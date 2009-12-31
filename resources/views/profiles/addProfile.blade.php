@@ -11,7 +11,7 @@
 
 @section('content')
 
-<div class="row">
+<div class="row mar-bot-5">
 	<div class="col-md-8 offset-2">
     	<h3 style="margin-top: 5%; margin-bottom: 5%;">Add Profile</h3>
 		

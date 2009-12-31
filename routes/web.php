@@ -23,6 +23,7 @@ Auth::routes();
 
 //AdminController
 Route::get('/adminPanel', 'AdminController@index')->name('adminPanel');
+Route::get('/getUsers', 'AdminController@getUsers')->name('getUsers');
 
 
 //ProfileController
