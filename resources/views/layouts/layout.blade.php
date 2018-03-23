@@ -10,12 +10,15 @@
 
     <title>SOCMED - @yield('title')</title>
 
-    <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/bootstrap-table.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
     <link href="css/styles.css" rel="stylesheet">
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/bootstrap-table.js"></script>
+
 
   </head>
 
@@ -57,13 +60,6 @@
       @yield('content')
     </div>
     <!-- /.container -->
-
-    <!-- Bootstrap core JavaScript -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/bootstrap-table.js"></script>
-
   </body>
 
 </html>

@@ -22,21 +22,13 @@ class ProfileController extends Controller
         return view('profiles');
     }
 
+    public function getProfiles()
+    {
+        return Profile::all();
+    }
+
     public function store(Request $request)
     {
-        // $profile = new Profile;
-
-        // $profile-> = $request->email;
-        // $profile->name = $request->name;
-        // $profile->website = $request->website;
-        // $profile->country = $request->country;
-        // $profile->is_affliate = $request->is_affliate;
-        // $profile->is_influencer = $request->is_influencer;
-        // $profile->mentioned_product = $request->mentioned_product;
-        // $profile->created_at = now();
-
-        // $profile->save();
-
         return Profile::create([
             'email' => $request->email,
             'name' => $request->name,
@@ -50,19 +42,6 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
-        // $profile = Profile::find($request->id);
-
-        // $profile->email = $request->email;
-        // $profile->name = $request->name;
-        // $profile->website = $request->website;
-        // $profile->country = $request->country;
-        // $profile->is_affliate = $request->is_affliate;
-        // $profile->is_influencer = $request->is_influencer;
-        // $profile->mentioned_product = $request->mentioned_product;
-        // $profile->updated_at = now();
-
-        // $profile->save();
-
         return Profile::find($request->id)
             ->update([
                 'email' => $request->email,
@@ -78,23 +57,10 @@ class ProfileController extends Controller
     public function setAffliate(Request $request)
     {
         $profile = Profile::find($request->id)->update(['is_affliate' => $request->is_affliate]);
-
-        // $profile->is_affliate = $request->is_affliate;
-
-        // $profile->save();
-
     }
 
     public function setInfluencer(Request $request)
     {
-        $profile = Profile::find($request->id)->update(['is_influencer' => $request->is_influencer]);
-
-        // $profile = Profile::find($request->id);
-
-        // $profile->is_influencer = $request->is_influencer;
-
-        // $profile->save();
-        
-    }
+        $profile = Profile::find($request->id)->update(['is_influencer' => $request->is_influencer]);    }
 
 }

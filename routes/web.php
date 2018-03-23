@@ -13,6 +13,6 @@
 
 Auth::routes();
 
-
-//ProfileController
 Route::get('/home', 'ProfileController@index')->name('home');
+
+Route::get('/getProfiles', 'ProfileController@getProfiles');
