@@ -18,7 +18,7 @@ class Email extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'email',
+        'profile_id', 'email',
     ];
 
     /**

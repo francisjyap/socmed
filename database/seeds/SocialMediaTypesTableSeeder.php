@@ -12,7 +12,7 @@ class SocialMediaTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        $types = [
+        $entries = [
             ['name' => 'Youtube'],
             ['name' => 'Facebook'],
             ['name' => 'Twitter'],
@@ -23,6 +23,6 @@ class SocialMediaTypesTableSeeder extends Seeder
             ['name' => 'ask.fm'],
         ];
 
-        SocialMediaTypes::insert($types);
+        SocialMediaTypes::insert($entries);
     }
 }

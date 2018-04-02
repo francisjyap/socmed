@@ -32,9 +32,9 @@ class EmailController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($profile_id)
     {
-        //
+        return view('profiles.addEmail')->with(['profile_id' => $profile_id]);
     }
 
     /**
@@ -45,18 +45,21 @@ class EmailController extends Controller
      */
     public function store(Request $request)
     {
-        // $email = new Email;
-
-        // $email->user_id = $request->user_id;
-        // $email->email = $request->email;
-        // $profile->created_at = now();
-
-        // $email->save();
-
-        return Email::create([
-            'user_id' => $request->user_id,
+        $bool = Email::create([
+            'profile_id' => $request->profile_id,
             'email' => $request->email,
         ]);
+
+        if($bool){
+            $msg = 'Email created successfully!';
+            $type = 'success';
+        }
+        else{
+            $msg = 'Email creation failed!';
+            $type = 'danger';
+        }
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 
     /**
@@ -90,7 +93,7 @@ class EmailController extends Controller
      */
     public function update(Request $request, Email $email)
     {
-        return Email::find($request->id)->update('email' => $request->email);
+        return Email::find($request->id)->update(['email' => $request->email]);
 
         // $email->email = $request->email;
         // $profile->updated_at = now();
@@ -107,5 +110,10 @@ class EmailController extends Controller
     public function destroy(Email $email)
     {
         //
+    }
+
+    public static function getEmails($profile_id)
+    {
+        return Email::where('profile_id', $profile_id)->get();
     }
 }

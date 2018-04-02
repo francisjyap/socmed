@@ -16,4 +16,9 @@ class SocialMediaTypesController extends Controller
     {
         $this->middleware('auth');
     }
+
+    public static function getTypes()
+    {
+    	return SocialMediaTypes::all();
+    }
 }

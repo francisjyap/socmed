@@ -12,10 +12,10 @@ class ProfilesTableSeeder extends Seeder
      */
     public function run()
     {
-        $profiles = [
-        	['email' => 'test@test.com', 'name' => 'John Test', 'website' => 'www.johntest.com', 'country' => 'United States'],
+        $entries = [
+        	['id' => '1', 'email' => 'test@test.com', 'name' => 'John Test', 'website' => 'www.johntest.com', 'country' => 'United States'],
         ];
 
-        Profile::insert($profiles);
+        Profile::insert($entries);
     }
 }

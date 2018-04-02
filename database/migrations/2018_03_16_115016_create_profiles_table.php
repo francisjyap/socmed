@@ -19,6 +19,7 @@ class CreateProfilesTable extends Migration
             $table->string('name')->unique();
             $table->string('website')->nullable();
             $table->string('country')->nullable();
+            $table->boolean('email_sent')->default(0);
             $table->boolean('is_affliate')->default(0);
             $table->boolean('is_influencer')->default(0);
             $table->boolean('mentioned_product')->default(0);

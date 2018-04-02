@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Profile;
+use App\Http\Controllers\EmailController;
+use App\Http\Controllers\SocialMediaController;
+use App\Http\Controllers\SocialMediaTypesController;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -17,11 +20,46 @@ class ProfileController extends Controller
         $this->middleware('auth');
     }
 
+    /*****
+        Display Index Page
+    *****/
     public function index()
     {
-        return view('profiles');
+        return view('profiles.profilelist');
     }
 
+    /*****
+        Display viewProfile Page
+    *****/
+    public function viewProfile($profile_id)
+    {
+        $profile = Profile::find($profile_id);
+        $emails = EmailController::getEmails($profile_id);
+        $socmed = SocialMediaController::getAccounts($profile_id);
+        $types = SocialMediaTypesController::getTypes();
+
+        return view('profiles.viewProfile')->with(['profile'=>$profile, 'emails'=>$emails, 'socmed'=>$socmed, 'types'=> $types]);
+    }
+
+    /*****
+        Display addProfile Page
+    *****/
+    public function addProfile()
+    {
+        return view('profiles.addProfile');
+    }
+
+    /*****
+        Display editProfile Page
+    *****/
+    public function editProfile()
+    {
+        return view('profiles.editProfile');
+    }
+
+    /*****
+        Return all profile entries
+    *****/
     public function getProfiles()
     {
         return Profile::all();
@@ -29,29 +67,36 @@ class ProfileController extends Controller
 
     public function store(Request $request)
     {
-        return Profile::create([
+        $bool = Profile::create([
             'email' => $request->email,
             'name' => $request->name,
             'website' => $request->website,
-            'country' => $request->country,
-            'is_affliate' => $request->is_affliate,
-            'is_influencer' => $request->is_influencer,
-            'mentioned_product' => $request->mentioned_product
+            'country' => $request->country
         ]);
+
+        if($bool){
+            $msg = 'Profile created successfully!';
+            $type = 'success';
+        }
+        else{
+            $msg = 'Profile creation failed!';
+            $type = 'danger';
+        }
+
+        return view('profiles.profilelist')->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 
     public function update(Request $request)
     {
-        return Profile::find($request->id)
+        $bool = Profile::find($request->id)
             ->update([
                 'email' => $request->email,
                 'name' => $request->name,
                 'website' => $request->website,
-                'country' => $request->country,
-                'is_affliate' => $request->is_affliate,
-                'is_influencer' => $request->is_influencer,
-                'mentioned_product' => $request->mentioned_product
+                'country' => $request->country
             ]);
+
+        return view('profiles.profilelist')->with(['status' => $bool]);
     }
 
     public function setAffliate(Request $request)

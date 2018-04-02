@@ -12,10 +12,10 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $users = [
+        $entries = [
             ['name' => 'Francis Yap', 'email' => 'francisyap.utech@gmail.com', 'password' => bcrypt('password')],
         ];
 
-        User::insert($users);
+        User::insert($entries);
     }
 }

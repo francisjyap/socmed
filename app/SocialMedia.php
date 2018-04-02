@@ -18,7 +18,7 @@ class SocialMedia extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'type', 'username', 'url', 'followers', 
+        'profile_id', 'type', 'username', 'url', 'followers', 
     ];
 
     /**
