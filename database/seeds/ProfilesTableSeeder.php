@@ -13,7 +13,7 @@ class ProfilesTableSeeder extends Seeder
     public function run()
     {
         $entries = [
-        	['id' => '1', 'email' => 'test@test.com', 'name' => 'John Test', 'website' => 'www.johntest.com', 'country' => 'United States'],
+        	['id' => '1', 'email' => 'test@test.com', 'name' => 'John Test', 'website' => 'http://www.johntest.com', 'country' => 'United States'],
         ];
 
         Profile::insert($entries);

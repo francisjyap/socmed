@@ -10,7 +10,7 @@ class SocialMediaTypes extends Model
     use SoftDeletes;
 
     protected $table = 'social_media_types';
-    public $timestamps = false;
+    public $timestamps = true;
 
     /**
      * The attributes that are mass assignable.

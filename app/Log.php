@@ -3,22 +3,19 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Profile extends Model
+class Log extends Model
 {
-    use SoftDeletes;
+    protected $table = 'logs';
+    public $timestamps = true;
 
-	protected $table = 'profiles';
-	public $timestamps = true;
-
-	/**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'website', 'country', 'is_affliate', 'is_influencer', 'mentioned_product', 
+        'user_id', 'profile_id', 'inf_aff_id', 'field_name', 'field_data'
     ];
 
     /**

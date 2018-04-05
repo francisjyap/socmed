@@ -10,7 +10,7 @@ class Email extends Model
     use SoftDeletes;
 
     protected $table = 'emails';
-    public $timestamps = false;
+    public $timestamps = true;
 
     /**
      * The attributes that are mass assignable.

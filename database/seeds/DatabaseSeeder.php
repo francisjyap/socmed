@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             EmailsTableSeeder::class,
             SocialMediaTableSeeder::class,
             SocialMediaTypesTableSeeder::class,
+            InfluencerAffliatesTableSeeder::class,
             
         ]);
     }

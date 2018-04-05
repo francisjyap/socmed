@@ -115,6 +115,91 @@
 				</tbody>
 			</table>
 		</div>
+
+		<div class="col-md-12" style="margin-top: 5%;">
+			<div class="row">
+				<div class="col-md-6">
+					<h5 style="text-align: center;">Influencer</h5>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Status</label>
+								<select class="form-control">
+									<option value="1">N/A</option>
+									<option value="2">Done</option>
+									<option value="3">Declined</option>
+									<option value="4">Interested</option>
+									<option value="5">Emailed</option>
+									<option value="6">Rejected</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label>Follow-up</label>
+								<select class="form-control">
+									<option value="1">N/A</option>
+									<option value="2">Done</option>
+									<option value="3">Declined</option>
+									<option value="4">Interested</option>
+									<option value="5">Emailed</option>
+									<option value="6">Rejected</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Status Date</label>
+								<p id="inf_status_date" style="margin-top: 3%;">N/A</p>
+							</div>
+							<div class="form-group">
+								<label style="margin-top: 7%;">Follow-up Date</label>
+								<p id="inf_follow-up_date" style="margin-top: 3%;">N/A</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<h5 style="text-align: center;">Affliate</h5>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Status</label>
+								<select class="form-control">
+									<option value="1">N/A</option>
+									<option value="2">Done</option>
+									<option value="3">Declined</option>
+									<option value="4">Interested</option>
+									<option value="5">Emailed</option>
+									<option value="6">Rejected</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label>Follow-up</label>
+								<select class="form-control">
+									<option value="1">N/A</option>
+									<option value="2">Done</option>
+									<option value="3">Declined</option>
+									<option value="4">Interested</option>
+									<option value="5">Emailed</option>
+									<option value="6">Rejected</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Status Date</label>
+								<p id="aff_status_date" style="margin-top: 3%;">N/A</p>
+							</div>
+							<div class="form-group">
+								<label style="margin-top: 7%;">Follow-up Date</label>
+								<p id="aff_follow-up_date" style="margin-top: 3%;">N/A</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 </div>
 

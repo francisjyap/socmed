@@ -13,7 +13,7 @@ class EmailsTableSeeder extends Seeder
     public function run()
     {
         $entries = [
-            ['profile_id' => '1', 'email' => 'johntest2@email.com'],
+            ['profile_id' => '1', 'email' => 'johntest@email.com'],
         ];
 
         Email::insert($entries);
