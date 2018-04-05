@@ -79,9 +79,10 @@ class EmailController extends Controller
      * @param  \App\Email  $email
      * @return \Illuminate\Http\Response
      */
-    public function edit(Email $email)
+    public function edit($id)
     {
-        //
+        $email = Email::find($id);
+        return view('profiles.editEmail')->with(['email' => $email]);
     }
 
     /**
@@ -91,14 +92,22 @@ class EmailController extends Controller
      * @param  \App\Email  $email
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Email $email)
+    public function update(Request $request)
     {
-        return Email::find($request->id)->update(['email' => $request->email]);
+        $email = Email::find($request->id);
 
-        // $email->email = $request->email;
-        // $profile->updated_at = now();
+        $bool = $email->update(['email' => $request->email]);
 
-        // $email->save();
+        if($bool){
+            $msg = 'Email updated successfully!';
+            $type = 'success';
+        }
+        else{
+            $msg = 'Email updating failed!';
+            $type = 'danger';
+        }
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $email->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 
     /**
@@ -107,9 +116,20 @@ class EmailController extends Controller
      * @param  \App\Email  $email
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Email $email)
+    public function destroy(Request $request)
     {
-        //
+        $email = Email::find($request->id);
+        $bool = $email->delete();
+
+        if($bool){
+            $msg = 'Email deleted!';
+            $type = 'success';
+        } else {
+            $msg = 'Email failed to delete!';
+            $type = 'fail';
+        }
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $email->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 
     public static function getEmails($profile_id)

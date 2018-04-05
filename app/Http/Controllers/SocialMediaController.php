@@ -37,7 +37,6 @@ class SocialMediaController extends Controller
     public function create($profile_id)
     {
         $types = SocialMediaTypesController::getTypes();
-
         return view('profiles.addAccount')->with(['profile_id' => $profile_id, 'types' => $types]);
     }
 
@@ -86,9 +85,11 @@ class SocialMediaController extends Controller
      * @param  \App\SocialMedia  $socialMedia
      * @return \Illuminate\Http\Response
      */
-    public function edit(SocialMedia $socialMedia)
+    public function edit($id)
     {
-        //
+        $account = SocialMedia::find($id);
+        $types = SocialMediaTypesController::getTypes();
+        return view('profiles.editAccount')->with(['account' => $account, 'types' => $types]);
     }
 
     /**
@@ -102,14 +103,23 @@ class SocialMediaController extends Controller
     {
         $socmed = SocialMedia::find($request->id);
 
-        $socmed->user_id = $request->user_id;
-        $socmed->type = $request->type;
-        $socmed->username = $request->username;
-        $socmed->url = $request->url;
-        $socmed->followers = $request->followers;
-        $socmed->created_at = now();
+        $bool = $socmed->update([
+            'type' => $request->type,
+            'username' => $request->username,
+            'url' => $request->url,
+            'followers' => $request->followers,
+        ]);
 
-        $socmed->save();
+        if($bool){
+            $msg = 'Account updated successfully!';
+            $type = 'success';
+        }
+        else{
+            $msg = 'Account updating failed!';
+            $type = 'danger';
+        }
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $socmed->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 
     /**
@@ -118,9 +128,20 @@ class SocialMediaController extends Controller
      * @param  \App\SocialMedia  $socialMedia
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SocialMedia $socialMedia)
+    public function destroy(Request $request)
     {
-        //
+        $socmed = SocialMedia::find($request->id);
+        $bool = $socmed->delete();
+
+        if($bool){
+            $msg = 'Account deleted!';
+            $type = 'success';
+        } else {
+            $msg = 'Account failed to delete!';
+            $type = 'fail';
+        }
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $socmed->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 
     public static function getAccounts($profile_id)

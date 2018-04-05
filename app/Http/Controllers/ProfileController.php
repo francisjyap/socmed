@@ -44,7 +44,7 @@ class ProfileController extends Controller
     /*****
         Display addProfile Page
     *****/
-    public function addProfile()
+    public function create()
     {
         return view('profiles.addProfile');
     }
@@ -52,9 +52,10 @@ class ProfileController extends Controller
     /*****
         Display editProfile Page
     *****/
-    public function editProfile()
+    public function edit($id)
     {
-        return view('profiles.editProfile');
+        $profile = Profile::find($id);
+        return view('profiles.editProfile')->with(['profile' => $profile]);
     }
 
     /*****
@@ -88,15 +89,39 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
-        $bool = Profile::find($request->id)
-            ->update([
+        $bool = Profile::find($request->id)->update([
                 'email' => $request->email,
                 'name' => $request->name,
                 'website' => $request->website,
                 'country' => $request->country
             ]);
 
-        return view('profiles.profilelist')->with(['status' => $bool]);
+        if($bool){
+            $msg = 'Profile edited successfully!';
+            $type = 'success';
+        }
+        else{
+            $msg = 'Profile editing failed!';
+            $type = 'danger';
+        }
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+    }
+
+    public function delete(Request $request)
+    {
+        $profile = Profile::find($request->id);
+        $bool = $profile->delete();
+
+        if($bool){
+            $msg = 'Profile deleted!';
+            $type = 'success';
+        } else {
+            $msg = 'Profile failed to delete!';
+            $type = 'fail';
+        }
+
+        return view('profiles.profilelist')->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 
     public function setAffliate(Request $request)

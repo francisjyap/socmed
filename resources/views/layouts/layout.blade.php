@@ -5,8 +5,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>SOCMED - @yield('title')</title>
 
@@ -19,6 +18,7 @@
     <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap-table.js') }}"></script>
+    <script src="{{ asset('js/sweetalert.min.js') }}"></script>
 
 
   </head>
@@ -40,13 +40,11 @@
               </a>
             </li>
             <li class="nav-item">
-              {{-- <a class="nav-link" href="">Logout</a> --}}
               <a class="nav-link" href="{{ route('logout') }}"
                  onclick="event.preventDefault();
-                               document.getElementById('logout-form').submit();">
-                  {{ __('Logout') }}
+                 document.getElementById('logout-form').submit();">
+                 {{ __('Logout') }}
               </a>
-
               <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                   @csrf
               </form>
