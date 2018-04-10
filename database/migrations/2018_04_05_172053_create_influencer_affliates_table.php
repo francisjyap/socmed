@@ -16,7 +16,7 @@ class CreateInfluencerAffliatesTable extends Migration
         Schema::create('influencer_affliates', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('profile_id');
-            $table->string('type');
+            $table->enum('type', ['influencer', 'affliate']);
             $table->string('status')->nullable();
             $table->date('status_date')->nullable();
             $table->string('follow-up')->nullable();

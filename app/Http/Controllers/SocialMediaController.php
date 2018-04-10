@@ -148,4 +148,16 @@ class SocialMediaController extends Controller
     {
         return SocialMedia::where('profile_id', $profile_id)->get();
     }
+
+    public static function getAccountsWithSocMedType($socmedtype_id)
+    {
+        if($socmedtype_id != 0){
+            $entries = SocialMedia::where('type', $socmedtype_id)->get();
+        } else {
+            $entries = SocialMedia::all();
+        }
+        $entries = $entries->unique('profile_id');
+
+        return $entries;
+    }
 }

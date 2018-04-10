@@ -6,6 +6,7 @@ use App\Profile;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\SocialMediaTypesController;
+use App\Http\Controllers\InfluencerAffliateController;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
@@ -25,7 +26,9 @@ class ProfileController extends Controller
     *****/
     public function index()
     {
-        return view('profiles.profilelist');
+        $types = SocialMediaTypesController::getTypes();
+
+        return view('profiles.profilelist')->with(['types' => $types]);
     }
 
     /*****
@@ -63,19 +66,42 @@ class ProfileController extends Controller
     *****/
     public function getProfiles()
     {
-        return Profile::all();
+        // return Profile::all();
+
+        $profiles = Profile::all();
+
+        //Change influencer/affliate bool into text
+        foreach($profiles as $p){
+            if($p->is_influencer == 0){
+                $p->is_influencer = "No";
+            } else {
+                $p->is_influencer = "Yes";
+            }
+            if($p->is_affliate == 0){
+                $p->is_affliate = "No";
+            } else {
+                $p->is_affliate = "Yes";
+            }
+        }
+
+        $profiles = $profiles->sortBy('name')->values()->all();
+
+        return $profiles;
     }
 
     public function store(Request $request)
     {
-        $bool = Profile::create([
+        $profile = Profile::create([
             'email' => $request->email,
             'name' => $request->name,
             'website' => $request->website,
             'country' => $request->country
         ]);
 
-        if($bool){
+        //Create InfluencerAffliate entry
+        InfluencerAffliateController::createEntryforProfile($profile->id);
+
+        if($profile){
             $msg = 'Profile created successfully!';
             $type = 'success';
         }
@@ -84,7 +110,7 @@ class ProfileController extends Controller
             $type = 'danger';
         }
 
-        return view('profiles.profilelist')->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        return redirect()->action('ProfileController@index')->with(['status' => $profile, 'msg' => $msg, 'type' => $type]);
     }
 
     public function update(Request $request)
@@ -121,7 +147,8 @@ class ProfileController extends Controller
             $type = 'fail';
         }
 
-        return view('profiles.profilelist')->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        return redirect()->action('ProfileController@index')->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+
     }
 
     public function setAffliate(Request $request)
@@ -131,6 +158,61 @@ class ProfileController extends Controller
 
     public function setInfluencer(Request $request)
     {
-        $profile = Profile::find($request->id)->update(['is_influencer' => $request->is_influencer]);    }
+        $profile = Profile::find($request->id)->update(['is_influencer' => $request->is_influencer]);
+    }
+
+    public static function profileSort($socmedtype_id, $type)
+    {
+        //Get Accounts matching SocMedType ID
+        $acc_ids = SocialMediaController::getAccountsWithSocMedType($socmedtype_id);
+        $accounts = collect();
+
+        foreach($acc_ids as $a){
+            $accounts->push(Profile::find($a->profile_id));
+        }
+
+        //Filter accounts with type
+        $return = null;
+
+        switch($type){
+            case 0:
+                $return = $accounts;
+                break;
+            case 1:
+                $return = $accounts->where('is_influencer', 1);
+                break;
+            case 2:
+                $return = $accounts->where('is_affliate', 1);
+                break;
+            case 3:
+                $return = $accounts->where('is_influencer', 0);
+                break;
+            case 4:
+                $return = $accounts->where('is_affliate', 0);
+                break;
+            default:
+                $return = null;
+                break;
+        }
+
+        //Change influencer/affliate bool into text
+        foreach($return as $p){
+            if($p->is_influencer == 0){
+                $p->is_influencer = "No";
+            } else {
+                $p->is_influencer = "Yes";
+            }
+            if($p->is_affliate == 0){
+                $p->is_affliate = "No";
+            } else {
+                $p->is_affliate = "Yes";
+            }
+        }
+
+        //Sort values by Name
+        $return = $return->sortBy('name')->values()->all();
+
+        return $return;
+    }
 
 }

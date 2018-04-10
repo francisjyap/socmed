@@ -17,7 +17,7 @@ class CreateLogsTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->integer('profile_id');
-            $table->integer('inf_aff_id');
+            $table->enum('type', ['influencer', 'affliate']);
             $table->string('field_name');
             $table->string('field_data');
             $table->timestamps();

@@ -7,6 +7,19 @@ use Illuminate\Http\Request;
 
 class InfluencerAffliateController extends Controller
 {
+    public static function createEntryforProfile($profile_id)
+    {
+        InfluencerAffliate::create([
+            'profile_id' => $profile_id,
+            'type' => 'influencer'
+        ]);
+
+        InfluencerAffliate::create([
+            'profile_id' => $profile_id,
+            'type' => 'affliate'
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -33,7 +46,7 @@ class InfluencerAffliateController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
         //
     }

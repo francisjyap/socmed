@@ -71,8 +71,10 @@
 								<tr>
 									<td>{{ $email->email }}</td>
 									<td>
-										<a href="{{ route('editEmail', $email->id) }}" class="btn btn-success"> Edit</a>
-										<button type="button" class="btn btn-danger btnDeleteEmail" value="{{ $email->id }}"> Delete</button>
+										<div class="btn-group">
+											<a href="{{ route('editEmail', $email->id) }}" class="btn btn-success"> Edit</a>
+											<button type="button" class="btn btn-danger btnDeleteEmail" value="{{ $email->id }}"> Delete</button>
+										</div>
 									</td>
 								</tr>
 							@endforeach
@@ -107,8 +109,10 @@
 							<td><a href="{{ $s->url }}" target="_blank">{{ $s->url }}</a></td>
 							<td>{{ $s->followers }}</td>
 							<td>
-								<a href="{{ route('editAccount', $s->id) }}" class="btn btn-success"> Edit</a>
-								<button type="button" class="btn btn-danger btnDeleteAccount" value="{{ $s->id }}"> Delete</button>
+								<div class="btn-group">
+									<a href="{{ route('editAccount', $s->id) }}" class="btn btn-success"> Edit</a>
+									<button type="button" class="btn btn-danger btnDeleteAccount" value="{{ $s->id }}"> Delete</button>
+								</div>
 							</td>
 						</tr>
 					@endforeach
@@ -155,6 +159,10 @@
 								<p id="inf_follow-up_date" style="margin-top: 3%;">N/A</p>
 							</div>
 						</div>
+						<div class="col-md-12">
+							<h5 style="text-align: center;">History</h5>
+							<table id="tableInfHistory"></table>
+						</div>
 					</div>
 				</div>
 
@@ -195,11 +203,14 @@
 								<p id="aff_follow-up_date" style="margin-top: 3%;">N/A</p>
 							</div>
 						</div>
+						<div class="col-md-12">
+							<h5 style="text-align: center;">History</h5>
+							<table id="tableAffHistory"></table>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
 	</div>
 </div>
 
@@ -219,27 +230,55 @@
 </form>
 
 <script type="text/javascript">
-	$('#btnDelete').on('click', function () {
-		swal({
-		  title: "Are you sure you wish to delete?",
-		  text: "Profile Name: {{ $profile->name }}",
-		  icon: "warning",
-		  buttons: true,
-		  dangerMode: true,
-		})
-		.then((willDelete) => {
-		  if (willDelete) {
-		  	$("#formDelete").submit();
-		  } else {
-			    swal({
-			    	title: "Account NOT deleted",
-			    	icon: "error"
-			    });
-		  }
-		});
-	});
-
 	$(document).ready(function (){
+		$('#tableInfHistory').bootstrapTable({
+			url: 'getInfHistory',
+		    columns: [{
+		        field: 'field_name',
+		        title: 'Name'
+		    }, {
+		        field: 'field_data',
+		        title: 'Data'
+		    }, {
+		        field: 'created_at',
+		        title: 'Date'
+		    }]
+		});
+
+		$('#tableAffHistory').bootstrapTable({
+			url: 'getAffHistory',
+		    columns: [{
+		        field: 'field_name',
+		        title: 'Name'
+		    }, {
+		        field: 'field_data',
+		        title: 'Data'
+		    }, {
+		        field: 'created_at',
+		        title: 'Date'
+		    }]
+		});
+
+		$('#btnDelete').on('click', function () {
+			swal({
+			  title: "Are you sure you wish to delete?",
+			  text: "Profile Name: {{ $profile->name }}",
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((willDelete) => {
+			  if (willDelete) {
+			  	$("#formDelete").submit();
+			  } else {
+				    swal({
+				    	title: "Account NOT deleted",
+				    	icon: "error"
+				    });
+			  }
+			});
+		});
+
 		$('.btnDeleteEmail').on('click', function () {
 			swal({
 			  title: "Are you sure?",

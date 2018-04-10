@@ -25,6 +25,8 @@ Route::get('/editProfile/{profile_id}', 'ProfileController@edit')->name('editPro
 Route::post('/editProfile', 'ProfileController@update')->name('updateProfile');
 Route::post('/deleteProfile', 'ProfileController@delete')->name('deleteProfile');
 
+Route::get('/profileSort/{id}/{type}', 'ProfileController@profileSort');
+
 //Email
 Route::get('/addEmail/{profile_id}', 'EmailController@create')->name('addEmail');
 Route::post('/addEmail', 'EmailController@store')->name('storeEmail');

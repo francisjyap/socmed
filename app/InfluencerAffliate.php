@@ -18,7 +18,7 @@ class InfluencerAffliate extends Model
      * @var array
      */
     protected $fillable = [
-        'type', 'status', 'status_date', 'follow-up', 'follow-up_date', 'affliate_code',
+        'profile_id', 'type', 'status', 'status_date', 'follow-up', 'follow-up_date', 'affliate_code',
     ];
 
     /**
