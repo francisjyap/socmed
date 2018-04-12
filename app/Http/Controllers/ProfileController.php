@@ -40,8 +40,10 @@ class ProfileController extends Controller
         $emails = EmailController::getEmails($profile_id);
         $socmed = SocialMediaController::getAccounts($profile_id);
         $types = SocialMediaTypesController::getTypes();
+        $influencer = InfluencerAffliateController::getInfluencerEntry($profile_id);
+        $affliate = InfluencerAffliateController::getAffliateEntry($profile_id);
 
-        return view('profiles.viewProfile')->with(['profile'=>$profile, 'emails'=>$emails, 'socmed'=>$socmed, 'types'=> $types]);
+        return view('profiles.viewProfile')->with(['profile'=>$profile, 'emails'=>$emails, 'socmed'=>$socmed, 'types'=> $types, 'influencer'=>$influencer, 'affliate'=>$affliate]);
     }
 
     /*****
@@ -213,6 +215,26 @@ class ProfileController extends Controller
         $return = $return->sortBy('name')->values()->all();
 
         return $return;
+    }
+
+    public static function setEmailSent($profile_id, $bool)
+    {
+        return Profile::find($profile_id)->update(['email_sent' => $bool]);
+    }
+
+    public static function setIsInfluencer($profile_id, $bool)
+    {
+        return Profile::find($profile_id)->update(['is_influencer' => $bool]);
+    }
+
+    public static function setIsAffliate($profile_id, $bool)
+    {
+        return Profile::find($profile_id)->update(['is_affliate' => $bool]);
+    }
+
+    public static function setMentionedProduct($profile_id, $bool)
+    {
+        return Profile::find($profile_id)->update(['mentioned_product' => $bool]);
     }
 
 }

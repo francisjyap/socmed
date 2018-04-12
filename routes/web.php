@@ -40,3 +40,10 @@ Route::post('/addAccount', 'SocialMediaController@store')->name('storeAccount');
 Route::get('/editAccount/{account_id}', 'SocialMediaController@edit')->name('editAccount');
 Route::post('/editAccount', 'SocialMediaController@update')->name('updateAccount');
 Route::post('/deleteAccount', 'SocialMediaController@destroy')->name('deleteAccount');
+
+//InfluencerAffliateController
+Route::post('/changeStatus', 'InfluencerAffliateController@changeStatus')->name('changeStatus');
+
+//LogController
+Route::get('/getInfHistory/{id}', 'LogController@getInfHistory')->name('getInfHistory');
+Route::get('/getAffHistory/{id}', 'LogController@getAffHistory')->name('getAffHistory');

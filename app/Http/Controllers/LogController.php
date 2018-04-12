@@ -7,79 +7,74 @@ use Illuminate\Http\Request;
 
 class LogController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public static function createLog($user_id, $profile_id, $class, $field_name, $field_data)
     {
-        //
+        return Log::create([
+            'user_id' => $user_id,
+            'profile_id' => $profile_id,
+            'type' => $class,
+            'field_name' => $field_name,
+            'field_data' => $field_data
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function getInfHistory($profile_id)
     {
-        //
+        $logs = Log::where('profile_id', $profile_id)->where('type', 0)->get();
+
+        foreach($logs as $log){
+            switch($log->field_data){
+                case 0:
+                    $log->field_data = "N/A";
+                    break;
+                case 1:
+                    $log->field_data = "Done";
+                    break;
+                case 2:
+                    $log->field_data = "Declined";
+                    break;
+                case 3:
+                    $log->field_data = "Interested";
+                    break;
+                case 4:
+                    $log->field_data = "Emailed";
+                    break;
+                case 5:
+                    $log->field_data = "Rejected";
+                    break;
+            }
+        }
+
+        return $logs;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function getAffHistory($profile_id)
     {
-        //
-    }
+        $logs = Log::where('profile_id', $profile_id)->where('type', 1)->get();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Log  $log
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Log $log)
-    {
-        //
-    }
+        foreach($logs as $log){
+            switch($log->field_data){
+                case 0:
+                    $log->field_data = "N/A";
+                    break;
+                case 1:
+                    $log->field_data = "Done";
+                    break;
+                case 2:
+                    $log->field_data = "Declined";
+                    break;
+                case 3:
+                    $log->field_data = "Interested";
+                    break;
+                case 4:
+                    $log->field_data = "Emailed";
+                    break;
+                case 5:
+                    $log->field_data = "Rejected";
+                    break;
+            }
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Log  $log
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Log $log)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Log  $log
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Log $log)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Log  $log
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Log $log)
-    {
-        //
+        return $logs;
     }
 }

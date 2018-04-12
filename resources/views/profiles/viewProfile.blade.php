@@ -128,24 +128,24 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<label>Status</label>
-								<select class="form-control">
-									<option value="1">N/A</option>
-									<option value="2">Done</option>
-									<option value="3">Declined</option>
-									<option value="4">Interested</option>
-									<option value="5">Emailed</option>
-									<option value="6">Rejected</option>
+								<select class="form-control" id="inf_status">
+									<option value="0">N/A</option>
+									<option value="1">Done</option>
+									<option value="2">Declined</option>
+									<option value="3">Interested</option>
+									<option value="4">Emailed</option>
+									<option value="5">Rejected</option>
 								</select>
 							</div>
 							<div class="form-group">
 								<label>Follow-up</label>
-								<select class="form-control">
-									<option value="1">N/A</option>
-									<option value="2">Done</option>
-									<option value="3">Declined</option>
-									<option value="4">Interested</option>
-									<option value="5">Emailed</option>
-									<option value="6">Rejected</option>
+								<select class="form-control" id="inf_follow-up">
+									<option value="0">N/A</option>
+									<option value="1">Done</option>
+									<option value="2">Declined</option>
+									<option value="3">Interested</option>
+									<option value="4">Emailed</option>
+									<option value="5">Rejected</option>
 								</select>
 							</div>
 						</div>
@@ -172,24 +172,24 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<label>Status</label>
-								<select class="form-control">
-									<option value="1">N/A</option>
-									<option value="2">Done</option>
-									<option value="3">Declined</option>
-									<option value="4">Interested</option>
-									<option value="5">Emailed</option>
-									<option value="6">Rejected</option>
+								<select class="form-control" id="aff_status">
+									<option value="0">N/A</option>
+									<option value="1">Done</option>
+									<option value="2">Declined</option>
+									<option value="3">Interested</option>
+									<option value="4">Emailed</option>
+									<option value="5">Rejected</option>
 								</select>
 							</div>
 							<div class="form-group">
 								<label>Follow-up</label>
-								<select class="form-control">
-									<option value="1">N/A</option>
-									<option value="2">Done</option>
-									<option value="3">Declined</option>
-									<option value="4">Interested</option>
-									<option value="5">Emailed</option>
-									<option value="6">Rejected</option>
+								<select class="form-control" id="aff_follow-up">
+									<option value="0">N/A</option>
+									<option value="1">Done</option>
+									<option value="2">Declined</option>
+									<option value="3">Interested</option>
+									<option value="4">Emailed</option>
+									<option value="5">Rejected</option>
 								</select>
 							</div>
 						</div>
@@ -229,33 +229,57 @@
 	<input type="hidden" name="id" id="formDeleteAccount-id" value="">
 </form>
 
+<form id="formChangeStatus" method="POST" action="{{ route('changeStatus') }}" hidden="true">
+	@csrf
+	<input type="hidden" name="profile_id" value="{{ $profile->id }}">
+	<input type="hidden" name="class" id="formChangeStatus-class" value="">
+	<input type="hidden" name="status_key" id="formChangeStatus-statusKey" value="">
+	<input type="hidden" name="status_type" id="formChangeStatus-statusType" value="">
+</form>
+
 <script type="text/javascript">
 	$(document).ready(function (){
+		//Set influencer statuses
+		$('#inf_status').prop('selectedIndex', {{ $influencer->status }});
+		$('#inf_follow-up').prop('selectedIndex', {{ $influencer['follow-up'] }});
+		$('#inf_status_date').text('@if($influencer->status_date != null) {{ substr($influencer->status_date,0,11) }} @else N/A @endif')
+		$('#inf_follow-up_date').text('@if($influencer["follow-up_date"] != null) {{ substr($influencer["follow-up_date"],0,11) }} @else N/A @endif')
+
+		//Set affliate statuses
+		$('#aff_status').prop('selectedIndex', {{ $affliate->status }});
+		$('#aff_follow-up').prop('selectedIndex', {{ $affliate['follow-up'] }});
+		$('#aff_status_date').text('@if($affliate->status_date != null) {{ substr($affliate->status_date,0,11) }} @else N/A @endif')
+		$('#aff_follow-up_date').text('@if($affliate["follow-up_date"] != null) {{ substr($affliate["follow-up_date"],0,11) }} @else N/A @endif')
+
 		$('#tableInfHistory').bootstrapTable({
-			url: 'getInfHistory',
+			url: '{{ route('getInfHistory', $profile->id) }}',
+			sortName: 'created_at',
+			sortOrder: 'desc',
 		    columns: [{
 		        field: 'field_name',
-		        title: 'Name'
+		        title: 'Type'
 		    }, {
 		        field: 'field_data',
 		        title: 'Data'
 		    }, {
 		        field: 'created_at',
-		        title: 'Date'
+		        title: 'Date',
 		    }]
 		});
 
 		$('#tableAffHistory').bootstrapTable({
-			url: 'getAffHistory',
+			url: '{{ route('getAffHistory', $profile->id) }}',
+			sortName: 'created_at',
+			sortOrder: 'desc',
 		    columns: [{
 		        field: 'field_name',
-		        title: 'Name'
+		        title: 'Type'
 		    }, {
 		        field: 'field_data',
 		        title: 'Data'
 		    }, {
 		        field: 'created_at',
-		        title: 'Date'
+		        title: 'Date',
 		    }]
 		});
 
@@ -320,7 +344,71 @@
 			  }
 			});
 		});
+
+		$('#inf_status').change(function() {
+			var class_key = 0;
+			var status_type = 0;
+			var type_string = "Status";
+			var status_key = $(this).val();
+			var status_key_string = this.options[this.selectedIndex].text;
+
+			changeStatus($(this), class_key, status_key, status_type, type_string, status_key_string);
+		});
+
+		$('#inf_follow-up').change(function() {
+			var class_key = 0;
+			var status_type = 1;
+			var type_string = "Follow-up";
+			var status_key = $(this).val();
+			var status_key_string = this.options[this.selectedIndex].text;
+
+			changeStatus($(this), class_key, status_key, status_type, type_string, status_key_string);
+		});
+
+		$('#aff_status').change(function() {
+			var class_key = 1;
+			var status_type = 0;
+			var type_string = "Status";
+			var status_key = $(this).val();
+			var status_key_string = this.options[this.selectedIndex].text;
+
+			changeStatus($(this), class_key, status_key, status_type, type_string, status_key_string);
+		});
+
+		$('#aff_follow-up').change(function() {
+			var class_key = 1;
+			var status_type = 1;
+			var type_string = "Follow-up";
+			var status_key = $(this).val();
+			var status_key_string = this.options[this.selectedIndex].text;
+
+			changeStatus($(this), class_key, status_key, status_type, type_string, status_key_string);
+		});
 	});
+
+	function changeStatus(elem, class_key, status_key, status_type, type_string, status_key_string)
+	{
+		swal({
+			  title: "You are changing the " + type_string,
+			  text: "Attention, you are setting " + type_string + " to " + status_key_string + ". Are you sure?",
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((changeStatus) => {
+			  if (changeStatus) {
+				$('#formChangeStatus-class').val(class_key);
+				$('#formChangeStatus-statusKey').val(status_key);
+				$('#formChangeStatus-statusType').val(status_type);
+				$('#formChangeStatus').submit();
+			  } else {
+				    swal({
+				    	title: type_string + " NOT changed",
+				    	icon: "error"
+				    });
+			  }
+			});
+	}
 
 </script>
 

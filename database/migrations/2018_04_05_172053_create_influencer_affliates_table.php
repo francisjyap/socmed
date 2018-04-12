@@ -16,10 +16,10 @@ class CreateInfluencerAffliatesTable extends Migration
         Schema::create('influencer_affliates', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('profile_id');
-            $table->enum('type', ['influencer', 'affliate']);
-            $table->string('status')->nullable();
+            $table->boolean('class');
+            $table->integer('status')->default(0);
             $table->date('status_date')->nullable();
-            $table->string('follow-up')->nullable();
+            $table->integer('follow-up')->default(0);
             $table->date('follow-up_date')->nullable();
             $table->string('affliate_code')->nullable();
             $table->timestamps();

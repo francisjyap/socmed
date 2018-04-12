@@ -12,9 +12,12 @@ class InfluencerAffliatesTableSeeder extends Seeder
      */
     public function run()
     {
+        /*
+        *   class 0 - Influencer, class 1 - Affliate
+        */
         $entries = [
-            ['profile_id' => '1', 'type' => 'influencer'],
-            ['profile_id' => '1', 'type' => 'affliate'],
+            ['profile_id' => '1', 'class' => 0],
+            ['profile_id' => '1', 'class' => 1],
         ];
 
         InfluencerAffliate::insert($entries);
