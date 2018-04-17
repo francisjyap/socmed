@@ -161,7 +161,7 @@
 						</div>
 						<div class="col-md-12">
 							<h5 style="text-align: center;">History</h5>
-							<table id="tableInfHistory"></table>
+							<table id="tableInfHistory" data-pagination="true" data-page-size="5"></table>
 						</div>
 					</div>
 				</div>
@@ -205,7 +205,7 @@
 						</div>
 						<div class="col-md-12">
 							<h5 style="text-align: center;">History</h5>
-							<table id="tableAffHistory"></table>
+							<table id="tableAffHistory" data-pagination="true" data-page-size="5"></table>
 						</div>
 					</div>
 				</div>
@@ -283,6 +283,25 @@
 		    }]
 		});
 
+		/*****
+		*	Checks Influencer/Affliate status and disables follow-up
+		*	if not set to Interested or Emailed
+		*****/
+		if($('#inf_status').val() != 3 && $('#inf_status').val() != 4){
+			$('#inf_follow-up').prop('disabled', true);
+		} else {
+			$('#inf_follow-up').prop('disabled', false);
+		}
+
+		if($('#aff_status').val() != 3 && $('#aff_status').val() != 4){
+			$('#aff_follow-up').prop('disabled', true);
+		} else {
+			$('#aff_follow-up').prop('disabled', false);
+		}
+
+		/*****
+		*	btnDelete function
+		*****/
 		$('#btnDelete').on('click', function () {
 			swal({
 			  title: "Are you sure you wish to delete?",
@@ -302,7 +321,10 @@
 			  }
 			});
 		});
-
+		
+		/*****
+		*	btnDeleteEmail function
+		*****/
 		$('.btnDeleteEmail').on('click', function () {
 			swal({
 			  title: "Are you sure?",
@@ -323,7 +345,7 @@
 			  }
 			});
 		});
-
+		
 		$('.btnDeleteAccount').on('click', function () {
 			swal({
 			  title: "Are you sure?",

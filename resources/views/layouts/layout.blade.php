@@ -34,6 +34,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
+            @guest
+            <li class="nav-item active">
+              <a class="nav-link" href="{{ route('register') }}">Register
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            @else
             <li class="nav-item active">
               <a class="nav-link" href="{{ route('home') }}">Home
                 <span class="sr-only">(current)</span>
@@ -49,6 +56,7 @@
                   @csrf
               </form>
             </li>
+            @endguest
           </ul>
         </div>
       </div>
