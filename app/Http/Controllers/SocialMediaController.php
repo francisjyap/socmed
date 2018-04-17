@@ -37,7 +37,7 @@ class SocialMediaController extends Controller
     public function create($profile_id)
     {
         $types = SocialMediaTypesController::getTypes();
-        return view('profiles.addAccount')->with(['profile_id' => $profile_id, 'types' => $types]);
+        return view('account.addAccount')->with(['profile_id' => $profile_id, 'types' => $types]);
     }
 
     /**
@@ -89,7 +89,7 @@ class SocialMediaController extends Controller
     {
         $account = SocialMedia::find($id);
         $types = SocialMediaTypesController::getTypes();
-        return view('profiles.editAccount')->with(['account' => $account, 'types' => $types]);
+        return view('account.editAccount')->with(['account' => $account, 'types' => $types]);
     }
 
     /**

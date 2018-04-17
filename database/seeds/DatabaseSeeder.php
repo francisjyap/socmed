@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         	UsersTableSeeder::class,
             ProfilesTableSeeder::class,
             EmailsTableSeeder::class,
+            WebsitesTableSeeder::class,
             SocialMediaTableSeeder::class,
             SocialMediaTypesTableSeeder::class,
             InfluencerAffliatesTableSeeder::class,

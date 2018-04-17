@@ -4,29 +4,41 @@
 
 @section('content')
 
-<div class="row" style="margin-bottom: 10%;">
+<div class="row" style="margin-bottom: 5%;">
 	<div class="col-md-2" style="margin-top: 5%;">
 		<a href="{{ route("home") }}" class="btn btn-danger" style="margin-bottom: 5%; width: 100%;"><i class="fas fa-arrow-left"></i> Back to Profiles</a>
 		<a href="{{ route("editProfile", $profile->id)}}" class="btn btn-success" style="margin-bottom: 5%; width: 100%;"><i class="far fa-edit"></i> Edit Profile</a>
 		<a href="{{ route("addEmail", $profile->id)}}" class="btn btn-success" style="margin-bottom: 5%; width: 100%;"><i class="fas fa-plus"></i> Add Email</a>
+		<a href="{{ route("addWebsite", $profile->id)}}" class="btn btn-success" style="margin-bottom: 5%; width: 100%;"><i class="fas fa-plus"></i> Add Wesbite</a>
 		<a href="{{ route("addAccount", $profile->id)}}" class="btn btn-success" style="margin-bottom: 5%; width: 100%;"><i class="fas fa-plus"></i> Add Account</a>
 		<button type="button" class="btn btn-danger" id="btnDelete" style="margin-top: 30%; margin-bottom: 5%; width: 100%;"><i class="far fa-trash-alt"></i> Delete Account</button>
 	</div>
 
 	<div class="col-md-8">
+		@if(session('status'))
+            <div class="alert alert-{{ session('type') }}" role="alert">
+              {{ session('msg') }}
+            </div>
+        @endif
 
-		<div class="col-md-12" style="text-align: ; margin-top: 5%;">
-			@if(session('status'))
-	            <div class="alert alert-{{ session('type') }}" role="alert">
-	              {{ session('msg') }}
-	            </div>
-	        @endif
-			<h3 style="margin-top: 5%; margin-bottom: 5%;">View Profile</h3>
-			<div class="row">			
-				<div class="col-md-6">
-					<h5>Name: {{ $profile->name }}</h5>
+		<h3 style="margin-top: 5%; margin-bottom: 5%;">View Profile</h3>
+
+		<div id="accordion">
+			{{-- Profile Card --}}
+			<div class="card">
+				<div class="card-header" id="headingOne">
+			      <h5 class="mb-0">
+			        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+						<h5 style="text-align: center;">Profile Details</h5>
+			        </button>
+			      </h5>
+			    </div>
+
+			    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+			      <div class="card-body">
+			        <h5>Name: {{ $profile->name }}</h5>
 					<h5>Primary Email: {{ $profile->email }}</h5>
-					<h5>Website: <a href="{{ $profile->website }}" target="_blank">{{ $profile->website }}</a></h5>
+					<h5>Primary Website: <a href="{{ $profile->website }}" target="_blank">{{ $profile->website }}</a></h5>
 					<h5>Country: {{ $profile->country }}</h5>
 					<div>
 						<button id="email_no" class="btn btn-danger" style="float: right;"
@@ -81,155 +93,237 @@
 						</h5>
 					</div>
 				</div>
+			  </div>
+			</div>
 
-				<div class="col-md-6">
-					<table id="emailTable" class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="7" data-search="true">
-						<thead>
-							<tr>
-								<th data-field="email">List of Emails</th>
-								<th>Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach($emails as $email)
+			<div class="card">
+				<div class="card-header" id="headingTwo">
+				  <h5 class="mb-0">
+				    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+						<h5 style="text-align: center;">List of Emails</h5>
+				    </button>
+				  </h5>
+				</div>
+				<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+					<div class="card-body">
+						<h5 style="text-align: center;">List of Emails</h5>
+						<table id="emailTable" class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="7" data-search="true">
+							<thead>
 								<tr>
-									<td>{{ $email->email }}</td>
-									<td>
-										<div class="btn-group">
-											<a href="{{ route('editEmail', $email->id) }}" class="btn btn-success"> Edit</a>
-											<button type="button" class="btn btn-danger btnDeleteEmail" value="{{ $email->id }}"> Delete</button>
-										</div>
-									</td>
+									<th data-field="email">List of Emails</th>
+									<th>Actions</th>
 								</tr>
-							@endforeach
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								@foreach($emails as $email)
+									<tr>
+										<td>{{ $email->email }}</td>
+										<td>
+											<div class="btn-group">
+												<a href="{{ route('editEmail', $email->id) }}" class="btn btn-success"> Edit</a>
+												<button type="button" class="btn btn-danger btnDeleteEmail" value="{{ $email->id }}"> Delete</button>
+											</div>
+										</td>
+									</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="col-md-12">
-			<h5 style="text-align: center;">List of Social Media Accounts</h5>
-			<table id="socmedTable" class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="10" data-search="true">
-				<thead>
-					<tr>
-						<th>Type</th>
-						<th>Username</th>
-						<th>URL</th>
-						<th>Followers</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach($socmed as $s)
-						<tr>
-							@foreach($types as $t)
-								@if($t->id == $s->type)
-									<td>{{ $t->name }}</td>
-									@break
-								@endif
-							@endforeach
-							<td>{{ $s->username }}</td>
-							<td><a href="{{ $s->url }}" target="_blank">{{ $s->url }}</a></td>
-							<td>{{ number_format($s->followers) }}</td>
-							<td>
-								<div class="btn-group">
-									<a href="{{ route('editAccount', $s->id) }}" class="btn btn-success"> Edit</a>
-									<button type="button" class="btn btn-danger btnDeleteAccount" value="{{ $s->id }}"> Delete</button>
-								</div>
-							</td>
-						</tr>
-					@endforeach
-				</tbody>
-			</table>
-		</div>
+			<div class="card">
+				<div class="card-header" id="headingWebsite">
+				  <h5 class="mb-0">
+				    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseWebsite" aria-expanded="false" aria-controls="collapseWebsite">
+						<h5 style="text-align: center;">List of Websites</h5>
+				    </button>
+				  </h5>
+				</div>
+				<div id="collapseWebsite" class="collapse" aria-labelledby="headingWebsite" data-parent="#accordion">
+					<div class="card-body">
+						<h5 style="text-align: center;">List of Websites</h5>
+						<table id="emailTable" class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="7" data-search="true">
+							<thead>
+								<tr>
+									<th data-field="email">List of Websites</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($websites as $website)
+									<tr>
+										<td><a href="{{ $website->website }}" target="_blank">{{ $website->website }}</a></td>
+										<td>
+											<div class="btn-group">
+												<a href="{{ route('editWebsite', $website->id) }}" class="btn btn-success"> Edit</a>
+												<button type="button" class="btn btn-danger btnDeleteWebsite" value="{{ $website->id }}"> Delete</button>
+											</div>
+										</td>
+									</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
 
-		<div class="col-md-12" style="margin-top: 5%;">
-			<div class="row">
-				<div class="col-md-6">
-					<h5 style="text-align: center;">Influencer</h5>
-					<div class="row">
-						<div class="col-md-6">
-							<div class="form-group">
-								<label>Status</label>
-								<select class="form-control" id="inf_status">
-									<option value="0">N/A</option>
-									<option value="1">Done</option>
-									<option value="2">Declined</option>
-									<option value="3">Interested</option>
-									<option value="4">Emailed</option>
-									<option value="5">Rejected</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label>Follow-up</label>
-								<select class="form-control" id="inf_follow-up">
-									<option value="0">N/A</option>
-									<option value="1">Done</option>
-									<option value="2">Declined</option>
-									<option value="3">Interested</option>
-									<option value="4">Emailed</option>
-									<option value="5">Rejected</option>
-								</select>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label>Status Date</label>
-								<p id="inf_status_date" style="margin-top: 3%;">N/A</p>
-							</div>
-							<div class="form-group">
-								<label style="margin-top: 7%;">Follow-up Date</label>
-								<p id="inf_follow-up_date" style="margin-top: 3%;">N/A</p>
-							</div>
-						</div>
+			<div class="card">
+				<div class="card-header" id="headingThree">
+					<h5 class="mb-0">
+						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+							<h5 style="text-align: center;">List of Social Media Accounts</h5>
+						</button>
+					</h5>
+				</div>
+				<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+					<div class="card-body">
+						<h5 style="text-align: center;">List of Social Media Accounts</h5>
+						<table id="socmedTable" class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="10" data-search="true">
+							<thead>
+								<tr>
+									<th>Type</th>
+									<th>Username</th>
+									<th>URL</th>
+									<th>Followers</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($socmed as $s)
+									<tr>
+										@foreach($types as $t)
+											@if($t->id == $s->type)
+												<td>{{ $t->name }}</td>
+												@break
+											@endif
+										@endforeach
+										<td>{{ $s->username }}</td>
+										<td><a href="{{ $s->url }}" target="_blank">{{ $s->url }}</a></td>
+										<td>{{ number_format($s->followers) }}</td>
+										<td>
+											<div class="btn-group">
+												<a href="{{ route('editAccount', $s->id) }}" class="btn btn-success"> Edit</a>
+												<button type="button" class="btn btn-danger btnDeleteAccount" value="{{ $s->id }}"> Delete</button>
+											</div>
+										</td>
+									</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="card">
+				<div class="card-header" id="headingFour">
+					<h5 class="mb-0">
+						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+							<h5 style="text-align: center;">Influencer</h5>
+						</button>
+					</h5>
+				</div>
+				<div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+					<div class="card-body">
 						<div class="col-md-12">
-							<h5 style="text-align: center;">History</h5>
-							<table id="tableInfHistory" data-pagination="true" data-page-size="5"></table>
+							<h5 style="text-align: center;">Influencer</h5>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Status</label>
+										<select class="form-control" id="inf_status">
+											<option value="0">N/A</option>
+											<option value="1">Done</option>
+											<option value="2">Declined</option>
+											<option value="3">Interested</option>
+											<option value="4">Emailed</option>
+											<option value="5">Rejected</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label>Follow-up</label>
+										<select class="form-control" id="inf_follow-up">
+											<option value="0">N/A</option>
+											<option value="1">Done</option>
+											<option value="2">Declined</option>
+											<option value="3">Interested</option>
+											<option value="4">Emailed</option>
+											<option value="5">Rejected</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-6" style="text-align: center;">
+									<div class="form-group">
+										<label>Status Date</label>
+										<p id="inf_status_date" style="margin-top: 3%;">N/A</p>
+									</div>
+									<div class="form-group">
+										<label style="margin-top: 7%;">Follow-up Date</label>
+										<p id="inf_follow-up_date" style="margin-top: 3%;">N/A</p>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<h5 style="text-align: center;">History</h5>
+									<table id="tableInfHistory" data-pagination="true" data-page-size="5"></table>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
+			</div>
 
-				<div class="col-md-6">
-					<h5 style="text-align: center;">Affliate</h5>
-					<div class="row">
-						<div class="col-md-6">
-							<div class="form-group">
-								<label>Status</label>
-								<select class="form-control" id="aff_status">
-									<option value="0">N/A</option>
-									<option value="1">Done</option>
-									<option value="2">Declined</option>
-									<option value="3">Interested</option>
-									<option value="4">Emailed</option>
-									<option value="5">Rejected</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label>Follow-up</label>
-								<select class="form-control" id="aff_follow-up">
-									<option value="0">N/A</option>
-									<option value="1">Done</option>
-									<option value="2">Declined</option>
-									<option value="3">Interested</option>
-									<option value="4">Emailed</option>
-									<option value="5">Rejected</option>
-								</select>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label>Status Date</label>
-								<p id="aff_status_date" style="margin-top: 3%;">N/A</p>
-							</div>
-							<div class="form-group">
-								<label style="margin-top: 7%;">Follow-up Date</label>
-								<p id="aff_follow-up_date" style="margin-top: 3%;">N/A</p>
-							</div>
-						</div>
+			<div class="card">
+				<div class="card-header" id="headingFive">
+					<h5 class="mb-0">
+						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+							<h5 style="text-align: center;">Affliate</h5>
+						</button>
+					</h5>
+				</div>
+				<div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+					<div class="card-body">
 						<div class="col-md-12">
-							<h5 style="text-align: center;">History</h5>
-							<table id="tableAffHistory" data-pagination="true" data-page-size="5"></table>
+							<h5 style="text-align: center;">Affliate</h5>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label>Status</label>
+										<select class="form-control" id="aff_status">
+											<option value="0">N/A</option>
+											<option value="1">Done</option>
+											<option value="2">Declined</option>
+											<option value="3">Interested</option>
+											<option value="4">Emailed</option>
+											<option value="5">Rejected</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label>Follow-up</label>
+										<select class="form-control" id="aff_follow-up">
+											<option value="0">N/A</option>
+											<option value="1">Done</option>
+											<option value="2">Declined</option>
+											<option value="3">Interested</option>
+											<option value="4">Emailed</option>
+											<option value="5">Rejected</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-6" style="text-align: center;">
+									<div class="form-group">
+										<label>Status Date</label>
+										<p id="aff_status_date" style="margin-top: 3%;">N/A</p>
+									</div>
+									<div class="form-group">
+										<label style="margin-top: 7%;">Follow-up Date</label>
+										<p id="aff_follow-up_date" style="margin-top: 3%;">N/A</p>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<h5 style="text-align: center;">History</h5>
+									<table id="tableAffHistory" data-pagination="true" data-page-size="5"></table>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -246,6 +340,11 @@
 <form id="formDeleteEmail" method="POST" action="{{ route('deleteEmail') }}" hidden="true">
 	@csrf
 	<input type="hidden" name="id" id="formDeleteEmail-id" value="">
+</form>
+
+<form id="formDeleteWebsite" method="POST" action="{{ route('deleteWebsite') }}" hidden="true">
+	@csrf
+	<input type="hidden" name="id" id="formDeleteWebsite-id" value="">
 </form>
 
 <form id="formDeleteAccount" method="POST" action="{{ route('deleteAccount') }}" hidden="true">
@@ -382,6 +481,31 @@
 			});
 		});
 		
+		/*****
+		*	btnDeleteWebsite function
+		*****/
+		$('.btnDeleteWebsite').on('click', function () {
+			swal({
+			  title: "Are you sure?",
+			  text: "You are deleting this website",
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((willDelete) => {
+			  if (willDelete) {
+			  	$('#formDeleteWebsite-id').val(this.value);
+			  	$("#formDeleteWebsite").submit();
+			  	console.log('deleteWebsiteSubmit');
+			  } else {
+				    swal({
+				    	title: "Website NOT deleted",
+				    	icon: "error"
+				    });
+			  }
+			});
+		});
+
 		$('.btnDeleteAccount').on('click', function () {
 			swal({
 			  title: "Are you sure?",

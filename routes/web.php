@@ -24,6 +24,8 @@ Route::post('/addProfile', 'ProfileController@store')->name('storeProfile');
 Route::get('/editProfile/{profile_id}', 'ProfileController@edit')->name('editProfile');
 Route::post('/editProfile', 'ProfileController@update')->name('updateProfile');
 Route::post('/deleteProfile', 'ProfileController@delete')->name('deleteProfile');
+Route::post('/setEmailSent', 'ProfileController@setEmailSent')->name('setEmailSent');
+Route::post('/setMentionedProduct', 'ProfileController@setMentionedProduct')->name('setMentionedProduct');
 
 Route::get('/profileSort/{id}/{type}', 'ProfileController@profileSort');
 
@@ -33,6 +35,13 @@ Route::post('/addEmail', 'EmailController@store')->name('storeEmail');
 Route::get('/editEmail/{email_id}', 'EmailController@edit')->name('editEmail');
 Route::post('/editEmail', 'EmailController@update')->name('updateEmail');
 Route::post('/deleteEmail', 'EmailController@destroy')->name('deleteEmail');
+
+//Wesbite
+Route::get('/addWebsite/{profile_id}', 'WebsiteController@create')->name('addWebsite');
+Route::post('/storeWebsite', 'WebsiteController@store')->name('storeWebsite');
+Route::get('/editWebsite/{website_id}', 'WebsiteController@edit')->name('editWebsite');
+Route::post('/updateWebsite', 'WebsiteController@update')->name('updateWebsite');
+Route::post('/deleteWebsite', 'WebsiteController@destroy')->name('deleteWebsite');
 
 //Social Media
 Route::get('/addAccount/{profile_id}', 'SocialMediaController@create')->name('addAccount');

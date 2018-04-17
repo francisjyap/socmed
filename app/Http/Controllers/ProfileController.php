@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Profile;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\SocialMediaController;
 use App\Http\Controllers\SocialMediaTypesController;
 use App\Http\Controllers\InfluencerAffliateController;
@@ -38,12 +39,13 @@ class ProfileController extends Controller
     {
         $profile = Profile::find($profile_id);
         $emails = EmailController::getEmails($profile_id);
+        $websites = WebsiteController::getWebsites($profile_id);
         $socmed = SocialMediaController::getAccounts($profile_id);
         $types = SocialMediaTypesController::getTypes();
         $influencer = InfluencerAffliateController::getInfluencerEntry($profile_id);
         $affliate = InfluencerAffliateController::getAffliateEntry($profile_id);
 
-        return view('profiles.viewProfile')->with(['profile'=>$profile, 'emails'=>$emails, 'socmed'=>$socmed, 'types'=> $types, 'influencer'=>$influencer, 'affliate'=>$affliate]);
+        return view('profiles.viewProfile_new')->with(['profile'=>$profile, 'emails'=>$emails, 'websites'=>$websites, 'socmed'=>$socmed, 'types'=> $types, 'influencer'=>$influencer, 'affliate'=>$affliate]);
     }
 
     /*****
@@ -153,16 +155,6 @@ class ProfileController extends Controller
 
     }
 
-    public function setAffliate(Request $request)
-    {
-        $profile = Profile::find($request->id)->update(['is_affliate' => $request->is_affliate]);
-    }
-
-    public function setInfluencer(Request $request)
-    {
-        $profile = Profile::find($request->id)->update(['is_influencer' => $request->is_influencer]);
-    }
-
     public static function profileSort($socmedtype_id, $type)
     {
         //Get Accounts matching SocMedType ID
@@ -217,11 +209,6 @@ class ProfileController extends Controller
         return $return;
     }
 
-    public static function setEmailSent($profile_id, $bool)
-    {
-        return Profile::find($profile_id)->update(['email_sent' => $bool]);
-    }
-
     public static function setIsInfluencer($profile_id, $bool)
     {
         return Profile::find($profile_id)->update(['is_influencer' => $bool]);
@@ -232,9 +219,36 @@ class ProfileController extends Controller
         return Profile::find($profile_id)->update(['is_affliate' => $bool]);
     }
 
-    public static function setMentionedProduct($profile_id, $bool)
+    public static function setEmailSent(Request $request)
     {
-        return Profile::find($profile_id)->update(['mentioned_product' => $bool]);
+        $bool = Profile::find($request->profile_id)->update(['email_sent' => $request->bool]);
+
+        if($bool){
+            $msg = 'Email sent status changed successfully!';
+            $type = 'success';
+        }
+        else{
+            $msg = 'Email sent status change failed!';
+            $type = 'danger';
+        }
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+    }
+
+    public static function setMentionedProduct(Request $request)
+    {
+        $bool = Profile::find($request->profile_id)->update(['mentioned_product' => $request->bool]);
+
+        if($bool){
+            $msg = 'Mentioned product status changed successfully!';
+            $type = 'success';
+        }
+        else{
+            $msg = 'Mentioned product status change failed!';
+            $type = 'danger';
+        }
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 
 }
