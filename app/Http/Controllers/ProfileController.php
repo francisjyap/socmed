@@ -1,4 +1,11 @@
 <?php
+/*
+|   Authored/Written/Maintained by:
+|       Francis Alec J. Yap
+|       francisj.yap@gmail.com
+|       https://github.com/francisjyap/socmed
+|
+*/
 
 namespace App\Http\Controllers;
 
@@ -70,8 +77,6 @@ class ProfileController extends Controller
     *****/
     public function getProfiles()
     {
-        // return Profile::all();
-
         $profiles = Profile::all();
 
         //Change influencer/affliate bool into text
@@ -219,20 +224,9 @@ class ProfileController extends Controller
         return Profile::find($profile_id)->update(['is_affliate' => $bool]);
     }
 
-    public static function setEmailSent(Request $request)
+    public static function setEmailSent($profile_id, $bool)
     {
-        $bool = Profile::find($request->profile_id)->update(['email_sent' => $request->bool]);
-
-        if($bool){
-            $msg = 'Email sent status changed successfully!';
-            $type = 'success';
-        }
-        else{
-            $msg = 'Email sent status change failed!';
-            $type = 'danger';
-        }
-
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        return Profile::find($profile_id)->update(['email_sent' => $bool]);
     }
 
     public static function setMentionedProduct(Request $request)

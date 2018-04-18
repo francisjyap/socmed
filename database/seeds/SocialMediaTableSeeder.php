@@ -1,4 +1,11 @@
 <?php
+/*
+|   Authored/Written/Maintained by:
+|       Francis Alec J. Yap
+|       francisj.yap@gmail.com
+|       https://github.com/francisjyap/socmed
+|
+*/
 
 use App\SocialMedia;
 use Illuminate\Database\Seeder;

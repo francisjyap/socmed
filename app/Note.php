@@ -10,13 +10,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class InfluencerAffliate extends Model
+class Note extends Model
 {
-    use SoftDeletes;
-    
-    protected $table = 'influencer_affliates';
+    protected $table = 'notes';
     public $timestamps = true;
 
     /**
@@ -25,7 +22,7 @@ class InfluencerAffliate extends Model
      * @var array
      */
     protected $fillable = [
-        'profile_id', 'class', 'status', 'status_date', 'follow-up', 'follow-up_date', 'affliate_code',
+        'profile_id', 'note', 'author_id'
     ];
 
     /**
@@ -33,5 +30,5 @@ class InfluencerAffliate extends Model
      *
      * @var array
      */
-    protected $dates = ['status_date', 'follow-up_date'];
+    protected $dates = ['deleted_at'];
 }

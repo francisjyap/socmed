@@ -1,6 +1,14 @@
 <?php
 
 /*
+|	Authored/Written/Maintained by:
+|		Francis Alec J. Yap
+|		francisj.yap@gmail.com
+|		https://github.com/francisjyap/socmed
+|
+*/
+
+/*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -56,3 +64,10 @@ Route::post('/changeStatus', 'InfluencerAffliateController@changeStatus')->name(
 //LogController
 Route::get('/getInfHistory/{id}', 'LogController@getInfHistory')->name('getInfHistory');
 Route::get('/getAffHistory/{id}', 'LogController@getAffHistory')->name('getAffHistory');
+Route::post('/createHistory', 'LogController@createHistory')->name('createHistory');
+
+//NoteController
+Route::get('/getNotes/{id}', 'NoteController@getNotes')->name('getNotes');
+Route::get('/createInfluencer/{id}', 'NoteController@createInfluencer')->name('createInfluencer');
+Route::get('/createAffliate/{id}', 'NoteController@createAffliate')->name('createAffliate');
+Route::post('/addNote', 'NoteController@addNote')->name('addNote');

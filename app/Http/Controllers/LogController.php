@@ -1,8 +1,16 @@
 <?php
+/*
+|   Authored/Written/Maintained by:
+|       Francis Alec J. Yap
+|       francisj.yap@gmail.com
+|       https://github.com/francisjyap/socmed
+|
+*/
 
 namespace App\Http\Controllers;
 
 use App\Log;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class LogController extends Controller
@@ -16,6 +24,29 @@ class LogController extends Controller
             'field_name' => $field_name,
             'field_data' => $field_data
         ]);
+    }
+
+    public function createHistory(Request $req)
+    {
+        $bool = Log::create([
+            'user_id' => $req->user_id,
+            'profile_id' => $req->profile_id,
+            'type' => $req->class,
+            'field_name' => $req->field_name,
+            'field_data' => $req->field_data,
+            'created_at' => new Carbon($req->date)
+        ]);
+
+        if($bool){
+            $msg = 'Profile edited successfully!';
+            $type = 'success';
+        }
+        else{
+            $msg = 'Profile editing failed!';
+            $type = 'danger';
+        }
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $req->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 
     public function getInfHistory($profile_id)

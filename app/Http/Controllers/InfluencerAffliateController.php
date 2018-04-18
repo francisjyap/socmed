@@ -1,4 +1,11 @@
 <?php
+/*
+|   Authored/Written/Maintained by:
+|       Francis Alec J. Yap
+|       francisj.yap@gmail.com
+|       https://github.com/francisjyap/socmed
+|
+*/
 
 namespace App\Http\Controllers;
 
@@ -15,12 +22,12 @@ class InfluencerAffliateController extends Controller
     {
         InfluencerAffliate::create([
             'profile_id' => $profile_id,
-            'type' => 'influencer'
+            'class' => 0
         ]);
 
         InfluencerAffliate::create([
             'profile_id' => $profile_id,
-            'type' => 'affliate'
+            'class' => '1'
         ]);
     }
 
@@ -77,6 +84,13 @@ class InfluencerAffliateController extends Controller
             ProfileController::setIsAffliate($request->profile_id, 0);
         }
 
+        //Check if status is set to Emailed, to change email_sent status in Profile
+        if($request->status_key == 4) {
+            ProfileController::setEmailSent($request->profile_id, 1);
+        } else {
+            ProfileController::setEmailSent($request->profile_id, 0);
+
+        }
 
         //For logs
         LogController::createLog(Auth::id(), $request->profile_id, $request->class, $type, $request->status_key);

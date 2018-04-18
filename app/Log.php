@@ -1,4 +1,11 @@
 <?php
+/*
+|   Authored/Written/Maintained by:
+|       Francis Alec J. Yap
+|       francisj.yap@gmail.com
+|       https://github.com/francisjyap/socmed
+|
+*/
 
 namespace App;
 
@@ -15,7 +22,7 @@ class Log extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'profile_id', 'type', 'field_name', 'field_data'
+        'user_id', 'profile_id', 'type', 'field_name', 'field_data', 'created_at'
     ];
 
     /**

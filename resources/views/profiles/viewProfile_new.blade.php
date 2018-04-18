@@ -1,3 +1,10 @@
+{{-- /*
+|	Authored/Written/Maintained by:
+|		Francis Alec J. Yap
+|		francisj.yap@gmail.com
+|		https://github.com/francisjyap/socmed
+|
+*/ --}}
 @extends('layouts.layout')
 
 @section('title', 'View Profile')
@@ -16,85 +23,67 @@
 
 	<div class="col-md-8">
 		@if(session('status'))
-            <div class="alert alert-{{ session('type') }}" role="alert">
+            <div class="alert alert-{{ session('type') }}" role="alert" style="margin-top: 2%">
               {{ session('msg') }}
             </div>
         @endif
 
-		<h3 style="margin-top: 5%; margin-bottom: 5%;">View Profile</h3>
+		<h3 style="margin-top: 3%; margin-bottom: 5%;">View Profile</h3>
+
+		<div class="row">
+			<div class="col-md-6">
+				<h5>Name: {{ $profile->name }}</h5>
+				<h5>Primary Email: {{ $profile->email }}</h5>
+				<h5>Primary Website: <a href="{{ $profile->website }}" target="_blank">{{ $profile->website }}</a></h5>
+				<h5>Country: {{ $profile->country }}</h5>
+			</div>
+
+			<div class="col-md-6">
+				<h5>Email Sent?: 
+					@if($profile->email_sent == 0)
+						<p style="color: red">No</p>
+					@else
+						<p style="color: green">Yes</p>
+					@endif
+				</h5>
+				<h5>Is Affliate?: 
+					@if($profile->is_affliate == 0)
+						<p style="color: red">No</p>
+					@else
+						<p style="color: green">Yes</p>
+					@endif
+				</h5>
+				<h5>Is Influencer?: 
+					@if($profile->is_influencer == 0)
+						<p style="color: red">No</p>
+					@else
+						<p style="color: green">Yes</p>
+					@endif
+				</h5>
+				<div>
+					<button id="mention_no" class="btn btn-danger" style="float: right;"
+					@if($profile->mentioned_product == 0)
+						disabled
+					@endif
+					><i class="fas fa-times"></i></button>
+					<button id="mention_yes" class="btn btn-success" style="float: right;"
+					@if($profile->mentioned_product == 1)
+						disabled
+					@endif
+					><i class="fas fa-check"></i></button>
+					<h5>Mentioned Trackimo?: 
+						@if($profile->mentioned_product == 0)
+							<p style="color: red">No</p>
+						@else
+							<p style="color: green">Yes</p>
+						@endif
+					</h5>
+				</div>
+			</div>
+		</div>
+
 
 		<div id="accordion">
-			{{-- Profile Card --}}
-			<div class="card">
-				<div class="card-header" id="headingOne">
-			      <h5 class="mb-0">
-			        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-						<h5 style="text-align: center;">Profile Details</h5>
-			        </button>
-			      </h5>
-			    </div>
-
-			    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-			      <div class="card-body">
-			        <h5>Name: {{ $profile->name }}</h5>
-					<h5>Primary Email: {{ $profile->email }}</h5>
-					<h5>Primary Website: <a href="{{ $profile->website }}" target="_blank">{{ $profile->website }}</a></h5>
-					<h5>Country: {{ $profile->country }}</h5>
-					<div>
-						<button id="email_no" class="btn btn-danger" style="float: right;"
-						@if($profile->email_sent == 0)
-							disabled
-						@endif
-						><i class="fas fa-times"></i></button>
-						<button id="email_yes" class="btn btn-success" style="float: right;"
-						@if($profile->email_sent == 1)
-							disabled
-						@endif
-						><i class="fas fa-check"></i></button>
-						<h5>Email Sent?: 
-							@if($profile->email_sent == 0)
-								<p style="color: red">No</p>
-							@else
-								<p style="color: green">Yes</p>
-							@endif
-						</h5>
-					</div>
-					<h5>Is Affliate?: 
-						@if($profile->is_affliate == 0)
-							<p style="color: red">No</p>
-						@else
-							<p style="color: green">Yes</p>
-						@endif
-					</h5>
-					<h5>Is Influencer?: 
-						@if($profile->is_influencer == 0)
-							<p style="color: red">No</p>
-						@else
-							<p style="color: green">Yes</p>
-						@endif
-					</h5>
-					<div>
-						<button id="mention_no" class="btn btn-danger" style="float: right;"
-						@if($profile->mentioned_product == 0)
-							disabled
-						@endif
-						><i class="fas fa-times"></i></button>
-						<button id="mention_yes" class="btn btn-success" style="float: right;"
-						@if($profile->mentioned_product == 1)
-							disabled
-						@endif
-						><i class="fas fa-check"></i></button>
-						<h5>Mentioned Trackimo?: 
-							@if($profile->mentioned_product == 0)
-								<p style="color: red">No</p>
-							@else
-								<p style="color: green">Yes</p>
-							@endif
-						</h5>
-					</div>
-				</div>
-			  </div>
-			</div>
 
 			<div class="card">
 				<div class="card-header" id="headingTwo">
@@ -214,121 +203,122 @@
 					</div>
 				</div>
 			</div>
+		</div>
 
-			<div class="card">
-				<div class="card-header" id="headingFour">
-					<h5 class="mb-0">
-						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-							<h5 style="text-align: center;">Influencer</h5>
-						</button>
-					</h5>
-				</div>
-				<div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
-					<div class="card-body">
-						<div class="col-md-12">
-							<h5 style="text-align: center;">Influencer</h5>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Status</label>
-										<select class="form-control" id="inf_status">
-											<option value="0">N/A</option>
-											<option value="1">Done</option>
-											<option value="2">Declined</option>
-											<option value="3">Interested</option>
-											<option value="4">Emailed</option>
-											<option value="5">Rejected</option>
-										</select>
-									</div>
-									<div class="form-group">
-										<label>Follow-up</label>
-										<select class="form-control" id="inf_follow-up">
-											<option value="0">N/A</option>
-											<option value="1">Done</option>
-											<option value="2">Declined</option>
-											<option value="3">Interested</option>
-											<option value="4">Emailed</option>
-											<option value="5">Rejected</option>
-										</select>
-									</div>
-								</div>
-								<div class="col-md-6" style="text-align: center;">
-									<div class="form-group">
-										<label>Status Date</label>
-										<p id="inf_status_date" style="margin-top: 3%;">N/A</p>
-									</div>
-									<div class="form-group">
-										<label style="margin-top: 7%;">Follow-up Date</label>
-										<p id="inf_follow-up_date" style="margin-top: 3%;">N/A</p>
-									</div>
-								</div>
-								<div class="col-md-12">
-									<h5 style="text-align: center;">History</h5>
-									<table id="tableInfHistory" data-pagination="true" data-page-size="5"></table>
-								</div>
+		<div class="col-md-12" style="margin-top: 5%;">
+			<div class="row">
+				<div class="col-md-6">
+					<h5 style="text-align: center;">Influencer</h5>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Status</label>
+								<select class="form-control" id="inf_status">
+									<option value="0">N/A</option>
+									<option value="1">Done</option>
+									<option value="2">Declined</option>
+									<option value="3">Interested</option>
+									<option value="4">Emailed</option>
+									<option value="5">Rejected</option>
+								</select>
 							</div>
+							<div class="form-group">
+								<label>Follow-up</label>
+								<select class="form-control" id="inf_follow-up">
+									<option value="0">N/A</option>
+									<option value="1">Done</option>
+									<option value="2">Declined</option>
+									<option value="3">Interested</option>
+									<option value="4">Emailed</option>
+									<option value="5">Rejected</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Status Date</label>
+								<p id="inf_status_date" style="margin-top: 3%;">N/A</p>
+							</div>
+							<div class="form-group">
+								<label style="margin-top: 7%;">Follow-up Date</label>
+								<p id="inf_follow-up_date" style="margin-top: 3%;">N/A</p>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<h5 style="text-align: center;">History</h5>
+							<a href="{{ route("createInfluencer", $profile->id)}}" class="btn btn-success" style="margin-bottom: 5%; width: 100%;">Add History</a>
+							<table id="tableInfHistory" data-pagination="true" data-page-size="5"></table>
 						</div>
 					</div>
 				</div>
-			</div>
 
-			<div class="card">
-				<div class="card-header" id="headingFive">
-					<h5 class="mb-0">
-						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-							<h5 style="text-align: center;">Affliate</h5>
-						</button>
-					</h5>
-				</div>
-				<div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
-					<div class="card-body">
-						<div class="col-md-12">
-							<h5 style="text-align: center;">Affliate</h5>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>Status</label>
-										<select class="form-control" id="aff_status">
-											<option value="0">N/A</option>
-											<option value="1">Done</option>
-											<option value="2">Declined</option>
-											<option value="3">Interested</option>
-											<option value="4">Emailed</option>
-											<option value="5">Rejected</option>
-										</select>
-									</div>
-									<div class="form-group">
-										<label>Follow-up</label>
-										<select class="form-control" id="aff_follow-up">
-											<option value="0">N/A</option>
-											<option value="1">Done</option>
-											<option value="2">Declined</option>
-											<option value="3">Interested</option>
-											<option value="4">Emailed</option>
-											<option value="5">Rejected</option>
-										</select>
-									</div>
-								</div>
-								<div class="col-md-6" style="text-align: center;">
-									<div class="form-group">
-										<label>Status Date</label>
-										<p id="aff_status_date" style="margin-top: 3%;">N/A</p>
-									</div>
-									<div class="form-group">
-										<label style="margin-top: 7%;">Follow-up Date</label>
-										<p id="aff_follow-up_date" style="margin-top: 3%;">N/A</p>
-									</div>
-								</div>
-								<div class="col-md-12">
-									<h5 style="text-align: center;">History</h5>
-									<table id="tableAffHistory" data-pagination="true" data-page-size="5"></table>
-								</div>
+				<div class="col-md-6">
+					<h5 style="text-align: center;">Affliate</h5>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Status</label>
+								<select class="form-control" id="aff_status">
+									<option value="0">N/A</option>
+									<option value="1">Done</option>
+									<option value="2">Declined</option>
+									<option value="3">Interested</option>
+									<option value="4">Emailed</option>
+									<option value="5">Rejected</option>
+								</select>
 							</div>
+							<div class="form-group">
+								<label>Follow-up</label>
+								<select class="form-control" id="aff_follow-up">
+									<option value="0">N/A</option>
+									<option value="1">Done</option>
+									<option value="2">Declined</option>
+									<option value="3">Interested</option>
+									<option value="4">Emailed</option>
+									<option value="5">Rejected</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Status Date</label>
+								<p id="aff_status_date" style="margin-top: 3%;">N/A</p>
+							</div>
+							<div class="form-group">
+								<label style="margin-top: 7%;">Follow-up Date</label>
+								<p id="aff_follow-up_date" style="margin-top: 3%;">N/A</p>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<h5 style="text-align: center;">History</h5>
+							<a href="{{ route("createAffliate", $profile->id)}}" class="btn btn-success" style="margin-bottom: 5%; width: 100%;">Add History</a>
+							<table id="tableAffHistory" data-pagination="true" data-page-size="5"></table>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
+		{{-- Notes --}}
+		<div class="col-md-12" style="margin-top: 5%;">
+			<h5 style="text-align: center;">Notes</h5>
+			<form method="POST" action="{{ route('addNote') }}">
+				@csrf
+				<input type="hidden" name="profile_id" value="{{ $profile->id }}">
+				<div class="form-group">
+					<textarea name="note" class="form-control"></textarea>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-success" style="float: right; margin-bottom: 5%;"><i class="fas fa-check"></i> Submit</button>
+				</div>
+			</form>
+		</div>
+
+		<div class="col-md-12" style="margin-top: 5%;">
+			<h5>History</h5>
+			<table id="tableNotes" data-pagination="true" data-page-size="5" required"></table>
+		</div>
+
 	</div>
 </div>
 
@@ -358,12 +348,6 @@
 	<input type="hidden" name="class" id="formChangeStatus-class" value="">
 	<input type="hidden" name="status_key" id="formChangeStatus-statusKey" value="">
 	<input type="hidden" name="status_type" id="formChangeStatus-statusType" value="">
-</form>
-
-<form id="formSetEmailSent" method="POST" action="{{ route('setEmailSent') }}" hidden="true">
-	@csrf
-	<input type="hidden" name="profile_id" id="formSetEmailSent-id" value="">
-	<input type="hidden" name="bool" id="formSetEmailSent-bool" value="">
 </form>
 
 <form id="formSetMentionedProduct" method="POST" action="{{ route('setMentionedProduct') }}" hidden="true">
@@ -415,6 +399,22 @@
 		    }, {
 		        field: 'created_at',
 		        title: 'Date',
+		    }]
+		});
+
+		$('#tableNotes').bootstrapTable({
+			url: '{{ route('getNotes', $profile->id) }}',
+			sortName: 'created_at',
+			sortOrder: 'desc',
+		    columns: [{
+		        field: 'note',
+		        title: 'Note'
+		    }, {
+		        field: 'author_id',
+		        title: 'Author'
+		    }, {
+		        field: 'created_at',
+		        title: 'Date'
 		    }]
 		});
 
@@ -521,50 +521,6 @@
 			  } else {
 				    swal({
 				    	title: "Account NOT deleted",
-				    	icon: "error"
-				    });
-			  }
-			});
-		});
-
-		$('#email_yes').on('click', function() {
-			swal({
-			  title: "Are you sure?",
-			  text: "You are setting Email sent status to 'Yes'",
-			  icon: "warning",
-			  buttons: true,
-			  dangerMode: true,
-			})
-			.then((willDelete) => {
-			  if (willDelete) {
-			  	$('#formSetEmailSent-id').val({{ $profile->id }});
-			  	$('#formSetEmailSent-bool').val(1);
-			  	$("#formSetEmailSent").submit();
-			  } else {
-				    swal({
-				    	title: "Email status NOT changed",
-				    	icon: "error"
-				    });
-			  }
-			});
-		});
-
-		$('#email_no').on('click', function() {
-			swal({
-			  title: "Are you sure?",
-			  text: "You are setting Email sent status to 'No'",
-			  icon: "warning",
-			  buttons: true,
-			  dangerMode: true,
-			})
-			.then((willDelete) => {
-			  if (willDelete) {
-			  	$('#formSetEmailSent-id').val({{ $profile->id }});
-			  	$('#formSetEmailSent-bool').val(0);
-			  	$("#formSetEmailSent").submit();
-			  } else {
-				    swal({
-				    	title: "Email status NOT changed",
 				    	icon: "error"
 				    });
 			  }
