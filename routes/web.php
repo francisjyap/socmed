@@ -60,6 +60,9 @@ Route::post('/deleteAccount', 'SocialMediaController@destroy')->name('deleteAcco
 
 //InfluencerAffliateController
 Route::post('/changeStatus', 'InfluencerAffliateController@changeStatus')->name('changeStatus');
+Route::post('/editInfAff', 'InfluencerAffliateController@editInfAff')->name('editInfAff');
+Route::get('/editInf/{id}', 'InfluencerAffliateController@editInf')->name('editInf');
+Route::get('/editAff/{id}', 'InfluencerAffliateController@editAff')->name('editAff');
 
 //LogController
 Route::get('/getInfHistory/{id}', 'LogController@getInfHistory')->name('getInfHistory');

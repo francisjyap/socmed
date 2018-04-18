@@ -70,6 +70,7 @@ $('#selectInfAff').change(function() {
 
 function refreshTableWithSelectValues()
 {
+	console.log('profileSort/' + $('#selectType').val() + '/' + $('#selectInfAff').val());
 	$('#table').bootstrapTable('refresh', {
 		silent: true,
 		url: 'profileSort/' + $('#selectType').val() + '/' + $('#selectInfAff').val(),

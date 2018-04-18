@@ -10,6 +10,7 @@
 namespace App\Http\Controllers;
 
 use App\Profile;
+use App\Http\Controllers\Helpers;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\SocialMediaController;
@@ -19,19 +20,14 @@ use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /*****
-        Display Index Page
-    *****/
+    /**
+    *   Display Index Page
+    **/
     public function index()
     {
         $types = SocialMediaTypesController::getTypes();
@@ -39,9 +35,9 @@ class ProfileController extends Controller
         return view('profiles.profilelist')->with(['types' => $types]);
     }
 
-    /*****
-        Display viewProfile Page
-    *****/
+    /**
+    *   Display viewProfile Page
+    */
     public function viewProfile($profile_id)
     {
         $profile = Profile::find($profile_id);
@@ -52,7 +48,7 @@ class ProfileController extends Controller
         $influencer = InfluencerAffliateController::getInfluencerEntry($profile_id);
         $affliate = InfluencerAffliateController::getAffliateEntry($profile_id);
 
-        return view('profiles.viewProfile_new')->with(['profile'=>$profile, 'emails'=>$emails, 'websites'=>$websites, 'socmed'=>$socmed, 'types'=> $types, 'influencer'=>$influencer, 'affliate'=>$affliate]);
+        return view('profiles.viewProfile')->with(['profile'=>$profile, 'emails'=>$emails, 'websites'=>$websites, 'socmed'=>$socmed, 'types'=> $types, 'influencer'=>$influencer, 'affliate'=>$affliate]);
     }
 
     /*****
@@ -77,21 +73,21 @@ class ProfileController extends Controller
     *****/
     public function getProfiles()
     {
-        $profiles = Profile::all();
+        // $profiles = Profile::all();
+        // foreach($profiles as $p){
+        //     if($p->is_influencer == 0){
+        //         $p->is_influencer = "No";
+        //     } else {
+        //         $p->is_influencer = "Yes";
+        //     }
+        //     if($p->is_affliate == 0){
+        //         $p->is_affliate = "No";
+        //     } else {
+        //         $p->is_affliate = "Yes";
+        //     }
+        // }
 
-        //Change influencer/affliate bool into text
-        foreach($profiles as $p){
-            if($p->is_influencer == 0){
-                $p->is_influencer = "No";
-            } else {
-                $p->is_influencer = "Yes";
-            }
-            if($p->is_affliate == 0){
-                $p->is_affliate = "No";
-            } else {
-                $p->is_affliate = "Yes";
-            }
-        }
+        $profiles = Helpers::convertBoolToString(Profile::all());
 
         $profiles = $profiles->sortBy('name')->values()->all();
 
@@ -195,18 +191,20 @@ class ProfileController extends Controller
         }
 
         //Change influencer/affliate bool into text
-        foreach($return as $p){
-            if($p->is_influencer == 0){
-                $p->is_influencer = "No";
-            } else {
-                $p->is_influencer = "Yes";
-            }
-            if($p->is_affliate == 0){
-                $p->is_affliate = "No";
-            } else {
-                $p->is_affliate = "Yes";
-            }
-        }
+        // foreach($return as $p){
+        //     if($p->is_influencer == 0){
+        //         $p->is_influencer = "No";
+        //     } else {
+        //         $p->is_influencer = "Yes";
+        //     }
+        //     if($p->is_affliate == 0){
+        //         $p->is_affliate = "No";
+        //     } else {
+        //         $p->is_affliate = "Yes";
+        //     }
+        // }
+
+        $return = Helpers::convertBoolToString($return);
 
         //Sort values by Name
         $return = $return->sortBy('name')->values()->all();
@@ -244,5 +242,4 @@ class ProfileController extends Controller
 
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
-
 }

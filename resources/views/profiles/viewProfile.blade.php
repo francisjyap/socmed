@@ -11,150 +11,225 @@
 
 @section('content')
 
-<div class="row" style="margin-bottom: 10%;">
-	<div class="col-md-2" style="margin-top: 5%;">
-		<a href="{{ route("home") }}" class="btn btn-danger" style="margin-bottom: 5%; width: 100%;"><i class="fas fa-arrow-left"></i> Back to Profiles</a>
-		<a href="{{ route("editProfile", $profile->id)}}" class="btn btn-success" style="margin-bottom: 5%; width: 100%;"><i class="far fa-edit"></i> Edit Profile</a>
-		<a href="{{ route("addEmail", $profile->id)}}" class="btn btn-success" style="margin-bottom: 5%; width: 100%;"><i class="fas fa-plus"></i> Add Email</a>
-		<a href="{{ route("addAccount", $profile->id)}}" class="btn btn-success" style="margin-bottom: 5%; width: 100%;"><i class="fas fa-plus"></i> Add Account</a>
-		<button type="button" class="btn btn-danger" id="btnDelete" style="margin-top: 30%; margin-bottom: 5%; width: 100%;"><i class="far fa-trash-alt"></i> Delete Account</button>
+<div class="row mar-bot-5">
+	<div class="col-md-2 mar-top-5 mar-bot-5">
+		<a href="{{ route("home") }}" class="btn btn-danger mar-bot-5 width-100"><i class="fas fa-arrow-left"></i> Back to Profiles</a>
+		<a href="{{ route("editProfile", $profile->id)}}" class="btn btn-success mar-bot-5 width-100"><i class="far fa-edit"></i> Edit Profile</a>
+		<a href="{{ route("addEmail", $profile->id)}}" class="btn btn-success mar-bot-5 width-100"><i class="fas fa-plus"></i> Add Email</a>
+		<a href="{{ route("addWebsite", $profile->id)}}" class="btn btn-success mar-bot-5 width-100"><i class="fas fa-plus"></i> Add Wesbite</a>
+		<a href="{{ route("addAccount", $profile->id)}}" class="btn btn-success mar-bot-5 width-100"><i class="fas fa-plus"></i> Add Account</a>
+		<button type="button" class="btn btn-danger mar-top-30 mar-bot-5 width-100" id="btnDelete"><i class="far fa-trash-alt"></i> Delete Account</button>
 	</div>
 
 	<div class="col-md-8">
+		@if(session('status'))
+            <div class="alert alert-{{ session('type') }}" role="alert" style="margin-top: 2%">
+              {{ session('msg') }}
+            </div>
+        @endif
 
-		<div class="col-md-12" style="text-align: ; margin-top: 5%;">
-			@if(session('status'))
-	            <div class="alert alert-{{ session('type') }}" role="alert">
-	              {{ session('msg') }}
-	            </div>
-	        @endif
-			<h3 style="margin-top: 5%; margin-bottom: 5%;">View Profile</h3>
-			<div class="row">			
-				<div class="col-md-6">
-					<h5>Name: {{ $profile->name }}</h5>
-					<h5>Primary Email: {{ $profile->email }}</h5>
-					<h5>Website: <a href="{{ $profile->website }}" target="_blank">{{ $profile->website }}</a></h5>
-					<h5>Country: {{ $profile->country }}</h5>
-					<div>
-						<button id="email_no" class="btn btn-danger" style="float: right;"
-						@if($profile->email_sent == 0)
-							disabled
-						@endif
-						><i class="fas fa-times"></i></button>
-						<button id="email_yes" class="btn btn-success" style="float: right;"
-						@if($profile->email_sent == 1)
-							disabled
-						@endif
-						><i class="fas fa-check"></i></button>
-						<h5>Email Sent?: 
-							@if($profile->email_sent == 0)
-								<p style="color: red">No</p>
-							@else
-								<p style="color: green">Yes</p>
-							@endif
-						</h5>
-					</div>
-					<h5>Is Affliate?: 
-						@if($profile->is_affliate == 0)
-							<p style="color: red">No</p>
-						@else
-							<p style="color: green">Yes</p>
-						@endif
-					</h5>
-					<h5>Is Influencer?: 
-						@if($profile->is_influencer == 0)
-							<p style="color: red">No</p>
-						@else
-							<p style="color: green">Yes</p>
-						@endif
-					</h5>
-					<div>
-						<button id="mention_no" class="btn btn-danger" style="float: right;"
-						@if($profile->mentioned_product == 0)
-							disabled
-						@endif
-						><i class="fas fa-times"></i></button>
-						<button id="mention_yes" class="btn btn-success" style="float: right;"
-						@if($profile->mentioned_product == 1)
-							disabled
-						@endif
-						><i class="fas fa-check"></i></button>
-						<h5>Mentioned Trackimo?: 
-							@if($profile->mentioned_product == 0)
-								<p style="color: red">No</p>
-							@else
-								<p style="color: green">Yes</p>
-							@endif
-						</h5>
-					</div>
-				</div>
+		<h3 class="mar-top-5 mar-bot-5">View Profile</h3>
 
-				<div class="col-md-6">
-					<table id="emailTable" class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="7" data-search="true">
+		<div class="row">
+			<div class="col-md-6">
+				<h5>Name: {{ $profile->name }}</h5>
+				<h5>Primary Email: {{ $profile->email }}</h5>
+				<h5>Primary Website: <a href="{{ $profile->website }}" target="_blank">{{ $profile->website }}</a></h5>
+				<h5>Country: {{ $profile->country }}</h5>
+			</div>
+
+			<div class="col-md-6">
+				<h5>Email Sent?:
+					<table class="table table-condensed table-bordered">
 						<thead>
 							<tr>
-								<th data-field="email">List of Emails</th>
-								<th>Actions</th>
+								<th>Influencer</th>
+								<th>Affliate</th>
 							</tr>
 						</thead>
 						<tbody>
-							@foreach($emails as $email)
-								<tr>
-									<td>{{ $email->email }}</td>
-									<td>
-										<div class="btn-group">
-											<a href="{{ route('editEmail', $email->id) }}" class="btn btn-success"> Edit</a>
-											<button type="button" class="btn btn-danger btnDeleteEmail" value="{{ $email->id }}"> Delete</button>
-										</div>
-									</td>
-								</tr>
-							@endforeach
+							<tr>
+								<td>
+									@if($influencer->status == 4 || $influencer['follow-up'] == 4)
+										<p style="color: green">Yes</p>
+									@else
+										<p style="color: red">No</p>
+									@endif
+								</td>
+								<td>
+									@if($affliate->status == 4 || $affliate['follow-up'] == 4)
+										<p style="color: green">Yes</p>
+									@else
+										<p style="color: red">No</p>
+									@endif
+								</td>
+							</tr>
 						</tbody>
 					</table>
+				</h5>
+				<h5>Is Affliate?: 
+					@if($profile->is_affliate == 0)
+						<p style="color: red">No</p>
+					@else
+						<p style="color: green">Yes</p>
+					@endif
+				</h5>
+				<h5>Is Influencer?: 
+					@if($profile->is_influencer == 0)
+						<p style="color: red">No</p>
+					@else
+						<p style="color: green">Yes</p>
+					@endif
+				</h5>
+				<div>
+					<button id="mention_no" class="btn btn-danger" style="float: right;"
+					@if($profile->mentioned_product == 0)
+						disabled
+					@endif
+					><i class="fas fa-times"></i></button>
+					<button id="mention_yes" class="btn btn-success" style="float: right;"
+					@if($profile->mentioned_product == 1)
+						disabled
+					@endif
+					><i class="fas fa-check"></i></button>
+					<h5>Mentioned Trackimo?: 
+						@if($profile->mentioned_product == 0)
+							<p style="color: red">No</p>
+						@else
+							<p style="color: green">Yes</p>
+						@endif
+					</h5>
 				</div>
 			</div>
 		</div>
 
-		<div class="col-md-12">
-			<h5 style="text-align: center;">List of Social Media Accounts</h5>
-			<table id="socmedTable" class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="10" data-search="true">
-				<thead>
-					<tr>
-						<th>Type</th>
-						<th>Username</th>
-						<th>URL</th>
-						<th>Followers</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach($socmed as $s)
-						<tr>
-							@foreach($types as $t)
-								@if($t->id == $s->type)
-									<td>{{ $t->name }}</td>
-									@break
-								@endif
-							@endforeach
-							<td>{{ $s->username }}</td>
-							<td><a href="{{ $s->url }}" target="_blank">{{ $s->url }}</a></td>
-							<td>{{ number_format($s->followers) }}</td>
-							<td>
-								<div class="btn-group">
-									<a href="{{ route('editAccount', $s->id) }}" class="btn btn-success"> Edit</a>
-									<button type="button" class="btn btn-danger btnDeleteAccount" value="{{ $s->id }}"> Delete</button>
-								</div>
-							</td>
-						</tr>
-					@endforeach
-				</tbody>
-			</table>
+
+		<div id="accordion">
+			<div class="card">
+				<div class="card-header" id="headingTwo">
+				  <h5 class="mb-0">
+				    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+						<h5 style="text-align: center;">List of Emails</h5>
+				    </button>
+				  </h5>
+				</div>
+				<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+					<div class="card-body">
+						<h5 style="text-align: center;">List of Emails</h5>
+						<table id="emailTable" class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="7" data-search="true">
+							<thead>
+								<tr>
+									<th data-field="email">List of Emails</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($emails as $email)
+									<tr>
+										<td>{{ $email->email }}</td>
+										<td>
+											<div class="btn-group">
+												<a href="{{ route('editEmail', $email->id) }}" class="btn btn-success"> Edit</a>
+												<button type="button" class="btn btn-danger btnDeleteEmail" value="{{ $email->id }}"> Delete</button>
+											</div>
+										</td>
+									</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="card">
+				<div class="card-header" id="headingWebsite">
+				  <h5 class="mb-0">
+				    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseWebsite" aria-expanded="false" aria-controls="collapseWebsite">
+						<h5 style="text-align: center;">List of Websites</h5>
+				    </button>
+				  </h5>
+				</div>
+				<div id="collapseWebsite" class="collapse" aria-labelledby="headingWebsite" data-parent="#accordion">
+					<div class="card-body">
+						<h5 style="text-align: center;">List of Websites</h5>
+						<table id="emailTable" class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="7" data-search="true">
+							<thead>
+								<tr>
+									<th data-field="email">List of Websites</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($websites as $website)
+									<tr>
+										<td><a href="{{ $website->website }}" target="_blank">{{ $website->website }}</a></td>
+										<td>
+											<div class="btn-group">
+												<a href="{{ route('editWebsite', $website->id) }}" class="btn btn-success"> Edit</a>
+												<button type="button" class="btn btn-danger btnDeleteWebsite" value="{{ $website->id }}"> Delete</button>
+											</div>
+										</td>
+									</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="card">
+				<div class="card-header" id="headingThree">
+					<h5 class="mb-0">
+						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+							<h5 style="text-align: center;">List of Social Media Accounts</h5>
+						</button>
+					</h5>
+				</div>
+				<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+					<div class="card-body">
+						<h5 style="text-align: center;">List of Social Media Accounts</h5>
+						<table id="socmedTable" class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="10" data-search="true">
+							<thead>
+								<tr>
+									<th>Type</th>
+									<th>Username</th>
+									<th>URL</th>
+									<th>Followers</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($socmed as $s)
+									<tr>
+										@foreach($types as $t)
+											@if($t->id == $s->type)
+												<td>{{ $t->name }}</td>
+												@break
+											@endif
+										@endforeach
+										<td>{{ $s->username }}</td>
+										<td><a href="{{ $s->url }}" target="_blank">{{ $s->url }}</a></td>
+										<td>{{ number_format($s->followers) }}</td>
+										<td>
+											<div class="btn-group">
+												<a href="{{ route('editAccount', $s->id) }}" class="btn btn-success"> Edit</a>
+												<button type="button" class="btn btn-danger btnDeleteAccount" value="{{ $s->id }}"> Delete</button>
+											</div>
+										</td>
+									</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
 		</div>
 
-		<div class="col-md-12" style="margin-top: 5%;">
+		<div class="col-md-12 mar-top-5">
 			<div class="row">
 				<div class="col-md-6">
 					<h5 style="text-align: center;">Influencer</h5>
+					<a href="{{ route('editInf', $profile->id) }}" class="btn btn-success" style="width: 100%;">Edit</a>
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
@@ -192,6 +267,7 @@
 						</div>
 						<div class="col-md-12">
 							<h5 style="text-align: center;">History</h5>
+							<a href="{{ route("createInfluencer", $profile->id)}}" class="btn btn-success mar-bot-5 width-100">Add History</a>
 							<table id="tableInfHistory" data-pagination="true" data-page-size="5"></table>
 						</div>
 					</div>
@@ -199,6 +275,7 @@
 
 				<div class="col-md-6">
 					<h5 style="text-align: center;">Affliate</h5>
+					<a href="{{ route('editAff', $profile->id) }}" class="btn btn-success" style="width: 100%;">Edit</a>
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
@@ -236,12 +313,34 @@
 						</div>
 						<div class="col-md-12">
 							<h5 style="text-align: center;">History</h5>
+							<a href="{{ route("createAffliate", $profile->id)}}" class="btn btn-success" style="margin-bottom: 5%; width: 100%;">Add History</a>
 							<table id="tableAffHistory" data-pagination="true" data-page-size="5"></table>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
+		{{-- Notes --}}
+		<div class="col-md-12" style="margin-top: 5%;">
+			<h5 style="text-align: center;">Notes</h5>
+			<form method="POST" action="{{ route('addNote') }}">
+				@csrf
+				<input type="hidden" name="profile_id" value="{{ $profile->id }}">
+				<div class="form-group">
+					<textarea name="note" class="form-control"></textarea>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-success" style="float: right; margin-bottom: 5%;"><i class="fas fa-check"></i> Submit</button>
+				</div>
+			</form>
+		</div>
+
+		<div class="col-md-12" style="margin-top: 5%;">
+			<h5>History</h5>
+			<table id="tableNotes" data-pagination="true" data-page-size="5" required"></table>
+		</div>
+
 	</div>
 </div>
 
@@ -255,6 +354,11 @@
 	<input type="hidden" name="id" id="formDeleteEmail-id" value="">
 </form>
 
+<form id="formDeleteWebsite" method="POST" action="{{ route('deleteWebsite') }}" hidden="true">
+	@csrf
+	<input type="hidden" name="id" id="formDeleteWebsite-id" value="">
+</form>
+
 <form id="formDeleteAccount" method="POST" action="{{ route('deleteAccount') }}" hidden="true">
 	@csrf
 	<input type="hidden" name="id" id="formDeleteAccount-id" value="">
@@ -266,12 +370,6 @@
 	<input type="hidden" name="class" id="formChangeStatus-class" value="">
 	<input type="hidden" name="status_key" id="formChangeStatus-statusKey" value="">
 	<input type="hidden" name="status_type" id="formChangeStatus-statusType" value="">
-</form>
-
-<form id="formSetEmailSent" method="POST" action="{{ route('setEmailSent') }}" hidden="true">
-	@csrf
-	<input type="hidden" name="profile_id" id="formSetEmailSent-id" value="">
-	<input type="hidden" name="bool" id="formSetEmailSent-bool" value="">
 </form>
 
 <form id="formSetMentionedProduct" method="POST" action="{{ route('setMentionedProduct') }}" hidden="true">
@@ -323,6 +421,22 @@
 		    }, {
 		        field: 'created_at',
 		        title: 'Date',
+		    }]
+		});
+
+		$('#tableNotes').bootstrapTable({
+			url: '{{ route('getNotes', $profile->id) }}',
+			sortName: 'created_at',
+			sortOrder: 'desc',
+		    columns: [{
+		        field: 'note',
+		        title: 'Note'
+		    }, {
+		        field: 'author_id',
+		        title: 'Author'
+		    }, {
+		        field: 'created_at',
+		        title: 'Date of Action'
 		    }]
 		});
 
@@ -389,6 +503,31 @@
 			});
 		});
 		
+		/*****
+		*	btnDeleteWebsite function
+		*****/
+		$('.btnDeleteWebsite').on('click', function () {
+			swal({
+			  title: "Are you sure?",
+			  text: "You are deleting this website",
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((willDelete) => {
+			  if (willDelete) {
+			  	$('#formDeleteWebsite-id').val(this.value);
+			  	$("#formDeleteWebsite").submit();
+			  	console.log('deleteWebsiteSubmit');
+			  } else {
+				    swal({
+				    	title: "Website NOT deleted",
+				    	icon: "error"
+				    });
+			  }
+			});
+		});
+
 		$('.btnDeleteAccount').on('click', function () {
 			swal({
 			  title: "Are you sure?",
@@ -404,50 +543,6 @@
 			  } else {
 				    swal({
 				    	title: "Account NOT deleted",
-				    	icon: "error"
-				    });
-			  }
-			});
-		});
-
-		$('#email_yes').on('click', function() {
-			swal({
-			  title: "Are you sure?",
-			  text: "You are setting Email sent status to 'Yes'",
-			  icon: "warning",
-			  buttons: true,
-			  dangerMode: true,
-			})
-			.then((willDelete) => {
-			  if (willDelete) {
-			  	$('#formSetEmailSent-id').val({{ $profile->id }});
-			  	$('#formSetEmailSent-bool').val(1);
-			  	$("#formSetEmailSent").submit();
-			  } else {
-				    swal({
-				    	title: "Email status NOT changed",
-				    	icon: "error"
-				    });
-			  }
-			});
-		});
-
-		$('#email_no').on('click', function() {
-			swal({
-			  title: "Are you sure?",
-			  text: "You are setting Email sent status to 'No'",
-			  icon: "warning",
-			  buttons: true,
-			  dangerMode: true,
-			})
-			.then((willDelete) => {
-			  if (willDelete) {
-			  	$('#formSetEmailSent-id').val({{ $profile->id }});
-			  	$('#formSetEmailSent-bool').val(0);
-			  	$("#formSetEmailSent").submit();
-			  } else {
-				    swal({
-				    	title: "Email status NOT changed",
 				    	icon: "error"
 				    });
 			  }

@@ -64,23 +64,31 @@ class InfluencerAffliateController extends Controller
             $previous = $previous['follow-up'];
         }
 
-        //Check for done status and if changing Influencer
+        /*****
+        *   Summary:
+        *       The (bool)is_influencer and (bool)is_affliate column
+        *       is set to "1 (True)" if the Influencer/Affliate Status
+        *       is set to "Done"
+        *   Condition:
+        *       if status_key is set to "Done" AND class is "Influencer"
+        *   Effect:
+        *       Profile->is_influencer (bool)status is set to 1(True)
+        *   Else Condition:
+        *       if status_key is set to "Done" AND class is "Affliate"
+        *   Else Effect:
+        *       Profile->is_affliate (bool)status is set to 1(True)
+        *****/
         if($request->status_key == 1 && $request->class == 0){
             ProfileController::setIsInfluencer($request->profile_id, 1);
-        } 
-
-        //Check for done status and if changing Affliate
-        if($request->status_key == 1 && $request->class == 1) {
+        } else if($request->status_key == 1 && $request->class == 1) {
             ProfileController::setIsAffliate($request->profile_id, 1);
         }
 
-        //Check if changing status from Done to another and if changing Influencer
+        // Check if changing status from Done to another and if changing Influencer
+        // else changing Affliate
         if($request->status_key != 1 && $request->class == 0){
             ProfileController::setIsInfluencer($request->profile_id, 0);
-        } 
-
-        //Check if changing status from Done to another and if changing Influencer
-        if($request->status_key != 1 && $request->class == 1) {
+        } else if($request->status_key != 1 && $request->class == 1) {
             ProfileController::setIsAffliate($request->profile_id, 0);
         }
 
@@ -115,5 +123,40 @@ class InfluencerAffliateController extends Controller
     public static function getAffliateEntry($profile_id)
     {
         return InfluencerAffliate::where('profile_id', $profile_id)->where('class', 1)->first();
+    }
+
+    public static function editInfAff(Request $request)
+    {
+        $data = InfluencerAffliate::where('profile_id', $request->profile_id)->where('class', $request->class)->first();
+        $data->status_date = $request->status_date;
+        $data['follow-up_date'] = $request['follow-up_date'];
+        $data->save();
+
+        if($data){
+            $msg = 'Date updated successfully!';
+            $type = 'success';
+        }
+        else{
+            $msg = 'Date updating failed!';
+            $type = 'danger';
+        }
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $data, 'msg' => $msg, 'type' => $type]);
+    }
+
+    public static function editInf($profile_id)
+    {
+        $data = InfluencerAffliate::where('profile_id', $profile_id)->where('class', 0)->first();
+        $status_date = substr($data['status_date'],0,10);
+        $follow_up_date = substr($data['follow-up_date'],0,10);
+        return view('editInf')->with(['data' => $data, 'profile_id'=>$profile_id, 'status_date'=>$status_date, 'follow_up_date'=>$follow_up_date]);
+    }
+
+    public static function editAff($profile_id)
+    {
+        $data = InfluencerAffliate::where('profile_id', $profile_id)->where('class', 1)->first();
+        $status_date = substr($data['status_date'],0,10);
+        $follow_up_date = substr($data['follow-up_date10'],0,10);
+        return view('editAff')->with(['data' => $data, 'profile_id'=>$profile_id, 'status_date'=>$status_date, 'follow_up_date'=>$follow_up_date]);
     }
 }

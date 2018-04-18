@@ -11,7 +11,7 @@
 
 @section('content')
 
-<div class="row">
+<div class="row mar-bot-5">
     <div class="col-md-8 offset-2" style="margin-top: 5%;">
         @if(isset($status))
             <div class="alert alert-{{ $type }}" role="alert">

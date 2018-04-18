@@ -1,0 +1,18 @@
+/**
+*	Margins
+**/
+.mar-top-5{
+	margin-top: 5%;
+}
+
+.mar-top-30{
+	margin-top: 30%;
+}
+
+.mar-bot-5{
+	margin-bottom: 5%;
+}
+
+.width-100{
+	width: 100%;
+}

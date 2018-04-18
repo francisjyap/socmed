@@ -9,6 +9,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Profile;
 use App\SocialMedia;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SocialMediaTypesController;
