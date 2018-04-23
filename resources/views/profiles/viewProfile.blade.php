@@ -11,8 +11,8 @@
 
 @section('content')
 
-<div class="row mar-bot-5">
-	<div class="col-md-2 mar-top-5 mar-bot-5">
+<div class="row mar-top-5 mar-bot-5">
+	<div class="col-md-2 mar-bot-5">
 		<a href="{{ route("home") }}" class="btn btn-danger mar-bot-5 width-100"><i class="fas fa-arrow-left"></i> Back to Profiles</a>
 		<a href="{{ route("editProfile", $profile->id)}}" class="btn btn-success mar-bot-5 width-100"><i class="far fa-edit"></i> Edit Profile</a>
 		<a href="{{ route("addEmail", $profile->id)}}" class="btn btn-success mar-bot-5 width-100"><i class="fas fa-plus"></i> Add Email</a>
@@ -23,12 +23,12 @@
 
 	<div class="col-md-8">
 		@if(session('status'))
-            <div class="alert alert-{{ session('type') }}" role="alert" style="margin-top: 2%">
+            <div class="alert alert-{{ session('type') }}" role="alert">
               {{ session('msg') }}
             </div>
         @endif
 
-		<h3 class="mar-top-5 mar-bot-5">View Profile</h3>
+		<h3 class="mar-bot-5">View Profile</h3>
 
 		<div class="row">
 			<div class="col-md-6">
@@ -332,7 +332,7 @@
 				</div>
 				<div class="form-group" style="text-align: center;">
 					<label>Date of Action</label>
-					<input type="date" name="date_of_action" id="date_of_action" class="form-control">
+					<input type="date" name="date_of_action" id="date_of_action" class="form-control" required>
 					<input type="checkbox" name="btnToday" id="btnToday" class="form-check-input" value="true">
 					<label class="form-check-label">Today</label>
 				</div>
