@@ -19,6 +19,16 @@ use Illuminate\Http\Request;
 
 class InfluencerAffliateController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public static function createEntryforProfile($profile_id)
     {
         InfluencerAffliate::create([

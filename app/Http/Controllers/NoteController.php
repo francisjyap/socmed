@@ -16,6 +16,16 @@ use Illuminate\Http\Request;
 
 class NoteController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function addNote(Request $request)
     {
         $date = $request->date_of_action;

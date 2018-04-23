@@ -15,6 +15,16 @@ use Illuminate\Http\Request;
 
 class LogController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public static function createLog($user_id, $profile_id, $class, $field_name, $field_data)
     {
         return Log::create([

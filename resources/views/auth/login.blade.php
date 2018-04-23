@@ -38,6 +38,7 @@
 			</div>
 
 			<div class="form-group">
+				<a href="{{ route('register') }}" style="float: left;">Click here to Register</a>
 				<button type="submit" class="btn btn-success" style="float: right;"> Login</button>
 			</div>
 		</form>
