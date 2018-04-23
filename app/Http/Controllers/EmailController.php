@@ -46,6 +46,9 @@ class EmailController extends Controller
             $type = 'danger';
         }
 
+        $note = 'Added email: '.$request->email;
+        NoteController::createLogNote($request->profile_id, $note);
+
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 
@@ -58,12 +61,14 @@ class EmailController extends Controller
     public function update(Request $request)
     {
         $email = Email::find($request->id);
-
+        $old = $email->email;
         $bool = $email->update(['email' => $request->email]);
 
         if($bool){
             $msg = 'Email updated successfully!';
             $type = 'success';
+            $note = 'Edited email: '.$old.' to '.$request->email;
+            NoteController::createLogNote($email->profile_id, $note);
         }
         else{
             $msg = 'Email updating failed!';
@@ -76,11 +81,15 @@ class EmailController extends Controller
     public function destroy(Request $request)
     {
         $email = Email::find($request->id);
+        $deleted = $email->email;
+        $deleted_profile_id = $email->profile_id;
         $bool = $email->delete();
 
         if($bool){
             $msg = 'Email deleted!';
             $type = 'success';
+            $note = 'Deleted email: '.$deleted;
+            NoteController::createLogNote($deleted_profile_id, $note);
         } else {
             $msg = 'Email failed to delete!';
             $type = 'fail';

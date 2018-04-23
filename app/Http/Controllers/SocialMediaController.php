@@ -67,6 +67,8 @@ class SocialMediaController extends Controller
         if($bool){
             $msg = 'Account added successfully!';
             $type = 'success';
+            $note = 'Added Social Media Account: '.$request->username;
+            NoteController::createLogNote($request->profile_id, $note);
         }
         else{
             $msg = 'Account adding failed!';
@@ -109,25 +111,46 @@ class SocialMediaController extends Controller
      */
     public function update(Request $request)
     {
-        $socmed = SocialMedia::find($request->id);
+        $old = SocialMedia::find($request->id);
 
-        $bool = $socmed->update([
+        $bool = SocialMedia::find($request->id)->update([
             'type' => $request->type,
             'username' => $request->username,
             'url' => $request->url,
             'followers' => $request->followers,
         ]);
 
+        $new = SocialMedia::find($request->id);
+
+        echo $old->username.' '.$new->username;
+
         if($bool){
-            $msg = 'Account updated successfully!';
+            $msg = 'Social Media Account updated successfully!';
             $type = 'success';
+            $note = 'Edited Social Media Account: '.$request->username;
+            if($old->type != $new->type){
+                $note = 'Edited Social Media Account: '.$new->username.' type from '.SocialMediaTypesController::getString($old->type).' to '.SocialMediaTypesController::getString($new->type);
+                NoteController::createLogNote($new->profile_id, $note);
+            }
+            if($old->username != $new->username){
+                $note = 'Edited Social Media Account: '.$old->username.' username from '.$old->username.' to '.$new->username;
+                NoteController::createLogNote($new->profile_id, $note);
+            }
+            if($old->url != $new->url){
+                $note = 'Edited Social Media Account: '.$new->username.' URL from '.$old->url.' to '.$new->url;
+                NoteController::createLogNote($new->profile_id, $note);
+            }
+            if($old->followers != $new->followers){
+                $note = 'Edited Social Media Account: '.$new->username.' followers from '.$old->followers.' to '.$new->followers;
+                NoteController::createLogNote($new->profile_id, $note);
+            }
         }
         else{
-            $msg = 'Account updating failed!';
+            $msg = 'Social Media Account updating failed!';
             $type = 'danger';
         }
 
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $socmed->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $new->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 
     /**
@@ -139,11 +162,15 @@ class SocialMediaController extends Controller
     public function destroy(Request $request)
     {
         $socmed = SocialMedia::find($request->id);
+        $deleted = $socmed->username;
+        $deleted_profile_id = $socmed->profile_id;
         $bool = $socmed->delete();
 
         if($bool){
             $msg = 'Account deleted!';
             $type = 'success';
+            $note = 'Deleted Social Media Account: '.$deleted;
+            NoteController::createLogNote($deleted_profile_id, $note);
         } else {
             $msg = 'Account failed to delete!';
             $type = 'fail';

@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use App\Profile;
 use App\Http\Controllers\Helpers;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\SocialMediaController;
@@ -120,16 +121,36 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
+        $old = Profile::find($request->id);
+
         $bool = Profile::find($request->id)->update([
                 'email' => $request->email,
                 'name' => $request->name,
                 'website' => $request->website,
                 'country' => $request->country
             ]);
+        
+        $new = Profile::find($request->id);
 
         if($bool){
             $msg = 'Profile edited successfully!';
             $type = 'success';
+            if($old->email != $new->email){
+                $note = 'Edited Primary Email from '.$old->email.' to '.$new->email;
+                NoteController::createLogNote($request->id, $note);
+            }
+            if($old->name != $new->name){
+                $note = 'Edited Name from '.$old->name.' to '.$new->name;
+                NoteController::createLogNote($request->id, $note);
+            }
+            if($old->website != $new->website){
+                $note = 'Edited Website from '.$old->website.' to '.$new->website;
+                NoteController::createLogNote($request->id, $note);
+            }
+            if($old->country != $new->country){
+                $note = 'Edited Country from '.$old->country.' to '.$new->country;
+                NoteController::createLogNote($request->id, $note);
+            }
         }
         else{
             $msg = 'Profile editing failed!';
@@ -234,6 +255,12 @@ class ProfileController extends Controller
         if($bool){
             $msg = 'Mentioned product status changed successfully!';
             $type = 'success';
+            if($request->bool){
+                $note = 'Changed mentioned product status to Yes';
+            } else{
+                $note = 'Changed mentioned product status to No';
+            }
+            NoteController::createLogNote($request->profile_id, $note);
         }
         else{
             $msg = 'Mentioned product status change failed!';

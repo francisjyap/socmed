@@ -40,6 +40,8 @@ class WebsiteController extends Controller
         if($bool){
             $msg = 'Website created successfully!';
             $type = 'success';
+            $note = 'Added website: '.$request->website;
+            NoteController::createLogNote($request->profile_id, $note);
         }
         else{
             $msg = 'Website creation failed!';
@@ -58,12 +60,14 @@ class WebsiteController extends Controller
     public function update(Request $request)
     {
         $website = Website::find($request->id);
-
+        $old = $website->website;
         $bool = $website->update(['website' => $request->website]);
 
         if($bool){
             $msg = 'Website updated successfully!';
             $type = 'success';
+            $note = 'Edited website: '.$old.' to '.$request->website;
+            NoteController::createLogNote($website->profile_id, $note);
         }
         else{
             $msg = 'Website updating failed!';
@@ -76,11 +80,15 @@ class WebsiteController extends Controller
     public function destroy(Request $request)
     {
         $website = Website::find($request->id);
+        $deleted = $website->website;
+        $deleted_profile_id = $website->profile_id;
         $bool = $website->delete();
 
         if($bool){
             $msg = 'Website deleted!';
             $type = 'success';
+            $note = 'Deleted website: '.$deleted;
+            NoteController::createLogNote($deleted_profile_id, $note);
         } else {
             $msg = 'Website failed to delete!';
             $type = 'fail';

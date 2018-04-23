@@ -41,6 +41,15 @@ class NoteController extends Controller
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 
+    public static function createLogNote($profile_id, $note)
+    {
+        return Note::create([
+            'profile_id' => $profile_id,
+            'author_id' => Auth::id(),
+            'note' => $note,
+        ]);
+    }
+
     public function getNotes($profile_id)
     {
         $notes = Note::where('profile_id', $profile_id)->get();

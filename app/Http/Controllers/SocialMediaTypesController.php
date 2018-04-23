@@ -28,4 +28,9 @@ class SocialMediaTypesController extends Controller
     {
     	return SocialMediaTypes::all();
     }
+
+    public static function getString($id)
+    {
+        return SocialMediaTypes::find($id)->name;
+    }
 }
