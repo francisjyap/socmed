@@ -29,6 +29,8 @@ class CreateInfluencerAffliatesTable extends Migration
             $table->integer('follow-up')->default(0);
             $table->date('follow-up_date')->nullable();
             $table->string('affliate_code')->nullable();
+            $table->integer('latest_inf_log_id')->nullable();
+            $table->integer('latest_aff_log_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

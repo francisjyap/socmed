@@ -10,6 +10,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use App\Log;
 use App\InfluencerAffliate;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\ProfileController;
@@ -101,8 +102,18 @@ class InfluencerAffliateController extends Controller
         }
 
         //For logs
-        LogController::createLog(Auth::id(), $request->profile_id, $request->class, $type, $request->status_key);
-        
+        $log = LogController::createLog(Auth::id(), $request->profile_id, $request->class, $type, $request->status_key);
+
+        if($request->status_type == 0){
+            InfluencerAffliate::where('profile_id', $request->profile_id)->where('class', $request->class)->update([
+                'latest_inf_log_id' => $log->id
+            ]);
+        } else if($request->status_type == 1){
+            InfluencerAffliate::where('profile_id', $request->profile_id)->where('class', $request->class)->update([
+                'latest_aff_log_id' => $log->id
+            ]);
+        }
+
         if($row){
             $msg = $type . ' updated successfully!';
             $type = 'success';
@@ -128,9 +139,26 @@ class InfluencerAffliateController extends Controller
     public static function editInfAff(Request $request)
     {
         $data = InfluencerAffliate::where('profile_id', $request->profile_id)->where('class', $request->class)->first();
+
+        $orig_status_date = $data->status_date;
+        $orig_follow_up_date = $data['follow-up_date'];
+
         $data->status_date = $request->status_date;
-        $data['follow-up_date'] = $request['follow-up_date'];
+        $data['follow-up_date'] = $request->follow_up_date;
         $data->save();
+
+        //Edit Log
+        if($data->latest_inf_log_id != null){
+            $log = Log::where('id', $data->latest_inf_log_id)->first();
+            $log->created_at = $request->status_date;
+            $log->save();
+        }
+
+        if($data->latest_aff_log_id != null){
+            $log = Log::where('id', $data->latest_aff_log_id)->first();
+            $log->created_at = $request->follow_up_date;
+            $log->save();
+        }
 
         if($data){
             $msg = 'Date updated successfully!';

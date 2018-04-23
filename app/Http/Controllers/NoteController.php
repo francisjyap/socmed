@@ -18,10 +18,15 @@ class NoteController extends Controller
 {
     public function addNote(Request $request)
     {
+        $date = $request->date_of_action;
+        if($request->btnToday){
+            $date = now();
+        }
         $bool = Note::create([
             'profile_id' => $request->profile_id,
             'author_id' => Auth::id(),
             'note' => $request->note,
+            'created_at' => $date
         ]);
 
         if($bool){

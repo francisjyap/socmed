@@ -22,7 +22,7 @@ class Note extends Model
      * @var array
      */
     protected $fillable = [
-        'profile_id', 'note', 'author_id'
+        'profile_id', 'note', 'author_id', 'created_at', 
     ];
 
     /**
