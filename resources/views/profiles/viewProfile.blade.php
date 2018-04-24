@@ -52,18 +52,22 @@
 						<tbody>
 							<tr>
 								<td>
-									@if($influencer->status == 4 || $influencer['follow-up'] == 4)
-										<p style="color: green">Yes</p>
-									@else
-										<p style="color: red">No</p>
-									@endif
+									@isset($influencer)
+										@if($influencer->status == 4 || $influencer['follow-up'] == 4)
+											<p style="color: green">Yes</p>
+										@else
+											<p style="color: red">No</p>
+										@endif
+									@endisset
 								</td>
 								<td>
-									@if($affliate->status == 4 || $affliate['follow-up'] == 4)
-										<p style="color: green">Yes</p>
-									@else
-										<p style="color: red">No</p>
-									@endif
+									@isset($affliate)
+										@if($affliate->status == 4 || $affliate['follow-up'] == 4)
+											<p style="color: green">Yes</p>
+										@else
+											<p style="color: red">No</p>
+										@endif
+									@endisset
 								</td>
 							</tr>
 						</tbody>
@@ -126,17 +130,19 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach($emails as $email)
-									<tr>
-										<td>{{ $email->email }}</td>
-										<td>
-											<div class="btn-group">
-												<a href="{{ route('editEmail', $email->id) }}" class="btn btn-success"> Edit</a>
-												<button type="button" class="btn btn-danger btnDeleteEmail" value="{{ $email->id }}"> Delete</button>
-											</div>
-										</td>
-									</tr>
-								@endforeach
+								@isset($emails)
+									@foreach($emails as $email)
+										<tr>
+											<td>{{ $email->email }}</td>
+											<td>
+												<div class="btn-group">
+													<a href="{{ route('editEmail', $email->id) }}" class="btn btn-success"> Edit</a>
+													<button type="button" class="btn btn-danger btnDeleteEmail" value="{{ $email->id }}"> Delete</button>
+												</div>
+											</td>
+										</tr>
+									@endforeach
+								@endisset
 							</tbody>
 						</table>
 					</div>
@@ -162,17 +168,19 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach($websites as $website)
-									<tr>
-										<td><a href="{{ $website->website }}" target="_blank">{{ $website->website }}</a></td>
-										<td>
-											<div class="btn-group">
-												<a href="{{ route('editWebsite', $website->id) }}" class="btn btn-success"> Edit</a>
-												<button type="button" class="btn btn-danger btnDeleteWebsite" value="{{ $website->id }}"> Delete</button>
-											</div>
-										</td>
-									</tr>
-								@endforeach
+								@isset($websites)
+									@foreach($websites as $website)
+										<tr>
+											<td><a href="{{ $website->website }}" target="_blank">{{ $website->website }}</a></td>
+											<td>
+												<div class="btn-group">
+													<a href="{{ route('editWebsite', $website->id) }}" class="btn btn-success"> Edit</a>
+													<button type="button" class="btn btn-danger btnDeleteWebsite" value="{{ $website->id }}"> Delete</button>
+												</div>
+											</td>
+										</tr>
+									@endforeach
+								@endisset
 							</tbody>
 						</table>
 					</div>
@@ -201,25 +209,27 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach($socmed as $s)
-									<tr>
-										@foreach($types as $t)
-											@if($t->id == $s->type)
-												<td>{{ $t->name }}</td>
-												@break
-											@endif
-										@endforeach
-										<td>{{ $s->username }}</td>
-										<td><a href="{{ $s->url }}" target="_blank">{{ $s->url }}</a></td>
-										<td>{{ number_format($s->followers) }}</td>
-										<td>
-											<div class="btn-group">
-												<a href="{{ route('editAccount', $s->id) }}" class="btn btn-success"> Edit</a>
-												<button type="button" class="btn btn-danger btnDeleteAccount" value="{{ $s->id }}"> Delete</button>
-											</div>
-										</td>
-									</tr>
-								@endforeach
+								@isset($socmed)
+									@foreach($socmed as $s)
+										<tr>
+											@foreach($types as $t)
+												@if($t->id == $s->type)
+													<td>{{ $t->name }}</td>
+													@break
+												@endif
+											@endforeach
+											<td>{{ $s->username }}</td>
+											<td><a href="{{ $s->url }}" target="_blank">{{ $s->url }}</a></td>
+											<td>{{ number_format($s->followers) }}</td>
+											<td>
+												<div class="btn-group">
+													<a href="{{ route('editAccount', $s->id) }}" class="btn btn-success"> Edit</a>
+													<button type="button" class="btn btn-danger btnDeleteAccount" value="{{ $s->id }}"> Delete</button>
+												</div>
+											</td>
+										</tr>
+									@endforeach
+								@endisset
 							</tbody>
 						</table>
 					</div>
@@ -281,16 +291,18 @@
 									</tr>
 								</thead>
 								<tbody>
-									@foreach($infHistory as $history)
-										<tr>
-											<td>{{ $history->field_name }}</td>
-											<td>{{ $history->field_data }}</td>
-											<td>{{ $history->created_at }}</td>
-											<td>
-												<a href="{{ route('editHistory', $history->id) }}" class="btn btn-success"><i class="far fa-edit"></i></a>
-											</td>
-										</tr>
-									@endforeach
+									@isset($infHistory)
+										@foreach($infHistory as $history)
+											<tr>
+												<td>{{ $history->field_name }}</td>
+												<td>{{ $history->field_data }}</td>
+												<td>{{ $history->created_at }}</td>
+												<td>
+													<a href="{{ route('editHistory', $history->id) }}" class="btn btn-success"><i class="far fa-edit"></i></a>
+												</td>
+											</tr>
+										@endforeach
+									@endisset
 								</tbody>
 							</table>
 						</div>
@@ -349,16 +361,18 @@
 									</tr>
 								</thead>
 								<tbody>
-									@foreach($affHistory as $history)
-										<tr>
-											<td>{{ $history->field_name }}</td>
-											<td>{{ $history->field_data }}</td>
-											<td>{{ $history->created_at }}</td>
-											<td>
-												<a href="{{ route('editHistory', $history->id) }}" class="btn btn-success"><i class="far fa-edit"></i></a>
-											</td>
-										</tr>
-									@endforeach
+									@isset($affHistory)
+										@foreach($affHistory as $history)
+											<tr>
+												<td>{{ $history->field_name }}</td>
+												<td>{{ $history->field_data }}</td>
+												<td>{{ $history->created_at }}</td>
+												<td>
+													<a href="{{ route('editHistory', $history->id) }}" class="btn btn-success"><i class="far fa-edit"></i></a>
+												</td>
+											</tr>
+										@endforeach
+									@endisset
 								</tbody>
 							</table>
 						</div>
@@ -433,16 +447,20 @@
 <script type="text/javascript">
 	$(document).ready(function (){
 		//Set influencer statuses
-		$('#inf_status').prop('selectedIndex', {{ $influencer->status }});
-		$('#inf_follow-up').prop('selectedIndex', {{ $influencer['follow-up'] }});
-		$('#inf_status_date').text('@if($influencer->status_date != null) {{ substr($influencer->status_date,0,11) }} @else N/A @endif')
-		$('#inf_follow-up_date').text('@if($influencer["follow-up_date"] != null) {{ substr($influencer["follow-up_date"],0,11) }} @else N/A @endif')
+		@isset($influencer)
+			$('#inf_status').prop('selectedIndex', {{ $influencer->status }});
+			$('#inf_follow-up').prop('selectedIndex', {{ $influencer['follow-up'] }});
+			$('#inf_status_date').text('@if($influencer->status_date != null) {{ substr($influencer->status_date,0,11) }} @else N/A @endif')
+			$('#inf_follow-up_date').text('@if($influencer["follow-up_date"] != null) {{ substr($influencer["follow-up_date"],0,11) }} @else N/A @endif')
+		@endisset
 
 		//Set affliate statuses
-		$('#aff_status').prop('selectedIndex', {{ $affliate->status }});
-		$('#aff_follow-up').prop('selectedIndex', {{ $affliate['follow-up'] }});
-		$('#aff_status_date').text('@if($affliate->status_date != null) {{ substr($affliate->status_date,0,11) }} @else N/A @endif')
-		$('#aff_follow-up_date').text('@if($affliate["follow-up_date"] != null) {{ substr($affliate["follow-up_date"],0,11) }} @else N/A @endif')
+		@isset($affliate)
+			$('#aff_status').prop('selectedIndex', {{ $affliate->status }});
+			$('#aff_follow-up').prop('selectedIndex', {{ $affliate['follow-up'] }});
+			$('#aff_status_date').text('@if($affliate->status_date != null) {{ substr($affliate->status_date,0,11) }} @else N/A @endif')
+			$('#aff_follow-up_date').text('@if($affliate["follow-up_date"] != null) {{ substr($affliate["follow-up_date"],0,11) }} @else N/A @endif')
+		@endisset
 
 		// $('#tableInfHistory').bootstrapTable({
 		// 	url: ' route('getInfHistory', $profile->id) ',
