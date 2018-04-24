@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use App\Profile;
 use App\Http\Controllers\Helpers;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\WebsiteController;
@@ -49,7 +50,20 @@ class ProfileController extends Controller
         $influencer = InfluencerAffliateController::getInfluencerEntry($profile_id);
         $affliate = InfluencerAffliateController::getAffliateEntry($profile_id);
 
-        return view('profiles.viewProfile')->with(['profile'=>$profile, 'emails'=>$emails, 'websites'=>$websites, 'socmed'=>$socmed, 'types'=> $types, 'influencer'=>$influencer, 'affliate'=>$affliate]);
+        $infHistory = LogController::getInfHistory($profile_id);
+        $affHistory = LogController::getAffHistory($profile_id);
+
+        return view('profiles.viewProfile')->with([
+            'profile'=>$profile, 
+            'emails'=>$emails, 
+            'websites'=>$websites, 
+            'socmed'=>$socmed, 
+            'types'=> $types, 
+            'influencer'=>$influencer, 
+            'affliate'=>$affliate, 
+            'infHistory'=>$infHistory, 
+            'affHistory'=>$affHistory
+        ]);
     }
 
     /*****

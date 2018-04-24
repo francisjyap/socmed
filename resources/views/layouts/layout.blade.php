@@ -34,33 +34,20 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            @if(Auth::check() && Auth::user()->is_admin)
+            @guest
+            @else
             <li class="nav-item active">
               <a class="nav-link" href="{{ route('home') }}">Home
                 <span class="sr-only">(current)</span>
               </a>
             </li>
+            @if(Auth::check() && Auth::user()->is_admin)
             <li class="nav-item active">
               <a class="nav-link" href="{{ route('adminPanel') }}">Admin Panel
                 <span class="sr-only">(current)</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ route('logout') }}"
-                 onclick="event.preventDefault();
-                 document.getElementById('logout-form').submit();">
-                 {{ __('Logout') }}
-              </a>
-              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                  @csrf
-              </form>
-            </li>
-            @elseif(Auth::check() && !Auth::user()->is_admin)
-            <li class="nav-item active">
-              <a class="nav-link" href="{{ route('home') }}">Home
-                <span class="sr-only">(current)</span>
-              </a>
-            </li>
+            @endif
             <li class="nav-item">
               <a class="nav-link" href="{{ route('logout') }}"
                  onclick="event.preventDefault();

@@ -49,7 +49,7 @@
 					</div>
 
 					<div class="clearfix">
-						<a href="{{ route("home") }}" class="btn btn-danger"><i class="fas fa-times"></i> Cancel</a>
+						<a href="{{ route("viewProfile", $profile_id) }}" class="btn btn-danger"><i class="fas fa-times"></i> Cancel</a>
 						<button type="submit" class="btn btn-success" style="float: right;"><i class="fas fa-check"></i> Submit</button>
 					</div>
 				</form>

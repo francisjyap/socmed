@@ -138,12 +138,18 @@ class InfluencerAffliateController extends Controller
 
     public static function getInfluencerEntry($profile_id)
     {
-        return InfluencerAffliate::where('profile_id', $profile_id)->where('class', 0)->first();
+        $var = InfluencerAffliate::where('profile_id', $profile_id)->where('class', 0)->first();
+        $var->created_at = substr($var->created_at, 0, 11);
+
+        return $var;
     }
 
     public static function getAffliateEntry($profile_id)
     {
-        return InfluencerAffliate::where('profile_id', $profile_id)->where('class', 1)->first();
+        $var = InfluencerAffliate::where('profile_id', $profile_id)->where('class', 1)->first();
+        $var->created_at = substr($var->created_at, 0, 11);
+
+        return $var;
     }
 
     public static function editInfAff(Request $request)

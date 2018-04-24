@@ -20,12 +20,13 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
         	UsersTableSeeder::class,
-            ProfilesTableSeeder::class,
-            EmailsTableSeeder::class,
-            WebsitesTableSeeder::class,
-            SocialMediaTableSeeder::class,
             SocialMediaTypesTableSeeder::class,
-            InfluencerAffliatesTableSeeder::class,
+            
+            // ProfilesTableSeeder::class,
+            // EmailsTableSeeder::class,
+            // WebsitesTableSeeder::class,
+            // SocialMediaTableSeeder::class,
+            // InfluencerAffliatesTableSeeder::class,
             
         ]);
     }

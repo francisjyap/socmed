@@ -59,7 +59,7 @@ class LogController extends Controller
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $req->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 
-    public function getInfHistory($profile_id)
+    public static function getInfHistory($profile_id)
     {
         $logs = Log::where('profile_id', $profile_id)->where('type', 0)->get();
 
@@ -89,7 +89,7 @@ class LogController extends Controller
         return $logs;
     }
 
-    public function getAffHistory($profile_id)
+    public static function getAffHistory($profile_id)
     {
         $logs = Log::where('profile_id', $profile_id)->where('type', 1)->get();
 
@@ -117,5 +117,32 @@ class LogController extends Controller
         }
 
         return $logs;
+    }
+
+    public function editHistory($log_id)
+    {
+        $log = Log::find($log_id);
+
+        return view('editHistory')->with([
+            'log' => $log,
+        ]);
+    }
+
+    public function updateHistory(Request $request)
+    {
+        $log = Log::find($request->id);
+
+        $bool = $log->update(['created_at' => $request->date]);
+
+        if($bool){
+            $msg = 'History date edited successfully!';
+            $type = 'success';
+        }
+        else{
+            $msg = 'History date editing failed!';
+            $type = 'danger';
+        }
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $log->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 }

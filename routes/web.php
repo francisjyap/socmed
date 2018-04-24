@@ -71,6 +71,8 @@ Route::get('/editAff/{id}', 'InfluencerAffliateController@editAff')->name('editA
 Route::get('/getInfHistory/{id}', 'LogController@getInfHistory')->name('getInfHistory');
 Route::get('/getAffHistory/{id}', 'LogController@getAffHistory')->name('getAffHistory');
 Route::post('/createHistory', 'LogController@createHistory')->name('createHistory');
+Route::get('/editHistory/{id}', 'LogController@editHistory')->name('editHistory');
+Route::post('/updateHistory', 'LogController@updateHistory')->name('updateHistory');
 
 //NoteController
 Route::get('/getNotes/{id}', 'NoteController@getNotes')->name('getNotes');

@@ -18,7 +18,9 @@
 		<a href="{{ route("addEmail", $profile->id)}}" class="btn btn-success mar-bot-5 width-100"><i class="fas fa-plus"></i> Add Email</a>
 		<a href="{{ route("addWebsite", $profile->id)}}" class="btn btn-success mar-bot-5 width-100"><i class="fas fa-plus"></i> Add Wesbite</a>
 		<a href="{{ route("addAccount", $profile->id)}}" class="btn btn-success mar-bot-5 width-100"><i class="fas fa-plus"></i> Add Account</a>
-		<button type="button" class="btn btn-danger mar-top-30 mar-bot-5 width-100" id="btnDelete"><i class="far fa-trash-alt"></i> Delete Account</button>
+		@if(Auth::user()->is_admin)
+			<button type="button" class="btn btn-danger mar-top-30 mar-bot-5 width-100" id="btnDelete"><i class="far fa-trash-alt"></i> Delete Account</button>
+		@endif
 	</div>
 
 	<div class="col-md-8">
@@ -178,14 +180,14 @@
 			</div>
 
 			<div class="card">
-				<div class="card-header" id="headingThree">
+				<div class="card-header" id="headingSocialMedia">
 					<h5 class="mb-0">
-						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSocialMedia" aria-expanded="false" aria-controls="collapseSocialMedia">
 							<h5 style="text-align: center;">List of Social Media Accounts</h5>
 						</button>
 					</h5>
 				</div>
-				<div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+				<div id="collapseSocialMedia" class="collapse" aria-labelledby="headingSocialMedia" data-parent="#accordion">
 					<div class="card-body">
 						<h5 style="text-align: center;">List of Social Media Accounts</h5>
 						<table id="socmedTable" class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="10" data-search="true">
@@ -268,7 +270,29 @@
 						<div class="col-md-12">
 							<h5 style="text-align: center;">History</h5>
 							<a href="{{ route("createInfluencer", $profile->id)}}" class="btn btn-success mar-bot-5 width-100">Add History</a>
-							<table id="tableInfHistory" data-pagination="true" data-page-size="5"></table>
+							{{-- <table id="tableInfHistory" data-pagination="true" data-page-size="5"></table> --}}
+							<table id="tableInfHistory" data-toggle="table" data-pagination="true" data-page-size="5">
+								<thead>
+									<tr>
+										<th>Type</th>
+										<th>Data</th>
+										<th>Status</th>
+										<th>Edit</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($infHistory as $history)
+										<tr>
+											<td>{{ $history->field_name }}</td>
+											<td>{{ $history->field_data }}</td>
+											<td>{{ $history->created_at }}</td>
+											<td>
+												<a href="{{ route('editHistory', $history->id) }}" class="btn btn-success"><i class="far fa-edit"></i></a>
+											</td>
+										</tr>
+									@endforeach
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -314,7 +338,29 @@
 						<div class="col-md-12">
 							<h5 style="text-align: center;">History</h5>
 							<a href="{{ route("createAffliate", $profile->id)}}" class="btn btn-success" style="margin-bottom: 5%; width: 100%;">Add History</a>
-							<table id="tableAffHistory" data-pagination="true" data-page-size="5"></table>
+							{{-- <table id="tableAffHistory" data-pagination="true" data-page-size="5"></table> --}}
+							<table id="tableAffHistory" data-toggle="table" data-pagination="true" data-page-size="5">
+								<thead>
+									<tr>
+										<th>Type</th>
+										<th>Data</th>
+										<th>Status</th>
+										<th>Edit</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($affHistory as $history)
+										<tr>
+											<td>{{ $history->field_name }}</td>
+											<td>{{ $history->field_data }}</td>
+											<td>{{ $history->created_at }}</td>
+											<td>
+												<a href="{{ route('editHistory', $history->id) }}" class="btn btn-success"><i class="far fa-edit"></i></a>
+											</td>
+										</tr>
+									@endforeach
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -398,37 +444,37 @@
 		$('#aff_status_date').text('@if($affliate->status_date != null) {{ substr($affliate->status_date,0,11) }} @else N/A @endif')
 		$('#aff_follow-up_date').text('@if($affliate["follow-up_date"] != null) {{ substr($affliate["follow-up_date"],0,11) }} @else N/A @endif')
 
-		$('#tableInfHistory').bootstrapTable({
-			url: '{{ route('getInfHistory', $profile->id) }}',
-			sortName: 'created_at',
-			sortOrder: 'desc',
-		    columns: [{
-		        field: 'field_name',
-		        title: 'Type'
-		    }, {
-		        field: 'field_data',
-		        title: 'Data'
-		    }, {
-		        field: 'created_at',
-		        title: 'Date',
-		    }]
-		});
+		// $('#tableInfHistory').bootstrapTable({
+		// 	url: ' route('getInfHistory', $profile->id) ',
+		// 	sortName: 'created_at',
+		// 	sortOrder: 'desc',
+		//     columns: [{
+		//         field: 'field_name',
+		//         title: 'Type'
+		//     }, {
+		//         field: 'field_data',
+		//         title: 'Data'
+		//     }, {
+		//         field: 'created_at',
+		//         title: 'Date',
+		//     }]
+		// });
 
-		$('#tableAffHistory').bootstrapTable({
-			url: '{{ route('getAffHistory', $profile->id) }}',
-			sortName: 'created_at',
-			sortOrder: 'desc',
-		    columns: [{
-		        field: 'field_name',
-		        title: 'Type'
-		    }, {
-		        field: 'field_data',
-		        title: 'Data'
-		    }, {
-		        field: 'created_at',
-		        title: 'Date',
-		    }]
-		});
+		// $('#tableAffHistory').bootstrapTable({
+			// url: ' route('getAffHistory', $profile->id) ',
+		// 	sortName: 'created_at',
+		// 	sortOrder: 'desc',
+		//     columns: [{
+		//         field: 'field_name',
+		//         title: 'Type'
+		//     }, {
+		//         field: 'field_data',
+		//         title: 'Data'
+		//     }, {
+		//         field: 'created_at',
+		//         title: 'Date',
+		//     }]
+		// });
 
 		$('#tableNotes').bootstrapTable({
 			url: '{{ route('getNotes', $profile->id) }}',
