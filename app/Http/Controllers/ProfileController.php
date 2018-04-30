@@ -88,20 +88,6 @@ class ProfileController extends Controller
     *****/
     public function getProfiles()
     {
-        // $profiles = Profile::all();
-        // foreach($profiles as $p){
-        //     if($p->is_influencer == 0){
-        //         $p->is_influencer = "No";
-        //     } else {
-        //         $p->is_influencer = "Yes";
-        //     }
-        //     if($p->is_affliate == 0){
-        //         $p->is_affliate = "No";
-        //     } else {
-        //         $p->is_affliate = "Yes";
-        //     }
-        // }
-
         $profiles = Helpers::convertBoolToString(Profile::all());
 
         $profiles = $profiles->sortBy('name')->values()->all();
@@ -109,14 +95,23 @@ class ProfileController extends Controller
         return $profiles;
     }
 
-    public function store(Request $request)
+    protected function store(Request $request)
     {
+        if($request->company_name)
+            $company_name = $request->company_name;
+        else
+            $company_name = $request->name;
+
         $profile = Profile::create([
-            'email' => $request->email,
             'name' => $request->name,
-            'website' => $request->website,
+            'company_name' => $company_name,
+            'phone_number' => $request->phone_number,
             'country' => $request->country
         ]);
+
+        //Create Email and Website entries
+        EmailController::staticStore($profile->id, $request->email);
+        WebsiteController::staticStore($profile->id, $request->website);
 
         //Create InfluencerAffliate entry
         InfluencerAffliateController::createEntryforProfile($profile->id);
@@ -137,10 +132,15 @@ class ProfileController extends Controller
     {
         $old = Profile::find($request->id);
 
+        if($request->company_name)
+            $company_name = $request->company_name;
+        else
+            $company_name = $request->name;
+
         $bool = Profile::find($request->id)->update([
-                'email' => $request->email,
                 'name' => $request->name,
-                'website' => $request->website,
+                'company_name' => $company_name,
+                'phone_number' => $request->phone_number,
                 'country' => $request->country
             ]);
         
@@ -149,16 +149,18 @@ class ProfileController extends Controller
         if($bool){
             $msg = 'Profile edited successfully!';
             $type = 'success';
-            if($old->email != $new->email){
-                $note = 'Edited Primary Email from '.$old->email.' to '.$new->email;
-                NoteController::createLogNote($request->id, $note);
-            }
             if($old->name != $new->name){
                 $note = 'Edited Name from '.$old->name.' to '.$new->name;
                 NoteController::createLogNote($request->id, $note);
             }
-            if($old->website != $new->website){
-                $note = 'Edited Website from '.$old->website.' to '.$new->website;
+            if($old->company_name != $new->company_name){
+                $note = 'Edited Company Name from '.$old->company_name.' to '.$new->company_name;
+                NoteController::createLogNote($request->id, $note);
+            }
+            if($old->phone_number != $new->phone_number){
+                $old->phone_number ? $old_phone_number = $old->phone_number : $old_phone_number = 'Blank';
+                $new->phone_number ? $new_phone_number = $new->phone_number : $new_phone_number = 'Blank';
+                $note = 'Edited Phone Number from '.$old_phone_number.' to '.$new_phone_number;
                 NoteController::createLogNote($request->id, $note);
             }
             if($old->country != $new->country){
@@ -193,12 +195,16 @@ class ProfileController extends Controller
 
     public static function profileSort($socmedtype_id, $type)
     {
-        //Get Accounts matching SocMedType ID
-        $acc_ids = SocialMediaController::getAccountsWithSocMedType($socmedtype_id);
         $accounts = collect();
 
-        foreach($acc_ids as $a){
-            $accounts->push(Profile::find($a->profile_id));
+        //Get Accounts matching SocMedType ID
+        if($socmedtype_id != 0){
+            $acc_ids = SocialMediaController::getAccountsWithSocMedType($socmedtype_id);
+            foreach($acc_ids as $a){
+                $accounts->push(Profile::find($a->profile_id));
+            } 
+        } else {
+            $accounts = Profile::all();
         }
 
         //Filter accounts with type
@@ -224,20 +230,6 @@ class ProfileController extends Controller
                 $return = null;
                 break;
         }
-
-        //Change influencer/affliate bool into text
-        // foreach($return as $p){
-        //     if($p->is_influencer == 0){
-        //         $p->is_influencer = "No";
-        //     } else {
-        //         $p->is_influencer = "Yes";
-        //     }
-        //     if($p->is_affliate == 0){
-        //         $p->is_affliate = "No";
-        //     } else {
-        //         $p->is_affliate = "Yes";
-        //     }
-        // }
 
         $return = Helpers::convertBoolToString($return);
 

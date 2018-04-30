@@ -8,11 +8,11 @@ $(document).ready(function() {
 	        field: 'name',
 	        title: 'Name'
 	    }, {
-	        field: 'email',
-	        title: 'Email'
+	        field: 'company_name',
+	        title: 'Company Name'
 	    }, {
-	        field: 'website',
-	        title: 'Website'
+	        field: 'phone_number',
+	        title: 'Phone Number'
 	    }, {
 	        field: 'country',
 	        title: 'Country'

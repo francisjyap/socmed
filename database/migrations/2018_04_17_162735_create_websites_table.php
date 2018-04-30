@@ -25,7 +25,7 @@ class CreateWebsitesTable extends Migration
             $table->integer('profile_id');
             $table->string('website');
             $table->timestamps();
-            $table->softDeletes();
+            // $table->softDeletes();
         });
     }
 

@@ -51,6 +51,16 @@ class WebsiteController extends Controller
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 
+    public static function staticStore($profile_id ,$website)
+    {
+        if($profile_id && $website){
+            return Website::create([
+                'profile_id' => $profile_id,
+                'website' => $website
+            ]);
+        }
+    }
+
     public function edit($id)
     {
         $website = Website::find($id);

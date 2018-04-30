@@ -52,6 +52,16 @@ class EmailController extends Controller
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
 
+    public static function staticStore($profile_id ,$email)
+    {
+        if($profile_id && $email){
+            return Email::create([
+                'profile_id' => $profile_id,
+                'email' => $email
+            ]);
+        }
+    }
+
     public function edit($id)
     {
         $email = Email::find($id);

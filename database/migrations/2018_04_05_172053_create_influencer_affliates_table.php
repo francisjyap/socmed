@@ -32,7 +32,7 @@ class CreateInfluencerAffliatesTable extends Migration
             $table->integer('latest_inf_log_id')->nullable();
             $table->integer('latest_aff_log_id')->nullable();
             $table->timestamps();
-            $table->softDeletes();
+            // $table->softDeletes();
         });
     }
 

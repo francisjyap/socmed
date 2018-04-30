@@ -22,16 +22,16 @@ class CreateProfilesTable extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('email')->unique();
             $table->string('name')->unique();
-            $table->string('website')->nullable();
+            $table->string('company_name')->nullable();
+            $table->string('phone_number')->nullable();
             $table->string('country')->nullable();
             $table->boolean('email_sent')->default(0);
             $table->boolean('is_affliate')->default(0);
             $table->boolean('is_influencer')->default(0);
             $table->boolean('mentioned_product')->default(0);
             $table->timestamps();
-            $table->softDeletes();
+            // $table->softDeletes();
         });
     }
 
