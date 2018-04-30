@@ -26,7 +26,7 @@ class CreateNotesTable extends Migration
             $table->integer('author_id');
             $table->text('note');
             $table->timestamps();
-            $table->softDeletes();
+            // $table->softDeletes();
         });
     }
 

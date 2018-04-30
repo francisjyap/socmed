@@ -28,7 +28,7 @@ class CreateSocialMediaTable extends Migration
             $table->string('url')->nullable();
             $table->integer('followers')->nullable();
             $table->timestamps();
-            $table->softDeletes();
+            // $table->softDeletes();
         });
     }
 

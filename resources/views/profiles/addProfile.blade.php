@@ -32,6 +32,14 @@
 						<input type="url" name="website" class="form-control">
 					</div>
 					<div class="form-group">
+						<label>Company Name</label>
+						<input type="text" name="company_name" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Phone Number</label>
+						<input type="number" name="phone_number" class="form-control" maxlength="11">
+					</div>
+					<div class="form-group">
 						<label>Country</label>
 						<input type="text" name="country" class="form-control">
 					</div>

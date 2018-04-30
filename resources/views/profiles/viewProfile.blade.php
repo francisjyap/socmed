@@ -35,9 +35,9 @@
 		<div class="row">
 			<div class="col-md-6">
 				<h5>Name: {{ $profile->name }}</h5>
-				<h5>Primary Email: {{ $profile->email }}</h5>
-				<h5>Primary Website: <a href="{{ $profile->website }}" target="_blank">{{ $profile->website }}</a></h5>
-				<h5>Country: {{ $profile->country }}</h5>
+				<h5>Company Name: {{ $profile->company_name }}</h5>
+				<h5>Phone Number: {{ $profile->phone_number ? $profile->phone_number : 'N/A' }}</h5>
+				<h5>Country: {{ $profile->country ? $profile->country : 'N/A' }}</h5>
 			</div>
 
 			<div class="col-md-6">

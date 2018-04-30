@@ -25,12 +25,12 @@
 						<input type="text" name="name" class="form-control" autofocus="true" required="true" value="{{ $profile->name }}">
 					</div>
 					<div class="form-group">
-						<label>Email</label>
-						<input type="email" name="email" class="form-control" required="true" value="{{ $profile->email }}">
+						<label>Company Name</label>
+						<input type="text" name="company_name" class="form-control" value="{{ $profile->company_name }}">
 					</div>
 					<div class="form-group">
-						<label>Website URL</label>
-						<input type="url" name="website" class="form-control" value="{{ $profile->website }}">
+						<label>Phone Number</label>
+						<input type="number" name="phone_number" class="form-control" maxlength="11" value="{{ $profile->phone_number }}">
 					</div>
 					<div class="form-group">
 						<label>Country</label>

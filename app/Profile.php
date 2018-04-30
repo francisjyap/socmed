@@ -10,11 +10,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Profile extends Model
 {
-    use SoftDeletes;
+    // use SoftDeletes;
 
 	protected $table = 'profiles';
 	public $timestamps = true;
@@ -25,7 +25,7 @@ class Profile extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'website', 'country', 'email_sent', 'is_affliate', 'is_influencer', 'mentioned_product', 
+        'name', 'company_name', 'phone_number', 'country', 'email_sent', 'is_affliate', 'is_influencer', 'mentioned_product', 
     ];
 
     /**
