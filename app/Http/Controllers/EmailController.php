@@ -10,6 +10,7 @@
 namespace App\Http\Controllers;
 
 use App\Email;
+use App\Http\Controllers\Helpers;
 use Illuminate\Http\Request;
 
 class EmailController extends Controller
@@ -32,24 +33,23 @@ class EmailController extends Controller
 
     public function store(Request $request)
     {
-        $bool = Email::create([
-            'profile_id' => $request->profile_id,
-            'email' => $request->email,
+        //Validate request
+        $this->validate(request(), [
+            'profile_id' => 'required',
+            'email' => 'required|email|unique:emails'
         ]);
 
-        if($bool){
-            $msg = 'Email created successfully!';
-            $type = 'success';
-        }
-        else{
-            $msg = 'Email creation failed!';
-            $type = 'danger';
-        }
+        // Create Email entry
+        $bool = Email::create(request(['profile_id', 'email']));
 
-        $note = 'Added email: '.$request->email;
-        NoteController::createLogNote($request->profile_id, $note);
+        //Log change
+        NoteController::createLogNote(request('profile_id'), 'Added email: '.request('email'));
 
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        //Create banner message
+        $banner = Helpers::createBanner($bool, 'Email', 'create');
+
+        //Redirect
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
     }
 
     public static function staticStore($profile_id ,$email)
@@ -70,42 +70,38 @@ class EmailController extends Controller
 
     public function update(Request $request)
     {
-        $email = Email::find($request->id);
+        $this->validate(request(), [
+            'id' => 'required',
+            'email' => 'required|email|unique:emails'
+        ]);
+
+        $email = Email::find(request('id'));
         $old = $email->email;
-        $bool = $email->update(['email' => $request->email]);
+        $bool = $email->update(['email' => request('email')]);
 
-        if($bool){
-            $msg = 'Email updated successfully!';
-            $type = 'success';
-            $note = 'Edited email: '.$old.' to '.$request->email;
-            NoteController::createLogNote($email->profile_id, $note);
-        }
-        else{
-            $msg = 'Email updating failed!';
-            $type = 'danger';
-        }
+        //Log change
+        NoteController::createLogNote($email->profile_id, 'Edited email: '.$old.' to '.request('email'));
 
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $email->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        //Create banner message
+        $banner = Helpers::createBanner($bool, 'Email', 'edit');
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $email->profile_id])->with(['status' => $bool, 'banner' => $banner]);
     }
 
     public function destroy(Request $request)
     {
-        $email = Email::find($request->id);
+        $email = Email::find(request('id'));
         $deleted = $email->email;
         $deleted_profile_id = $email->profile_id;
         $bool = $email->delete();
 
-        if($bool){
-            $msg = 'Email deleted!';
-            $type = 'success';
-            $note = 'Deleted email: '.$deleted;
-            NoteController::createLogNote($deleted_profile_id, $note);
-        } else {
-            $msg = 'Email failed to delete!';
-            $type = 'fail';
-        }
+        //Log change
+        NoteController::createLogNote($deleted_profile_id, 'Deleted email: '.$deleted);
 
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $email->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        //Create banner message
+        $banner = Helpers::createBanner($bool, 'Email', 'delete');
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $deleted_profile_id])->with(['status' => $bool, 'banner' => $banner]);
     }
 
     public static function getEmails($profile_id)

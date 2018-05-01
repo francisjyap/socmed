@@ -32,10 +32,10 @@ class Helpers extends Controller
     public static function createBanner($object, $objectName, $action)
     {
         if($object){
-            $msg = $objectName . $action . 'successfully!';
+            $msg = $objectName .' '. $action . ' success!';
             $type = 'success';
         } else {
-            $msg = $objectName . $action . 'failed!';
+            $msg = $objectName .' '. $action . ' failed!';
             $type = 'danger';
         }
         $return = collect(['msg' => $msg, 'type' => $type]);

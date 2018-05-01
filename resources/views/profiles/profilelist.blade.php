@@ -13,11 +13,8 @@
 
 <div class="row mar-top-5 mar-bot-5">
     <div class="col-md-8 offset-2">
-        @if(isset($status))
-            <div class="alert alert-{{ $type }}" role="alert">
-              {{ $msg }}
-            </div>
-        @endif
+        
+        @include('layouts.banner')
 
         <div class="clearfix" style="margin-bottom: 5%;">
             <h3 style="float: left;">Profiles</h3>

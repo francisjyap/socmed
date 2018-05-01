@@ -12,6 +12,7 @@
 @section('content')
 
 <div class="row mar-top-5 mar-bot-5">
+
 	<div class="col-md-2 mar-bot-5">
 		<a href="{{ route("home") }}" class="btn btn-danger mar-bot-5 width-100"><i class="fas fa-arrow-left"></i> Back to Profiles</a>
 		<a href="{{ route("editProfile", $profile->id)}}" class="btn btn-success mar-bot-5 width-100"><i class="far fa-edit"></i> Edit Profile</a>
@@ -24,11 +25,8 @@
 	</div>
 
 	<div class="col-md-8">
-		@if(session('status'))
-            <div class="alert alert-{{ session('type') }}" role="alert">
-              {{ session('msg') }}
-            </div>
-        @endif
+		
+		@include('layouts.banner')
 
 		<h3 class="mar-bot-5">View Profile</h3>
 
@@ -270,11 +268,23 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<label>Status Date</label>
-								<p id="inf_status_date" style="margin-top: 3%;">N/A</p>
+								<p id="inf_status_date" style="margin-top: 3%;">
+									@if($influencer['status_date'])
+										{{ $influencer['status_date']->toFormattedDateString() }}
+									@else
+										N/A
+									@endif
+								</p>
 							</div>
 							<div class="form-group">
 								<label style="margin-top: 7%;">Follow-up Date</label>
-								<p id="inf_follow-up_date" style="margin-top: 3%;">N/A</p>
+								<p id="inf_follow-up_date" style="margin-top: 3%;">
+									@if($influencer['follow-up_date'])
+										{{ $influencer['follow-up_date']->toFormattedDateString() }}
+									@else
+										N/A
+									@endif
+								</p>
 							</div>
 						</div>
 						<div class="col-md-12">
@@ -340,11 +350,23 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<label>Status Date</label>
-								<p id="aff_status_date" style="margin-top: 3%;">N/A</p>
+								<p id="aff_status_date" style="margin-top: 3%;">
+									@if($affliate['status_date'])
+										{{ $affliate['status_date']->toFormattedDateString() }}
+									@else
+										N/A
+									@endif
+								</p>
 							</div>
 							<div class="form-group">
 								<label style="margin-top: 7%;">Follow-up Date</label>
-								<p id="aff_follow-up_date" style="margin-top: 3%;">N/A</p>
+								<p id="aff_follow-up_date" style="margin-top: 3%;">
+									@if($affliate['follow-up_date'])
+										{{ $affliate['follow-up_date']->toFormattedDateString() }}
+									@else
+										N/A
+									@endif
+								</p>
 							</div>
 						</div>
 						<div class="col-md-12">
@@ -450,16 +472,12 @@
 		@isset($influencer)
 			$('#inf_status').prop('selectedIndex', {{ $influencer->status }});
 			$('#inf_follow-up').prop('selectedIndex', {{ $influencer['follow-up'] }});
-			$('#inf_status_date').text('@if($influencer->status_date != null) {{ substr($influencer->status_date,0,11) }} @else N/A @endif')
-			$('#inf_follow-up_date').text('@if($influencer["follow-up_date"] != null) {{ substr($influencer["follow-up_date"],0,11) }} @else N/A @endif')
 		@endisset
 
 		//Set affliate statuses
 		@isset($affliate)
 			$('#aff_status').prop('selectedIndex', {{ $affliate->status }});
 			$('#aff_follow-up').prop('selectedIndex', {{ $affliate['follow-up'] }});
-			$('#aff_status_date').text('@if($affliate->status_date != null) {{ substr($affliate->status_date,0,11) }} @else N/A @endif')
-			$('#aff_follow-up_date').text('@if($affliate["follow-up_date"] != null) {{ substr($affliate["follow-up_date"],0,11) }} @else N/A @endif')
 		@endisset
 
 		// $('#tableInfHistory').bootstrapTable({

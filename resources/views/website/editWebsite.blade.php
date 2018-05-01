@@ -13,6 +13,9 @@
 
 <div class="row">
 	<div class="col-md-8 offset-2">
+
+		@include('layouts.errors')
+		
     	<h3 style="margin-top: 5%; margin-bottom: 5%;">Edit Website</h3>
 		
 		<div class="row">

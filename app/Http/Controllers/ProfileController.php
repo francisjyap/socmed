@@ -97,58 +97,72 @@ class ProfileController extends Controller
 
     protected function store(Request $request)
     {
-        if($request->company_name)
-            $company_name = $request->company_name;
-        else
-            $company_name = $request->name;
+        //Validate request
+        $this->validate(request(), [
+            'name' => 'required|unique:profiles',
+            'email' => 'required|email',
+            'phone_number' => 'integer|digits_between:10,13'
+        ]);            
 
+        //If company_name is empty, set to name
+        if(request('company_name'))
+            $company_name = request('company_name');
+        else
+            $company_name = request('name');
+
+        //Create Profile
         $profile = Profile::create([
-            'name' => $request->name,
+            'name' => request('name'),
             'company_name' => $company_name,
-            'phone_number' => $request->phone_number,
-            'country' => $request->country
+            'phone_number' => request('phone_number'),
+            'country' => request('country')
         ]);
 
         //Create Email and Website entries
-        EmailController::staticStore($profile->id, $request->email);
-        WebsiteController::staticStore($profile->id, $request->website);
+        EmailController::staticStore($profile->id, request('email'));
+        WebsiteController::staticStore($profile->id, request('website'));
 
         //Create InfluencerAffliate entry
         InfluencerAffliateController::createEntryforProfile($profile->id);
 
-        if($profile){
-            $msg = 'Profile created successfully!';
-            $type = 'success';
-        }
-        else{
-            $msg = 'Profile creation failed!';
-            $type = 'danger';
-        }
+        //Create banner message
+        $banner = Helpers::createBanner($profile, 'Profile', 'create');
 
-        return redirect()->action('ProfileController@index')->with(['status' => $profile, 'msg' => $msg, 'type' => $type]);
+        return redirect()->action('ProfileController@index')->with(['status' => $profile, 'banner' => $banner]);
     }
 
     public function update(Request $request)
     {
-        $old = Profile::find($request->id);
+        //Validate Request
+        $this->validate(request(), [
+            'name' => 'required|unique:profiles',
+            'email' => 'required|email',
+            'phone_number' => 'integer|digits_between:10,13'
+        ]);
 
-        if($request->company_name)
-            $company_name = $request->company_name;
+        //Save instance of Profile before update
+        $old = Profile::find(request('id'));
+
+        //If company_name is empty, set to name
+        if(request('company_name'))
+            $company_name = request('company_name');
         else
-            $company_name = $request->name;
+            $company_name = request('name');
 
-        $bool = Profile::find($request->id)->update([
-                'name' => $request->name,
+        //Update Profile
+        $bool = Profile::find(request('id'))->update([
+                'name' => request('name'),
                 'company_name' => $company_name,
-                'phone_number' => $request->phone_number,
-                'country' => $request->country
-            ]);
+                'phone_number' => request('phone_number'),
+                'country' => request('country')
+        ]);
         
-        $new = Profile::find($request->id);
+        //Save instance of Profile after update
+        $new = Profile::find(request('id'));
 
+        //If profile created successfully
         if($bool){
-            $msg = 'Profile edited successfully!';
-            $type = 'success';
+            //Log changes
             if($old->name != $new->name){
                 $note = 'Edited Name from '.$old->name.' to '.$new->name;
                 NoteController::createLogNote($request->id, $note);
@@ -168,27 +182,24 @@ class ProfileController extends Controller
                 NoteController::createLogNote($request->id, $note);
             }
         }
-        else{
-            $msg = 'Profile editing failed!';
-            $type = 'danger';
-        }
 
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        //Create banner message
+        $banner = Helpers::createBanner($bool, 'Profile', 'edit');
+
+        //Redirect
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->id])->with(['status' => $bool, 'banner' => $banner]);
     }
 
     public function delete(Request $request)
     {
-        $profile = Profile::find($request->id);
+        //Find Profile with ID and delete
+        $profile = Profile::find(request('id'));
         $bool = $profile->delete();
 
-        if($bool){
-            $msg = 'Profile deleted!';
-            $type = 'success';
-        } else {
-            $msg = 'Profile failed to delete!';
-            $type = 'fail';
-        }
+        //Create banner message
+        $banner = Helpers::createBanner($bool, 'Profile', 'delete');
 
+        //Redirect
         return redirect()->action('ProfileController@index')->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
 
     }
@@ -256,23 +267,28 @@ class ProfileController extends Controller
 
     public static function setMentionedProduct(Request $request)
     {
-        $bool = Profile::find($request->profile_id)->update(['mentioned_product' => $request->bool]);
+        $this->validate(request(), [
+            'profile_id' => 'required',
+            'bool' => 'required'
+        ]);
 
+        //Update
+        $bool = Profile::find(request('profile_id'))->update(['mentioned_product' => request('bool')]);
+
+        //If update successfull
         if($bool){
-            $msg = 'Mentioned product status changed successfully!';
-            $type = 'success';
-            if($request->bool){
+            //Log changes
+            if(request('bool')){
                 $note = 'Changed mentioned product status to Yes';
             } else{
                 $note = 'Changed mentioned product status to No';
             }
-            NoteController::createLogNote($request->profile_id, $note);
-        }
-        else{
-            $msg = 'Mentioned product status change failed!';
-            $type = 'danger';
+            NoteController::createLogNote(request('profile_id'), $note);
         }
 
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        //Create banner message
+        $banner = Helpers::createBanner($bool, 'Mentioned product', 'status change');
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
     }
 }
