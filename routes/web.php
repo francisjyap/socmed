@@ -23,7 +23,10 @@ Auth::routes();
 
 //AdminController
 Route::get('/adminPanel', 'AdminController@index')->name('adminPanel');
+Route::get('/getUsers', 'AdminController@getUsers')->name('getUsers');
 
+//Helpers
+Route::get('/profileSort/{id}/{type}', 'Helpers@profileSort');
 
 //ProfileController
 Route::get('/', 'ProfileController@index')->name('home');
@@ -37,8 +40,8 @@ Route::post('/editProfile', 'ProfileController@update')->name('updateProfile');
 Route::post('/deleteProfile', 'ProfileController@delete')->name('deleteProfile');
 Route::post('/setEmailSent', 'ProfileController@setEmailSent')->name('setEmailSent');
 Route::post('/setMentionedProduct', 'ProfileController@setMentionedProduct')->name('setMentionedProduct');
+Route::post('/setAffliateCode', 'ProfileController@setAffliateCode')->name('setAffliateCode');
 
-Route::get('/profileSort/{id}/{type}', 'ProfileController@profileSort');
 
 //EmailController
 Route::get('/addEmail/{profile_id}', 'EmailController@create')->name('addEmail');

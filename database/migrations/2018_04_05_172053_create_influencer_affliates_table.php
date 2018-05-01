@@ -28,11 +28,10 @@ class CreateInfluencerAffliatesTable extends Migration
             $table->date('status_date')->nullable();
             $table->integer('follow-up')->default(0);
             $table->date('follow-up_date')->nullable();
-            $table->string('affliate_code')->nullable();
             $table->integer('latest_inf_log_id')->nullable();
             $table->integer('latest_aff_log_id')->nullable();
+            $table->boolean('email_sent')->default(0);
             $table->timestamps();
-            // $table->softDeletes();
         });
     }
 

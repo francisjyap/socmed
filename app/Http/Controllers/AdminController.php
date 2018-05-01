@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use App\User;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -28,5 +29,20 @@ class AdminController extends Controller
     	} else {
     		return redirect('/');
     	}
+    }
+
+    public function getUsers()
+    {
+        if(AdminController::CheckAdmin()){
+            $users = User::all();
+            foreach($users as $user){
+                if($user->is_admin == 1){
+                    $user->is_admin = 'Yes';
+                } else {
+                    $user->is_admin = 'No';
+                }
+            }
+            return $users;
+        }
     }
 }

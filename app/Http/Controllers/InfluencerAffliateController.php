@@ -12,6 +12,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Log;
 use App\InfluencerAffliate;
+use App\Http\Controllers\Helpers;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\ProfileController;
 
@@ -75,40 +76,27 @@ class InfluencerAffliateController extends Controller
             $previous = $previous['follow-up'];
         }
 
-        /*****
-        *   Summary:
-        *       The (bool)is_influencer and (bool)is_affliate column
-        *       is set to "1 (True)" if the Influencer/Affliate Status
-        *       is set to "Done"
-        *   Condition:
-        *       if status_key is set to "Done" AND class is "Influencer"
-        *   Effect:
-        *       Profile->is_influencer (bool)status is set to 1(True)
-        *   Else Condition:
-        *       if status_key is set to "Done" AND class is "Affliate"
-        *   Else Effect:
-        *       Profile->is_affliate (bool)status is set to 1(True)
-        *****/
-        if($request->status_key == 1 && $request->class == 0){
-            ProfileController::setIsInfluencer($request->profile_id, 1);
-        } else if($request->status_key == 1 && $request->class == 1) {
-            ProfileController::setIsAffliate($request->profile_id, 1);
+        if(request('status_key') == 1){ //If status is "Done"
+            if(request('class') == 0){ //If class is Influencer
+                //Set is_influencer to true
+                ProfileController::setIsInfluencer($request->profile_id, 1);
+            } else { //Else class is Affliate
+                //Set is_affliate to true
+                ProfileController::setIsAffliate($request->profile_id, 1);
+            }
+        } else { //Else status is not "Done"
+            if(request('class') == 0){  //If class is Influencer
+                //Set is_influencer to false
+                ProfileController::setIsInfluencer($request->profile_id, 0);
+            } else { //Else class is Affliate
+                //Set is_affliate to false
+                ProfileController::setIsAffliate($request->profile_id, 0);
+            }
         }
 
-        // Check if changing status from Done to another and if changing Influencer
-        // else changing Affliate
-        if($request->status_key != 1 && $request->class == 0){
-            ProfileController::setIsInfluencer($request->profile_id, 0);
-        } else if($request->status_key != 1 && $request->class == 1) {
-            ProfileController::setIsAffliate($request->profile_id, 0);
-        }
-
-        //Check if status is set to Emailed, to change email_sent status in Profile
-        if($request->status_key == 4) {
-            ProfileController::setEmailSent($request->profile_id, 1);
-        } else {
-            ProfileController::setEmailSent($request->profile_id, 0);
-
+        //For setting email_sent status
+        if(request('status_key') == 4){
+            $row = InfluencerAffliate::where('profile_id', $request->profile_id)->where('class', request('class'))->update(['email_sent' => 1]);
         }
 
         //For logs
@@ -124,16 +112,10 @@ class InfluencerAffliateController extends Controller
             ]);
         }
 
-        if($row){
-            $msg = $type . ' updated successfully!';
-            $type = 'success';
-        }
-        else{
-            $msg = $type . ' updating failed!';
-            $type = 'danger';
-        }
+        //Create banner
+        $banner = Helpers::createBanner($row, $type, 'update');
 
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $row, 'msg' => $msg, 'type' => $type]);
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $row, 'banner' => $banner]);
     }
 
     public static function getInfluencerEntry($profile_id)

@@ -13,6 +13,9 @@
 
 <div class="row">
 	<div class="col-md-8 offset-2">
+
+		@include('layouts.errors')
+
     	<h3 style="margin-top: 5%; margin-bottom: 5%;">Edit Profile</h3>
 		
 		<div class="row">
@@ -30,7 +33,7 @@
 					</div>
 					<div class="form-group">
 						<label>Phone Number</label>
-						<input type="number" name="phone_number" class="form-control" maxlength="11" value="{{ $profile->phone_number }}">
+						<input type="tel" name="phone_number" class="form-control" maxlength="16" value="{{ $profile->phone_number }}">
 					</div>
 					<div class="form-group">
 						<label>Country</label>

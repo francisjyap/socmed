@@ -29,7 +29,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $('#table').bootstrapTable({
-        url: 'getProfiles',
+        url: 'getUsers',
         uniqueId: 'id',
         search: true,
         columns: [{
@@ -39,14 +39,8 @@ $(document).ready(function() {
             field: 'email',
             title: 'Email'
         }, {
-            field: 'website',
-            title: 'Website'
-        }, {
-            field: 'country',
-            title: 'Country'
-        }, {
-            field: 'is_influencer',
-            title: 'Influencer',
+            field: 'is_admin',
+            title: 'Admin Status',
             searchable: false,
             cellStyle: function(value) {
                 if(value == 'Yes'){
@@ -60,20 +54,8 @@ $(document).ready(function() {
                 }
             }
         }, {
-            field: 'is_affliate',
-            title: 'Affliate',
-            searchable: false,
-            cellStyle: function(value) {
-                if(value == 'Yes'){
-                    return{
-                        css: {'color': 'green'}
-                    }
-                } else {
-                    return{
-                        css: {'color': 'red'}
-                    }
-                }
-            }
+            field: 'created_at',
+            title: 'Date Created'
         }]
     });
 });

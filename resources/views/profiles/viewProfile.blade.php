@@ -5,6 +5,7 @@
 |		https://github.com/francisjyap/socmed
 |
 */ --}}
+
 @extends('layouts.layout')
 
 @section('title', 'View Profile')
@@ -12,437 +13,32 @@
 @section('content')
 
 <div class="row mar-top-5 mar-bot-5">
-	<div class="col-md-2 mar-bot-5">
-		<a href="{{ route("home") }}" class="btn btn-danger mar-bot-5 width-100"><i class="fas fa-arrow-left"></i> Back to Profiles</a>
-		<a href="{{ route("editProfile", $profile->id)}}" class="btn btn-success mar-bot-5 width-100"><i class="far fa-edit"></i> Edit Profile</a>
-		<a href="{{ route("addEmail", $profile->id)}}" class="btn btn-success mar-bot-5 width-100"><i class="fas fa-plus"></i> Add Email</a>
-		<a href="{{ route("addWebsite", $profile->id)}}" class="btn btn-success mar-bot-5 width-100"><i class="fas fa-plus"></i> Add Wesbite</a>
-		<a href="{{ route("addAccount", $profile->id)}}" class="btn btn-success mar-bot-5 width-100"><i class="fas fa-plus"></i> Add Account</a>
-		@if(Auth::user()->is_admin)
-			<button type="button" class="btn btn-danger mar-top-30 mar-bot-5 width-100" id="btnDelete"><i class="far fa-trash-alt"></i> Delete Account</button>
-		@endif
-	</div>
+
+	@include('layouts.view_profile_sidebar')
 
 	<div class="col-md-8">
-		@if(session('status'))
-            <div class="alert alert-{{ session('type') }}" role="alert">
-              {{ session('msg') }}
-            </div>
-        @endif
+		
+		@include('layouts.banner')
 
 		<h3 class="mar-bot-5">View Profile</h3>
 
-		<div class="row">
-			<div class="col-md-6">
-				<h5>Name: {{ $profile->name }}</h5>
-				<h5>Company Name: {{ $profile->company_name }}</h5>
-				<h5>Phone Number: {{ $profile->phone_number ? $profile->phone_number : 'N/A' }}</h5>
-				<h5>Country: {{ $profile->country ? $profile->country : 'N/A' }}</h5>
-			</div>
 
-			<div class="col-md-6">
-				<h5>Email Sent?:
-					<table class="table table-condensed table-bordered">
-						<thead>
-							<tr>
-								<th>Influencer</th>
-								<th>Affliate</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>
-									@isset($influencer)
-										@if($influencer->status == 4 || $influencer['follow-up'] == 4)
-											<p style="color: green">Yes</p>
-										@else
-											<p style="color: red">No</p>
-										@endif
-									@endisset
-								</td>
-								<td>
-									@isset($affliate)
-										@if($affliate->status == 4 || $affliate['follow-up'] == 4)
-											<p style="color: green">Yes</p>
-										@else
-											<p style="color: red">No</p>
-										@endif
-									@endisset
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</h5>
-				<h5>Is Affliate?: 
-					@if($profile->is_affliate == 0)
-						<p style="color: red">No</p>
-					@else
-						<p style="color: green">Yes</p>
-					@endif
-				</h5>
-				<h5>Is Influencer?: 
-					@if($profile->is_influencer == 0)
-						<p style="color: red">No</p>
-					@else
-						<p style="color: green">Yes</p>
-					@endif
-				</h5>
-				<div>
-					<button id="mention_no" class="btn btn-danger" style="float: right;"
-					@if($profile->mentioned_product == 0)
-						disabled
-					@endif
-					><i class="fas fa-times"></i></button>
-					<button id="mention_yes" class="btn btn-success" style="float: right;"
-					@if($profile->mentioned_product == 1)
-						disabled
-					@endif
-					><i class="fas fa-check"></i></button>
-					<h5>Mentioned Trackimo?: 
-						@if($profile->mentioned_product == 0)
-							<p style="color: red">No</p>
-						@else
-							<p style="color: green">Yes</p>
-						@endif
-					</h5>
-				</div>
-			</div>
-		</div>
+		@include('components.view_profile.details')
 
+		@include('components.view_profile.accordion')
 
-		<div id="accordion">
-			<div class="card">
-				<div class="card-header" id="headingTwo">
-				  <h5 class="mb-0">
-				    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-						<h5 style="text-align: center;">List of Emails</h5>
-				    </button>
-				  </h5>
-				</div>
-				<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-					<div class="card-body">
-						<h5 style="text-align: center;">List of Emails</h5>
-						<table id="emailTable" class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="7" data-search="true">
-							<thead>
-								<tr>
-									<th data-field="email">List of Emails</th>
-									<th>Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								@isset($emails)
-									@foreach($emails as $email)
-										<tr>
-											<td>{{ $email->email }}</td>
-											<td>
-												<div class="btn-group">
-													<a href="{{ route('editEmail', $email->id) }}" class="btn btn-success"> Edit</a>
-													<button type="button" class="btn btn-danger btnDeleteEmail" value="{{ $email->id }}"> Delete</button>
-												</div>
-											</td>
-										</tr>
-									@endforeach
-								@endisset
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
+		@include('components.view_profile.inf_aff_panel')
 
-			<div class="card">
-				<div class="card-header" id="headingWebsite">
-				  <h5 class="mb-0">
-				    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseWebsite" aria-expanded="false" aria-controls="collapseWebsite">
-						<h5 style="text-align: center;">List of Websites</h5>
-				    </button>
-				  </h5>
-				</div>
-				<div id="collapseWebsite" class="collapse" aria-labelledby="headingWebsite" data-parent="#accordion">
-					<div class="card-body">
-						<h5 style="text-align: center;">List of Websites</h5>
-						<table id="emailTable" class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="7" data-search="true">
-							<thead>
-								<tr>
-									<th data-field="email">List of Websites</th>
-									<th>Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								@isset($websites)
-									@foreach($websites as $website)
-										<tr>
-											<td><a href="{{ $website->website }}" target="_blank">{{ $website->website }}</a></td>
-											<td>
-												<div class="btn-group">
-													<a href="{{ route('editWebsite', $website->id) }}" class="btn btn-success"> Edit</a>
-													<button type="button" class="btn btn-danger btnDeleteWebsite" value="{{ $website->id }}"> Delete</button>
-												</div>
-											</td>
-										</tr>
-									@endforeach
-								@endisset
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
+		@include('components.view_profile.notes')
 
-			<div class="card">
-				<div class="card-header" id="headingSocialMedia">
-					<h5 class="mb-0">
-						<button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseSocialMedia" aria-expanded="false" aria-controls="collapseSocialMedia">
-							<h5 style="text-align: center;">List of Social Media Accounts</h5>
-						</button>
-					</h5>
-				</div>
-				<div id="collapseSocialMedia" class="collapse" aria-labelledby="headingSocialMedia" data-parent="#accordion">
-					<div class="card-body">
-						<h5 style="text-align: center;">List of Social Media Accounts</h5>
-						<table id="socmedTable" class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="10" data-search="true">
-							<thead>
-								<tr>
-									<th>Type</th>
-									<th>Username</th>
-									<th>URL</th>
-									<th>Followers</th>
-									<th>Actions</th>
-								</tr>
-							</thead>
-							<tbody>
-								@isset($socmed)
-									@foreach($socmed as $s)
-										<tr>
-											@foreach($types as $t)
-												@if($t->id == $s->type)
-													<td>{{ $t->name }}</td>
-													@break
-												@endif
-											@endforeach
-											<td>{{ $s->username }}</td>
-											<td><a href="{{ $s->url }}" target="_blank">{{ $s->url }}</a></td>
-											<td>{{ number_format($s->followers) }}</td>
-											<td>
-												<div class="btn-group">
-													<a href="{{ route('editAccount', $s->id) }}" class="btn btn-success"> Edit</a>
-													<button type="button" class="btn btn-danger btnDeleteAccount" value="{{ $s->id }}"> Delete</button>
-												</div>
-											</td>
-										</tr>
-									@endforeach
-								@endisset
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="col-md-12 mar-top-5">
-			<div class="row">
-				<div class="col-md-6">
-					<h5 style="text-align: center;">Influencer</h5>
-					<a href="{{ route('editInf', $profile->id) }}" class="btn btn-success" style="width: 100%;">Edit</a>
-					<div class="row">
-						<div class="col-md-6">
-							<div class="form-group">
-								<label>Status</label>
-								<select class="form-control" id="inf_status">
-									<option value="0">N/A</option>
-									<option value="1">Done</option>
-									<option value="2">Declined</option>
-									<option value="3">Interested</option>
-									<option value="4">Emailed</option>
-									<option value="5">Rejected</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label>Follow-up</label>
-								<select class="form-control" id="inf_follow-up">
-									<option value="0">N/A</option>
-									<option value="1">Done</option>
-									<option value="2">Declined</option>
-									<option value="3">Interested</option>
-									<option value="4">Emailed</option>
-									<option value="5">Rejected</option>
-								</select>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label>Status Date</label>
-								<p id="inf_status_date" style="margin-top: 3%;">N/A</p>
-							</div>
-							<div class="form-group">
-								<label style="margin-top: 7%;">Follow-up Date</label>
-								<p id="inf_follow-up_date" style="margin-top: 3%;">N/A</p>
-							</div>
-						</div>
-						<div class="col-md-12">
-							<h5 style="text-align: center;">History</h5>
-							<a href="{{ route("createInfluencer", $profile->id)}}" class="btn btn-success mar-bot-5 width-100">Add History</a>
-							{{-- <table id="tableInfHistory" data-pagination="true" data-page-size="5"></table> --}}
-							<table id="tableInfHistory" data-toggle="table" data-pagination="true" data-page-size="5">
-								<thead>
-									<tr>
-										<th>Type</th>
-										<th>Data</th>
-										<th>Status</th>
-										<th>Edit</th>
-									</tr>
-								</thead>
-								<tbody>
-									@isset($infHistory)
-										@foreach($infHistory as $history)
-											<tr>
-												<td>{{ $history->field_name }}</td>
-												<td>{{ $history->field_data }}</td>
-												<td>{{ $history->created_at }}</td>
-												<td>
-													<a href="{{ route('editHistory', $history->id) }}" class="btn btn-success"><i class="far fa-edit"></i></a>
-												</td>
-											</tr>
-										@endforeach
-									@endisset
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-6">
-					<h5 style="text-align: center;">Affliate</h5>
-					<a href="{{ route('editAff', $profile->id) }}" class="btn btn-success" style="width: 100%;">Edit</a>
-					<div class="row">
-						<div class="col-md-6">
-							<div class="form-group">
-								<label>Status</label>
-								<select class="form-control" id="aff_status">
-									<option value="0">N/A</option>
-									<option value="1">Done</option>
-									<option value="2">Declined</option>
-									<option value="3">Interested</option>
-									<option value="4">Emailed</option>
-									<option value="5">Rejected</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<label>Follow-up</label>
-								<select class="form-control" id="aff_follow-up">
-									<option value="0">N/A</option>
-									<option value="1">Done</option>
-									<option value="2">Declined</option>
-									<option value="3">Interested</option>
-									<option value="4">Emailed</option>
-									<option value="5">Rejected</option>
-								</select>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label>Status Date</label>
-								<p id="aff_status_date" style="margin-top: 3%;">N/A</p>
-							</div>
-							<div class="form-group">
-								<label style="margin-top: 7%;">Follow-up Date</label>
-								<p id="aff_follow-up_date" style="margin-top: 3%;">N/A</p>
-							</div>
-						</div>
-						<div class="col-md-12">
-							<h5 style="text-align: center;">History</h5>
-							<a href="{{ route("createAffliate", $profile->id)}}" class="btn btn-success" style="margin-bottom: 5%; width: 100%;">Add History</a>
-							{{-- <table id="tableAffHistory" data-pagination="true" data-page-size="5"></table> --}}
-							<table id="tableAffHistory" data-toggle="table" data-pagination="true" data-page-size="5">
-								<thead>
-									<tr>
-										<th>Type</th>
-										<th>Data</th>
-										<th>Status</th>
-										<th>Edit</th>
-									</tr>
-								</thead>
-								<tbody>
-									@isset($affHistory)
-										@foreach($affHistory as $history)
-											<tr>
-												<td>{{ $history->field_name }}</td>
-												<td>{{ $history->field_data }}</td>
-												<td>{{ $history->created_at }}</td>
-												<td>
-													<a href="{{ route('editHistory', $history->id) }}" class="btn btn-success"><i class="far fa-edit"></i></a>
-												</td>
-											</tr>
-										@endforeach
-									@endisset
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		{{-- Notes --}}
-		<div class="col-md-12" style="margin-top: 5%;">
-			<h5 style="text-align: center;">Notes</h5>
-			<form method="POST" action="{{ route('addNote') }}">
-				@csrf
-				<input type="hidden" name="profile_id" value="{{ $profile->id }}">
-				<div class="form-group">
-					<textarea name="note" class="form-control" required></textarea>
-				</div>
-				<div class="form-group" style="text-align: center;">
-					<label>Date of Action</label>
-					<input type="date" name="date_of_action" id="date_of_action" class="form-control" required>
-					<input type="checkbox" name="btnToday" id="btnToday" class="form-check-input" value="true">
-					<label class="form-check-label">Today</label>
-				</div>
-				<div class="form-group">
-					<button type="submit" class="btn btn-success" style="float: right; margin-bottom: 5%;"><i class="fas fa-check"></i> Submit</button>
-				</div>
-			</form>
-		</div>
-
-		<div class="col-md-12" style="margin-top: 5%;">
-			<h5>History</h5>
-			<table id="tableNotes" data-pagination="true" data-page-size="5" required"></table>
-		</div>
+		@include('components.view_profile.history_table')
 
 	</div>
 </div>
 
-<form id="formDelete" method="POST" action="{{ route('deleteProfile') }}" hidden="true">
-	@csrf
-	<input type="hidden" name="id" id="formDelete-id" value="{{ $profile->id }}">
-</form>
+@include('components.view_profile.modal_edit_affliate_code')
 
-<form id="formDeleteEmail" method="POST" action="{{ route('deleteEmail') }}" hidden="true">
-	@csrf
-	<input type="hidden" name="id" id="formDeleteEmail-id" value="">
-</form>
-
-<form id="formDeleteWebsite" method="POST" action="{{ route('deleteWebsite') }}" hidden="true">
-	@csrf
-	<input type="hidden" name="id" id="formDeleteWebsite-id" value="">
-</form>
-
-<form id="formDeleteAccount" method="POST" action="{{ route('deleteAccount') }}" hidden="true">
-	@csrf
-	<input type="hidden" name="id" id="formDeleteAccount-id" value="">
-</form>
-
-<form id="formChangeStatus" method="POST" action="{{ route('changeStatus') }}" hidden="true">
-	@csrf
-	<input type="hidden" name="profile_id" value="{{ $profile->id }}">
-	<input type="hidden" name="class" id="formChangeStatus-class" value="">
-	<input type="hidden" name="status_key" id="formChangeStatus-statusKey" value="">
-	<input type="hidden" name="status_type" id="formChangeStatus-statusType" value="">
-</form>
-
-<form id="formSetMentionedProduct" method="POST" action="{{ route('setMentionedProduct') }}" hidden="true">
-	@csrf
-	<input type="hidden" name="profile_id" id="formSetMentionedProduct-id" value="">
-	<input type="hidden" name="bool" id="formSetMentionedProduct-bool" value="">
-</form>
+@include('components.view_profile.hidden_forms')
 
 <script type="text/javascript">
 	$(document).ready(function (){
@@ -450,16 +46,12 @@
 		@isset($influencer)
 			$('#inf_status').prop('selectedIndex', {{ $influencer->status }});
 			$('#inf_follow-up').prop('selectedIndex', {{ $influencer['follow-up'] }});
-			$('#inf_status_date').text('@if($influencer->status_date != null) {{ substr($influencer->status_date,0,11) }} @else N/A @endif')
-			$('#inf_follow-up_date').text('@if($influencer["follow-up_date"] != null) {{ substr($influencer["follow-up_date"],0,11) }} @else N/A @endif')
 		@endisset
 
 		//Set affliate statuses
 		@isset($affliate)
 			$('#aff_status').prop('selectedIndex', {{ $affliate->status }});
 			$('#aff_follow-up').prop('selectedIndex', {{ $affliate['follow-up'] }});
-			$('#aff_status_date').text('@if($affliate->status_date != null) {{ substr($affliate->status_date,0,11) }} @else N/A @endif')
-			$('#aff_follow-up_date').text('@if($affliate["follow-up_date"] != null) {{ substr($affliate["follow-up_date"],0,11) }} @else N/A @endif')
 		@endisset
 
 		// $('#tableInfHistory').bootstrapTable({

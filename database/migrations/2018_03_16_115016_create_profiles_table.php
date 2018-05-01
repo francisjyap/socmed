@@ -26,12 +26,12 @@ class CreateProfilesTable extends Migration
             $table->string('company_name')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('country')->nullable();
+            $table->string('affliate_code')->nullable();
             $table->boolean('email_sent')->default(0);
             $table->boolean('is_affliate')->default(0);
             $table->boolean('is_influencer')->default(0);
             $table->boolean('mentioned_product')->default(0);
             $table->timestamps();
-            // $table->softDeletes();
         });
     }
 
