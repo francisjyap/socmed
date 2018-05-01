@@ -94,6 +94,11 @@ class InfluencerAffliateController extends Controller
             }
         }
 
+        //For setting email_sent status
+        if(request('status_key') == 4){
+            $row = InfluencerAffliate::where('profile_id', $request->profile_id)->where('class', request('class'))->update(['email_sent' => 1]);
+        }
+
         //For logs
         $log = LogController::createLog(Auth::id(), $request->profile_id, $request->class, $type, $request->status_key);
 

@@ -33,7 +33,7 @@
 					</div>
 					<div class="form-group">
 						<label>Phone Number</label>
-						<input type="number" name="phone_number" class="form-control" maxlength="11" value="{{ $profile->phone_number }}">
+						<input type="tel" name="phone_number" class="form-control" maxlength="16" value="{{ $profile->phone_number }}">
 					</div>
 					<div class="form-group">
 						<label>Country</label>

@@ -101,33 +101,29 @@ class ProfileController extends Controller
         $this->validate(request(), [
             'name' => 'required|unique:profiles',
             'email' => 'required|email',
-            'phone_number' => 'integer|digits_between:10,13'
         ]);            
 
-        //If company_name is empty, set to name
-        if(request('company_name'))
-            $company_name = request('company_name');
-        else
-            $company_name = request('name');
+        //Field cleaning
+        $company_name = Helpers::cleanCompanyName(request('company_name'), request('name'));
+        $phone_number = Helpers::cleanPhoneNumber(request('country_code'), request('phone_number'));
 
         //Create Profile
         $profile = Profile::create([
             'name' => request('name'),
             'company_name' => $company_name,
-            'phone_number' => request('phone_number'),
+            'phone_number' => $phone_number,
             'country' => request('country')
         ]);
 
-        //Create Email and Website entries
+        //Create Email, Website, InfluencerAffliate entries
         EmailController::staticStore($profile->id, request('email'));
         WebsiteController::staticStore($profile->id, request('website'));
-
-        //Create InfluencerAffliate entry
         InfluencerAffliateController::createEntryforProfile($profile->id);
 
         //Create banner message
         $banner = Helpers::createBanner($profile, 'Profile', 'create');
 
+        //Redirect
         return redirect()->action('ProfileController@index')->with(['status' => $profile, 'banner' => $banner]);
     }
 
@@ -135,19 +131,14 @@ class ProfileController extends Controller
     {
         //Validate Request
         $this->validate(request(), [
-            'name' => 'required|unique:profiles',
-            'email' => 'required|email',
-            'phone_number' => 'integer|digits_between:10,13'
+            'name' => 'required'
         ]);
 
         //Save instance of Profile before update
         $old = Profile::find(request('id'));
 
-        //If company_name is empty, set to name
-        if(request('company_name'))
-            $company_name = request('company_name');
-        else
-            $company_name = request('name');
+        //Field cleaning
+        $company_name = Helpers::cleanCompanyName(request('company_name'), request('name'));
 
         //Update Profile
         $bool = Profile::find(request('id'))->update([
@@ -163,24 +154,7 @@ class ProfileController extends Controller
         //If profile created successfully
         if($bool){
             //Log changes
-            if($old->name != $new->name){
-                $note = 'Edited Name from '.$old->name.' to '.$new->name;
-                NoteController::createLogNote($request->id, $note);
-            }
-            if($old->company_name != $new->company_name){
-                $note = 'Edited Company Name from '.$old->company_name.' to '.$new->company_name;
-                NoteController::createLogNote($request->id, $note);
-            }
-            if($old->phone_number != $new->phone_number){
-                $old->phone_number ? $old_phone_number = $old->phone_number : $old_phone_number = 'Blank';
-                $new->phone_number ? $new_phone_number = $new->phone_number : $new_phone_number = 'Blank';
-                $note = 'Edited Phone Number from '.$old_phone_number.' to '.$new_phone_number;
-                NoteController::createLogNote($request->id, $note);
-            }
-            if($old->country != $new->country){
-                $note = 'Edited Country from '.$old->country.' to '.$new->country;
-                NoteController::createLogNote($request->id, $note);
-            }
+            Helpers::profileUpdateLog(request('id'), $old, $new);
         }
 
         //Create banner message
@@ -200,54 +174,8 @@ class ProfileController extends Controller
         $banner = Helpers::createBanner($bool, 'Profile', 'delete');
 
         //Redirect
-        return redirect()->action('ProfileController@index')->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        return redirect()->action('ProfileController@index')->with(['status' => $bool, 'banner' => $banner]);
 
-    }
-
-    public static function profileSort($socmedtype_id, $type)
-    {
-        $accounts = collect();
-
-        //Get Accounts matching SocMedType ID
-        if($socmedtype_id != 0){
-            $acc_ids = SocialMediaController::getAccountsWithSocMedType($socmedtype_id);
-            foreach($acc_ids as $a){
-                $accounts->push(Profile::find($a->profile_id));
-            } 
-        } else {
-            $accounts = Profile::all();
-        }
-
-        //Filter accounts with type
-        $return = null;
-
-        switch($type){
-            case 0:
-                $return = $accounts;
-                break;
-            case 1:
-                $return = $accounts->where('is_influencer', 1);
-                break;
-            case 2:
-                $return = $accounts->where('is_affliate', 1);
-                break;
-            case 3:
-                $return = $accounts->where('is_influencer', 0);
-                break;
-            case 4:
-                $return = $accounts->where('is_affliate', 0);
-                break;
-            default:
-                $return = null;
-                break;
-        }
-
-        $return = Helpers::convertBoolToString($return);
-
-        //Sort values by Name
-        $return = $return->sortBy('name')->values()->all();
-
-        return $return;
     }
 
     public static function setIsInfluencer($profile_id, $bool)
@@ -260,12 +188,7 @@ class ProfileController extends Controller
         return Profile::find($profile_id)->update(['is_affliate' => $bool]);
     }
 
-    public static function setEmailSent($profile_id, $bool)
-    {
-        return Profile::find($profile_id)->update(['email_sent' => $bool]);
-    }
-
-    public static function setMentionedProduct(Request $request)
+    public function setMentionedProduct(Request $request)
     {
         $this->validate(request(), [
             'profile_id' => 'required',
@@ -273,22 +196,45 @@ class ProfileController extends Controller
         ]);
 
         //Update
-        $bool = Profile::find(request('profile_id'))->update(['mentioned_product' => request('bool')]);
+        $bool = Profile::find(request('profile_id'))->update([
+            'mentioned_product' => request('bool')
+        ]);
 
-        //If update successfull
+        //If update successful
         if($bool){
             //Log changes
-            if(request('bool')){
-                $note = 'Changed mentioned product status to Yes';
-            } else{
-                $note = 'Changed mentioned product status to No';
-            }
-            NoteController::createLogNote(request('profile_id'), $note);
+            Helpers::profileSetMentionedProductLog(request('bool'), request('profile_id'));
         }
 
         //Create banner message
         $banner = Helpers::createBanner($bool, 'Mentioned product', 'status change');
+        
+        //Redirect
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
+    }
 
+    public function setAffliateCode(Request $request)
+    {
+        //Validate
+        $this->validate(request(), [
+            'profile_id' => 'required',
+        ]);
+
+        //Update
+        $profile = Profile::find(request('profile_id'));
+        $profile->affliate_code = request('affliate_code');
+        $bool = $profile->save();
+
+        //If update successful
+        if($bool){
+            //Log changes
+            Helpers::profileSetAffliateCodeLog(request('affliate_code'), request('profile_id'));
+        }
+
+        //Create banner message
+        $banner = Helpers::createBanner($bool, 'Affliate Code', 'set');
+
+        //Redirect
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
     }
 }

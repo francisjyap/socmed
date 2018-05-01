@@ -24,27 +24,33 @@
 					@csrf
 					<div class="form-group">
 						<label>Name</label>
-						<input type="text" name="name" class="form-control" autofocus="true" required="true">
+						<input type="text" name="name" placeholder="John Doe" class="form-control" autofocus="true" required="true">
 					</div>
 					<div class="form-group">
 						<label>Email</label>
-						<input type="email" name="email" class="form-control" required="true">
+						<input type="email" name="email" placeholder="john.doe@example.com" class="form-control" required="true">
 					</div>
 					<div class="form-group">
 						<label>Website URL</label>
-						<input type="url" name="website" class="form-control">
+						<input type="url" name="website" placeholder="http://www.example.com" class="form-control">
 					</div>
 					<div class="form-group">
 						<label>Company Name</label>
-						<input type="text" name="company_name" class="form-control">
+						<input type="text" name="company_name" placeholder="John Inc." class="form-control">
 					</div>
-					<div class="form-group">
-						<label>Phone Number</label>
-						<input type="number" name="phone_number" class="form-control" maxlength="11">
+					<div class="row form-group">
+						<div class="col-md-3">
+							<label>Country</label>
+							<input type="tel" name="country_code" placeholder="1" class="form-control" minlength="1" maxlength="3">
+						</div>
+						<div class="col-md-9">
+							<label>Phone Number</label>
+							<input type="tel" name="phone_number" placeholder="808-555-1234" class="form-control" minlength="10" maxlength="12">
+						</div>
 					</div>
 					<div class="form-group">
 						<label>Country</label>
-						<input type="text" name="country" class="form-control">
+						<input type="text" name="country" placeholder="United States" class="form-control">
 					</div>
 					<div class="clearfix">
 						<a href="{{ route("home") }}" class="btn btn-danger"><i class="fas fa-times"></i> Cancel</a>

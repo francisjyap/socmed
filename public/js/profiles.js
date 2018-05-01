@@ -6,16 +6,23 @@ $(document).ready(function() {
 		search: true,
 	    columns: [{
 	        field: 'name',
-	        title: 'Name'
+	        title: 'Name',
+	        sortable: true,
 	    }, {
 	        field: 'company_name',
-	        title: 'Company Name'
+	        title: 'Company Name',
+	        sortable: true,
 	    }, {
 	        field: 'phone_number',
 	        title: 'Phone Number'
 	    }, {
 	        field: 'country',
-	        title: 'Country'
+	        title: 'Country',
+	        sortable: true,
+	    }, {
+	        field: 'affliate_code',
+	        title: 'Affliate Code',
+	        sortable: true,
 	    }, {
 	        field: 'is_influencer',
 	        title: 'Influencer',

@@ -12,7 +12,7 @@
 @section('content')
 
 <div class="row mar-top-5 mar-bot-5">
-    <div class="col-md-8 offset-2">
+    <div class="col-md-10 offset-1">
         
         @include('layouts.banner')
 
