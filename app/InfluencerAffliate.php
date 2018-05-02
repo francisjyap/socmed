@@ -10,12 +10,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-// use Illuminate\Database\Eloquent\SoftDeletes;
 
 class InfluencerAffliate extends Model
-{
-    // use SoftDeletes;
-    
+{    
     protected $table = 'influencer_affliates';
     public $timestamps = true;
 

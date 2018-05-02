@@ -28,27 +28,25 @@
 					</tr>
 				</thead>
 				<tbody>
-					@isset($socmed)
-						@foreach($socmed as $s)
-							<tr>
-								@foreach($types as $t)
-									@if($t->id == $s->type)
-										<td>{{ $t->name }}</td>
-										@break
-									@endif
-								@endforeach
-								<td>{{ $s->username }}</td>
-								<td><a href="{{ $s->url }}" target="_blank">{{ $s->url }}</a></td>
-								<td>{{ number_format($s->followers) }}</td>
-								<td>
-									<div class="btn-group">
-										<a href="{{ route('editAccount', $s->id) }}" class="btn btn-success"> Edit</a>
-										<button type="button" class="btn btn-danger btnDeleteAccount" value="{{ $s->id }}"> Delete</button>
-									</div>
-								</td>
-							</tr>
-						@endforeach
-					@endisset
+					@foreach($profile->socmed as $s)
+						<tr>
+							@foreach($types as $t)
+								@if($t->id == $s->type)
+									<td>{{ $t->name }}</td>
+									@break
+								@endif
+							@endforeach
+							<td>{{ $s->username }}</td>
+							<td><a href="{{ $s->url }}" target="_blank">{{ $s->url }}</a></td>
+							<td>{{ number_format($s->followers) }}</td>
+							<td>
+								<div class="btn-group">
+									<a href="{{ route('editAccount', $s->id) }}" class="btn btn-success"> Edit</a>
+									<button type="button" class="btn btn-danger btnDeleteAccount" value="{{ $s->id }}"> Delete</button>
+								</div>
+							</td>
+						</tr>
+					@endforeach
 				</tbody>
 			</table>
 		</div>

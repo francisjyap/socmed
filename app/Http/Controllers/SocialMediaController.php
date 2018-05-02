@@ -9,11 +9,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Profile;
 use App\SocialMedia;
+use Illuminate\Http\Request;
+
+use App\Profile;
+
+use App\Http\Controllers\Helpers\CommonHelper;
+use App\Http\Controllers\Helpers\SocialMediaHelper;
+
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SocialMediaTypesController;
-use Illuminate\Http\Request;
 
 class SocialMediaController extends Controller
 {
@@ -44,8 +49,10 @@ class SocialMediaController extends Controller
      */
     public function create($profile_id)
     {
-        $types = SocialMediaTypesController::getTypes();
-        return view('account.addAccount')->with(['profile_id' => $profile_id, 'types' => $types]);
+        return view('account.addAccount')->with([
+            'profile_id' => $profile_id,
+            'types' => SocialMediaTypesController::getTypes()
+        ]);
     }
 
     /**
@@ -56,6 +63,14 @@ class SocialMediaController extends Controller
      */
     public function store(Request $request)
     {
+        //Validate
+        $this->validate(request(), [
+            'profile_id' => 'required',
+            'username' => 'required',
+            'type' => 'required',
+        ]);
+
+        //Create new Social Media entry
         $bool = SocialMedia::create([
             'profile_id' => $request->profile_id,
             'username' => $request->username,
@@ -64,18 +79,17 @@ class SocialMediaController extends Controller
             'followers' => $request->followers
         ]);
 
+        //If add successful
         if($bool){
-            $msg = 'Account added successfully!';
-            $type = 'success';
-            $note = 'Added Social Media Account: '.$request->username;
-            NoteController::createLogNote($request->profile_id, $note);
-        }
-        else{
-            $msg = 'Account adding failed!';
-            $type = 'danger';
+            //Log changes
+            SocialMediaHelper::storeLog(request('username'), request('profile_id'));
         }
 
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        //Create banner message
+        $banner = CommonHelper::createBanner($bool, 'Account', 'add');
+
+        //Redirect
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'banner' => $banner]);
     }
 
     /**
@@ -97,9 +111,10 @@ class SocialMediaController extends Controller
      */
     public function edit($id)
     {
-        $account = SocialMedia::find($id);
-        $types = SocialMediaTypesController::getTypes();
-        return view('account.editAccount')->with(['account' => $account, 'types' => $types]);
+        return view('account.editAccount')->with([
+            'account' => SocialMedia::find($id),
+            'types' => SocialMediaTypesController::getTypes()
+        ]);
     }
 
     /**
@@ -111,6 +126,11 @@ class SocialMediaController extends Controller
      */
     public function update(Request $request)
     {
+        $this->validate(request(), [
+            'type' => 'required',
+            'username' => 'required'
+        ]);
+
         $old = SocialMedia::find($request->id);
 
         $bool = SocialMedia::find($request->id)->update([
@@ -122,35 +142,15 @@ class SocialMediaController extends Controller
 
         $new = SocialMedia::find($request->id);
 
-        echo $old->username.' '.$new->username;
-
+        //Log changes
         if($bool){
-            $msg = 'Social Media Account updated successfully!';
-            $type = 'success';
-            $note = 'Edited Social Media Account: '.$request->username;
-            if($old->type != $new->type){
-                $note = 'Edited Social Media Account: '.$new->username.' type from '.SocialMediaTypesController::getString($old->type).' to '.SocialMediaTypesController::getString($new->type);
-                NoteController::createLogNote($new->profile_id, $note);
-            }
-            if($old->username != $new->username){
-                $note = 'Edited Social Media Account: '.$old->username.' username from '.$old->username.' to '.$new->username;
-                NoteController::createLogNote($new->profile_id, $note);
-            }
-            if($old->url != $new->url){
-                $note = 'Edited Social Media Account: '.$new->username.' URL from '.$old->url.' to '.$new->url;
-                NoteController::createLogNote($new->profile_id, $note);
-            }
-            if($old->followers != $new->followers){
-                $note = 'Edited Social Media Account: '.$new->username.' followers from '.$old->followers.' to '.$new->followers;
-                NoteController::createLogNote($new->profile_id, $note);
-            }
-        }
-        else{
-            $msg = 'Social Media Account updating failed!';
-            $type = 'danger';
+            SocialMediaHelper::updateLog($old, $new);
         }
 
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $new->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        //Create banner
+        $banner = CommonHelper::createBanner($bool, 'Account', 'update');
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $new->profile_id])->with(['status' => $bool, 'banner' => $banner]);
     }
 
     /**
@@ -167,16 +167,13 @@ class SocialMediaController extends Controller
         $bool = $socmed->delete();
 
         if($bool){
-            $msg = 'Account deleted!';
-            $type = 'success';
-            $note = 'Deleted Social Media Account: '.$deleted;
-            NoteController::createLogNote($deleted_profile_id, $note);
-        } else {
-            $msg = 'Account failed to delete!';
-            $type = 'fail';
+            SocialMediaHelper::destroyLog($deleted_profile_id, $deleted);
         }
 
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $socmed->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        //Create banner
+        $banner = CommonHelper::createBanner($bool, 'Account', 'delete');
+
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $socmed->profile_id])->with(['status' => $bool, 'banner' => $banner]);
     }
 
     public static function getAccounts($profile_id)
@@ -191,8 +188,7 @@ class SocialMediaController extends Controller
         } else {
             $entries = SocialMedia::all();
         }
-        $entries = $entries->unique('profile_id');
 
-        return $entries;
+        return $entries->unique('profile_id');
     }
 }

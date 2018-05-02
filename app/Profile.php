@@ -25,7 +25,7 @@ class Profile extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'company_name', 'phone_number', 'country', 'email_sent', 'is_affliate', 'is_influencer', 'mentioned_product', 
+        'name', 'company_name', 'country_code', 'phone_number', 'country', 'email_sent', 'is_affliate', 'is_influencer', 'mentioned_product', 
     ];
 
     /**
@@ -34,4 +34,19 @@ class Profile extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    public function emails()
+    {
+        return $this->hasMany(Email::class);
+    }
+
+    public function websites()
+    {
+        return $this->hasMany(Website::class);
+    }
+
+    public function socmed()
+    {
+        return $this->hasMany(SocialMedia::class);
+    }
 }

@@ -12,7 +12,9 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Log;
 use App\InfluencerAffliate;
-use App\Http\Controllers\Helpers;
+
+use App\Http\Controllers\Helpers\CommonHelper;
+
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\ProfileController;
 
@@ -113,27 +115,19 @@ class InfluencerAffliateController extends Controller
         }
 
         //Create banner
-        $banner = Helpers::createBanner($row, $type, 'update');
+        $banner = CommonHelper::createBanner($row, $type, 'update');
 
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $row, 'banner' => $banner]);
     }
 
     public static function getInfluencerEntry($profile_id)
     {
-        $var = InfluencerAffliate::where('profile_id', $profile_id)->where('class', 0)->first();
-        if($var)
-            $var->created_at = substr($var->created_at, 0, 10);
-
-        return $var;
+        return InfluencerAffliate::where('profile_id', $profile_id)->where('class', 0)->first();
     }
 
     public static function getAffliateEntry($profile_id)
     {
-        $var = InfluencerAffliate::where('profile_id', $profile_id)->where('class', 1)->first();
-        if($var)
-            $var->created_at = substr($var->created_at, 0, 10);
-
-        return $var;
+        return InfluencerAffliate::where('profile_id', $profile_id)->where('class', 1)->first();
     }
 
     public static function editInfAff(Request $request)
@@ -160,16 +154,9 @@ class InfluencerAffliateController extends Controller
             $log->save();
         }
 
-        if($data){
-            $msg = 'Date updated successfully!';
-            $type = 'success';
-        }
-        else{
-            $msg = 'Date updating failed!';
-            $type = 'danger';
-        }
+        $banner = CommonHelper::createBanner($data, 'Date', 'update');
 
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $data, 'msg' => $msg, 'type' => $type]);
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $data, 'banner' => $banner]);
     }
 
     public static function editInf($profile_id)

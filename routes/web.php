@@ -26,7 +26,7 @@ Route::get('/adminPanel', 'AdminController@index')->name('adminPanel');
 Route::get('/getUsers', 'AdminController@getUsers')->name('getUsers');
 
 //Helpers
-Route::get('/profileSort/{id}/{type}', 'Helpers@profileSort');
+Route::get('/profileSort/{id}/{type}', 'Helpers\CommonHelper@profileSort');
 
 //ProfileController
 Route::get('/', 'ProfileController@index')->name('home');
@@ -73,6 +73,7 @@ Route::get('/editAff/{id}', 'InfluencerAffliateController@editAff')->name('editA
 //LogController
 Route::get('/getInfHistory/{id}', 'LogController@getInfHistory')->name('getInfHistory');
 Route::get('/getAffHistory/{id}', 'LogController@getAffHistory')->name('getAffHistory');
+Route::get('/getHistory/{id}/{type}', 'LogController@getHistory')->name('getHistory');
 Route::post('/createHistory', 'LogController@createHistory')->name('createHistory');
 Route::get('/editHistory/{id}', 'LogController@editHistory')->name('editHistory');
 Route::post('/updateHistory', 'LogController@updateHistory')->name('updateHistory');

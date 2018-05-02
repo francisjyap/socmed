@@ -10,8 +10,9 @@
 namespace App\Http\Controllers;
 
 use App\Email;
-use App\Http\Controllers\Helpers;
 use Illuminate\Http\Request;
+
+use App\Http\Controllers\Helpers\CommonHelper;
 
 class EmailController extends Controller
 {
@@ -46,7 +47,7 @@ class EmailController extends Controller
         NoteController::createLogNote(request('profile_id'), 'Added email: '.request('email'));
 
         //Create banner message
-        $banner = Helpers::createBanner($bool, 'Email', 'create');
+        $banner = CommonHelper::createBanner($bool, 'Email', 'create');
 
         //Redirect
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
@@ -83,7 +84,7 @@ class EmailController extends Controller
         NoteController::createLogNote($email->profile_id, 'Edited email: '.$old.' to '.request('email'));
 
         //Create banner message
-        $banner = Helpers::createBanner($bool, 'Email', 'edit');
+        $banner = CommonHelper::createBanner($bool, 'Email', 'edit');
 
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $email->profile_id])->with(['status' => $bool, 'banner' => $banner]);
     }
@@ -99,7 +100,7 @@ class EmailController extends Controller
         NoteController::createLogNote($deleted_profile_id, 'Deleted email: '.$deleted);
 
         //Create banner message
-        $banner = Helpers::createBanner($bool, 'Email', 'delete');
+        $banner = CommonHelper::createBanner($bool, 'Email', 'delete');
 
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $deleted_profile_id])->with(['status' => $bool, 'banner' => $banner]);
     }

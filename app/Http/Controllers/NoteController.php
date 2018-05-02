@@ -13,6 +13,7 @@ use Auth;
 use App\Note;
 use App\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Helpers\CommonHelper;
 
 class NoteController extends Controller
 {
@@ -29,26 +30,20 @@ class NoteController extends Controller
     public function addNote(Request $request)
     {
         $date = $request->date_of_action;
-        if($request->btnToday){
+        
+        if($request->btnToday)
             $date = now();
-        }
+        
         $bool = Note::create([
             'profile_id' => $request->profile_id,
             'author_id' => Auth::id(),
             'note' => $request->note,
             'created_at' => $date
         ]);
+        
+        $banner = CommonHelper::createBanner($bool, 'Note', 'add');
 
-        if($bool){
-            $msg = 'Note added successfully!';
-            $type = 'success';
-        }
-        else{
-            $msg = 'Note adding failed!';
-            $type = 'danger';
-        }
-
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'banner' => $banner]);
     }
 
     public static function createLogNote($profile_id, $note)
