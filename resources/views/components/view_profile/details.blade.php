@@ -15,7 +15,7 @@
 
 		<div>
 			<button id="edit_affliate_code" class="btn btn-success" data-toggle="modal" data-target="#modal_edit_affliate_code" style="float: right;"
-			@if(!$profile->is_affliate)
+			@if(! $profile->is_affliate)
 				disabled
 			@endif
 			><i class="fas fa-edit"></i></button>
@@ -63,15 +63,15 @@
 				</tbody>
 			</table>
 		</h5>
-		<h5>Is Affliate?: 
-			@if($profile->is_affliate == 0)
+		<h5>Is Influencer?: 
+			@if($profile->is_influencer == 0)
 				<p style="color: red">No</p>
 			@else
 				<p style="color: green">Yes</p>
 			@endif
 		</h5>
-		<h5>Is Influencer?: 
-			@if($profile->is_influencer == 0)
+		<h5>Is Affliate?: 
+			@if($profile->is_affliate == 0)
 				<p style="color: red">No</p>
 			@else
 				<p style="color: green">Yes</p>

@@ -24,6 +24,7 @@ class CreateProfilesTable extends Migration
             $table->increments('id');
             $table->string('name')->unique();
             $table->string('company_name')->nullable();
+            $table->string('country_code')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('country')->nullable();
             $table->string('affliate_code')->nullable();

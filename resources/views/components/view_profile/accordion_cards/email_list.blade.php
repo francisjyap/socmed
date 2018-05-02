@@ -25,19 +25,17 @@
 					</tr>
 				</thead>
 				<tbody>
-					@isset($emails)
-						@foreach($emails as $email)
-							<tr>
-								<td>{{ $email->email }}</td>
-								<td>
-									<div class="btn-group">
-										<a href="{{ route('editEmail', $email->id) }}" class="btn btn-success"> Edit</a>
-										<button type="button" class="btn btn-danger btnDeleteEmail" value="{{ $email->id }}"> Delete</button>
-									</div>
-								</td>
-							</tr>
-						@endforeach
-					@endisset
+					@foreach($profile->emails as $email)
+						<tr>
+							<td>{{ $email->email }}</td>
+							<td>
+								<div class="btn-group">
+									<a href="{{ route('editEmail', $email->id) }}" class="btn btn-success"> Edit</a>
+									<button type="button" class="btn btn-danger btnDeleteEmail" value="{{ $email->id }}"> Delete</button>
+								</div>
+							</td>
+						</tr>
+					@endforeach
 				</tbody>
 			</table>
 		</div>

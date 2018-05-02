@@ -13,6 +13,9 @@ use App\Log;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\Helpers\LogHelper;
+use App\Http\Controllers\Helpers\CommonHelper;
+
 class LogController extends Controller
 {
     /**
@@ -36,55 +39,22 @@ class LogController extends Controller
         ]);
     }
 
-    public function createHistory(Request $req)
+    public function createHistory(Request $request)
     {
-        $bool = Log::create([
-            'user_id' => $req->user_id,
-            'profile_id' => $req->profile_id,
-            'type' => $req->class,
-            'field_name' => $req->field_name,
-            'field_data' => $req->field_data,
-            'created_at' => new Carbon($req->date)
-        ]);
-
-        if($bool){
-            $msg = 'Profile edited successfully!';
-            $type = 'success';
-        }
-        else{
-            $msg = 'Profile editing failed!';
-            $type = 'danger';
-        }
-
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $req->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        $bool = Log::create(request(['user_id', 'profile_id', 'type', 'field_name', 'field_data', 'created_at']));
+        
+        $banner = CommonHelper::createBanner($bool, 'History', 'create');
+        
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
     }
 
     public static function getInfHistory($profile_id)
     {
         $logs = Log::where('profile_id', $profile_id)->where('type', 0)->get();
 
-        foreach($logs as $log){
-            switch($log->field_data){
-                case 0:
-                    $log->field_data = "N/A";
-                    break;
-                case 1:
-                    $log->field_data = "Done";
-                    break;
-                case 2:
-                    $log->field_data = "Declined";
-                    break;
-                case 3:
-                    $log->field_data = "Interested";
-                    break;
-                case 4:
-                    $log->field_data = "Emailed";
-                    break;
-                case 5:
-                    $log->field_data = "Rejected";
-                    break;
-            }
-        }
+        $logs = LogHelper::convertFieldDataToString($logs);
+        
+        $logs = $logs->sortByDesc('created_at');
 
         return $logs;
     }
@@ -93,28 +63,18 @@ class LogController extends Controller
     {
         $logs = Log::where('profile_id', $profile_id)->where('type', 1)->get();
 
-        foreach($logs as $log){
-            switch($log->field_data){
-                case 0:
-                    $log->field_data = "N/A";
-                    break;
-                case 1:
-                    $log->field_data = "Done";
-                    break;
-                case 2:
-                    $log->field_data = "Declined";
-                    break;
-                case 3:
-                    $log->field_data = "Interested";
-                    break;
-                case 4:
-                    $log->field_data = "Emailed";
-                    break;
-                case 5:
-                    $log->field_data = "Rejected";
-                    break;
-            }
-        }
+        $logs = LogHelper::convertFieldDataToString($logs);
+        
+        $logs = $logs->sortByDesc('created_at');
+
+        return $logs;
+    }
+    
+    public static function getHistory($profile_id, $type)
+    {
+        $logs = Log::where('profile_id', $profile_id)->where('type', $type)->get();
+
+        $logs = LogHelper::convertFieldDataToString($logs);
 
         return $logs;
     }

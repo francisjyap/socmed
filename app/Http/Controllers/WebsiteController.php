@@ -12,6 +12,9 @@ namespace App\Http\Controllers;
 use App\Website;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\Helpers\CommonHelper;
+use App\Http\Controllers\Helpers\WebsiteHelper;
+
 class WebsiteController extends Controller
 {
 
@@ -32,23 +35,23 @@ class WebsiteController extends Controller
     
     public function store(Request $request)
     {
+        $this->validate(request(), [
+            'profile_id' => 'required',
+            'website' => 'required|unique:websites',
+        ]);
+        
         $bool = Website::create([
             'profile_id' => $request->profile_id,
             'website' => $request->website,
         ]);
 
         if($bool){
-            $msg = 'Website created successfully!';
-            $type = 'success';
-            $note = 'Added website: '.$request->website;
-            NoteController::createLogNote($request->profile_id, $note);
+            WebsiteHelper::storeLog(request('profile_id'), request('website'));
         }
-        else{
-            $msg = 'Website creation failed!';
-            $type = 'danger';
-        }
+        
+        $banner = CommonHelper::createBanner($bool, 'Website', 'add');
 
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'banner' => $banner]);
     }
 
     public static function staticStore($profile_id ,$website)
@@ -69,20 +72,19 @@ class WebsiteController extends Controller
 
     public function update(Request $request)
     {
+        $this->validate(request(), [
+            'website' => 'required',
+        ]);
+        
         $website = Website::find($request->id);
         $old = $website->website;
         $bool = $website->update(['website' => $request->website]);
-
+        
         if($bool){
-            $msg = 'Website updated successfully!';
-            $type = 'success';
-            $note = 'Edited website: '.$old.' to '.$request->website;
-            NoteController::createLogNote($website->profile_id, $note);
+            WebsiteHelper::updateLog($website->profile_id, $old, request('website'));
         }
-        else{
-            $msg = 'Website updating failed!';
-            $type = 'danger';
-        }
+        
+        $banner = CommonHelper::createBanner($bool, 'Website', 'update');
 
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $website->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
     }
@@ -95,16 +97,12 @@ class WebsiteController extends Controller
         $bool = $website->delete();
 
         if($bool){
-            $msg = 'Website deleted!';
-            $type = 'success';
-            $note = 'Deleted website: '.$deleted;
-            NoteController::createLogNote($deleted_profile_id, $note);
-        } else {
-            $msg = 'Website failed to delete!';
-            $type = 'fail';
+            WebsiteHelper::destroyLog($deleted_profile_id, $deleted);
         }
+        
+        $banner = CommonHelper::createBanner($bool, 'Website', 'delete');
 
-        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $website->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => $website->profile_id])->with(['status' => $bool, 'banner' => $banner]);
     }
 
     public static function getWebsites($profile_id)

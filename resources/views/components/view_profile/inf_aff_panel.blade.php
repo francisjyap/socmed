@@ -77,7 +77,7 @@
 									<tr>
 										<td>{{ $history->field_name }}</td>
 										<td>{{ $history->field_data }}</td>
-										<td>{{ $history->created_at }}</td>
+										<td>{{ $history->created_at->toFormattedDateString() }}</td>
 										<td>
 											<a href="{{ route('editHistory', $history->id) }}" class="btn btn-success"><i class="far fa-edit"></i></a>
 										</td>
@@ -159,7 +159,7 @@
 									<tr>
 										<td>{{ $history->field_name }}</td>
 										<td>{{ $history->field_data }}</td>
-										<td>{{ $history->created_at }}</td>
+										<td>{{ $history->created_at->toFormattedDateString() }}</td>
 										<td>
 											<a href="{{ route('editHistory', $history->id) }}" class="btn btn-success"><i class="far fa-edit"></i></a>
 										</td>

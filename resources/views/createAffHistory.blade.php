@@ -21,7 +21,7 @@
 					@csrf
 					<input type="hidden" name="user_id" value="{{ Auth::id() }}">
 					<input type="hidden" name="profile_id" value="{{ $profile_id }}">
-					<input type="hidden" name="class" value="1">
+					<input type="hidden" name="type" value="1">
 
 					<div class="form-group">
 						<label>Data</label>
@@ -45,7 +45,7 @@
 
 					<div class="form-group">
 						<label>Date</label>
-						<input type="date" name="date" class="form-control">
+						<input type="date" name="created_at" class="form-control" required>
 					</div>
 
 					<div class="clearfix">

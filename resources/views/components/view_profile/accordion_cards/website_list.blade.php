@@ -25,19 +25,17 @@
 					</tr>
 				</thead>
 				<tbody>
-					@isset($websites)
-						@foreach($websites as $website)
-							<tr>
-								<td><a href="{{ $website->website }}" target="_blank">{{ $website->website }}</a></td>
-								<td>
-									<div class="btn-group">
-										<a href="{{ route('editWebsite', $website->id) }}" class="btn btn-success"> Edit</a>
-										<button type="button" class="btn btn-danger btnDeleteWebsite" value="{{ $website->id }}"> Delete</button>
-									</div>
-								</td>
-							</tr>
-						@endforeach
-					@endisset
+					@foreach($profile->websites as $website)
+						<tr>
+							<td><a href="{{ $website->website }}" target="_blank">{{ $website->website }}</a></td>
+							<td>
+								<div class="btn-group">
+									<a href="{{ route('editWebsite', $website->id) }}" class="btn btn-success"> Edit</a>
+									<button type="button" class="btn btn-danger btnDeleteWebsite" value="{{ $website->id }}"> Delete</button>
+								</div>
+							</td>
+						</tr>
+					@endforeach
 				</tbody>
 			</table>
 		</div>
