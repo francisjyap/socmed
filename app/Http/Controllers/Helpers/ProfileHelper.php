@@ -53,8 +53,46 @@ class ProfileHelper extends Controller
     public static function cleanProfile($profile)
     {
         $profile->phone_number = $profile->country_code.' '.$profile->phone_number;
-
+        
         return $profile;
+    }
+    
+    public static function cleanProfiles($profiles)
+    {
+        $return = CommonHelper::convertBoolToString($profiles);
+
+        $return = $return->sortBy('name')->values()->all();
+
+        foreach($return as $p){
+            $p->phone_number = $p->country_code.' '.$p->phone_number;
+        }
+        
+        $profile = ProfileHelper::getInfAffEmailStatus($profiles);
+
+        return $return;
+    }
+    
+    public static function getInfAffEmailStatus($profiles)
+    {
+        foreach($profiles as $profile){
+            foreach($profile->infaff as $a){
+                if($a->class === 0)
+                    $influencer  = $a;
+                else
+                    $affliate = $a;
+            }
+            if($influencer->email_sent)
+                $profile['emailed_influencer'] = 'Yes';
+            else
+                $profile['emailed_influencer'] = 'No';
+            
+            if($affliate->email_sent)
+                $profile['emailed_affliate'] = 'Yes';
+            else
+                $profile['emailed_affliate'] = 'No';
+        }
+        
+        return $profiles;
     }
 
     public static function cleanPhoneNumber($country_code, $phone_number)
@@ -71,6 +109,22 @@ class ProfileHelper extends Controller
         }
 
         $cleaned_number = '';
+        
+        //For 8 Digit numbers
+        if(strlen($phone_number) == 8){
+            $cleaned_number = $cleaned_number.substr($phone_number, 0, 2).'-'.substr($phone_number, 3, 3).'-'.substr($phone_number, 6, 3);
+        } else if(strlen($phone_number) == 10){
+            $cleaned_number = $cleaned_number.$phone_number;
+        }
+        
+        //For 9 Digit numbers
+        if(strlen($phone_number) == 9){
+            $cleaned_number = $cleaned_number.substr($phone_number, 0, 3).'-'.substr($phone_number, 3, 3).'-'.substr($phone_number, 6, 3);
+        } else if(strlen($phone_number) == 11){
+            $cleaned_number = $cleaned_number.$phone_number;
+        }
+        
+        //For 10 Digit Numbers
         if(strlen($phone_number) == 10){
             $cleaned_number = $cleaned_number.substr($phone_number, 0, 3).'-'.substr($phone_number, 3, 3).'-'.substr($phone_number, 6, 4);
         } else if(strlen($phone_number) == 12){
@@ -88,16 +142,4 @@ class ProfileHelper extends Controller
         return $company_name;
     }
     
-    public static function cleanProfiles($profiles)
-    {
-        $return = CommonHelper::convertBoolToString($profiles);
-
-        $return = $return->sortBy('name')->values()->all();
-
-        foreach($return as $p){
-            $p->phone_number = $p->country_code.' '.$p->phone_number;
-        }
-
-        return $return;
-    }
 }

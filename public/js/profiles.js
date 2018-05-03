@@ -27,15 +27,12 @@ $(document).ready(function () {
             title: 'Company Name',
             sortable: true
         }, {
-            field: 'phone_number',
-            title: 'Phone Number'
-        }, {
             field: 'country',
             title: 'Country',
             sortable: true
         }, {
             field: 'affliate_code',
-            title: 'Affliate Code',
+            title: 'Aff. Code',
             sortable: true
         }, {
             field: 'is_influencer',
@@ -55,6 +52,36 @@ $(document).ready(function () {
         }, {
             field: 'is_affliate',
             title: 'Affliate',
+            searchable: false,
+            cellStyle: function (value) {
+                if (value === 'Yes') {
+                    return {
+                        css: {'color': 'green'}
+                    };
+                } else {
+                    return {
+                        css: {'color': 'red'}
+                    };
+                }
+            }
+        }, {
+            field: 'emailed_influencer',
+            title: 'Emailed Inf.',
+            searchable: false,
+            cellStyle: function (value) {
+                if (value === 'Yes') {
+                    return {
+                        css: {'color': 'green'}
+                    };
+                } else {
+                    return {
+                        css: {'color': 'red'}
+                    };
+                }
+            }
+        }, {
+            field: 'emailed_affliate',
+            title: 'Emailed Aff.',
             searchable: false,
             cellStyle: function (value) {
                 if (value === 'Yes') {

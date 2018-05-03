@@ -10,14 +10,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-// use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Profile extends Model
-{
-    // use SoftDeletes;
-
+{    
+    /**
+     * The table the Model is associated with.
+     *
+     * @var string
+     */
 	protected $table = 'profiles';
-	public $timestamps = true;
 
 	/**
      * The attributes that are mass assignable.
@@ -25,7 +26,7 @@ class Profile extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'company_name', 'country_code', 'phone_number', 'country', 'email_sent', 'is_affliate', 'is_influencer', 'mentioned_product', 
+        'name', 'company_name', 'country_code', 'phone_number', 'country', 'email_sent', 'is_affliate', 'is_influencer', 'mentioned_product', 'payment_email', 
     ];
 
     /**
@@ -34,6 +35,8 @@ class Profile extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+    
+    public $timestamps = true;
 
     public function emails()
     {
@@ -48,5 +51,10 @@ class Profile extends Model
     public function socmed()
     {
         return $this->hasMany(SocialMedia::class);
+    }
+    
+    public function infaff()
+    {
+        return $this->hasMany(InfluencerAffliate::class);
     }
 }

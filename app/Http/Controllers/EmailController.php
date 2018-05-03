@@ -73,7 +73,7 @@ class EmailController extends Controller
     {
         $this->validate(request(), [
             'id' => 'required',
-            'email' => 'required|email|unique:emails'
+            'email' => 'required|email'
         ]);
 
         $email = Email::find(request('id'));
