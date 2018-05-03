@@ -68,6 +68,7 @@ class SocialMediaController extends Controller
             'profile_id' => 'required',
             'username' => 'required',
             'type' => 'required',
+            'url' => 'required|unique:social_media',
         ]);
 
         //Create new Social Media entry
@@ -128,7 +129,8 @@ class SocialMediaController extends Controller
     {
         $this->validate(request(), [
             'type' => 'required',
-            'username' => 'required'
+            'username' => 'required',
+            'url' => 'required',
         ]);
 
         $old = SocialMedia::find($request->id);
