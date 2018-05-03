@@ -45,19 +45,25 @@
 						<td>
 							@isset($influencer)
 								@if($influencer->email_sent)
-									<p style="color: green">Yes</p>
+									<p style="color: green">Yes
+                                    <button type="button" class="btn btn-danger override-no" value="0"><i class="fas fa-times"></i></button>
 								@else
-									<p style="color: red">No</p>
+									<p style="color: red">No
+                                    <button type="button" class="btn btn-success override-yes" value="0"><i class="fas fa-check"></i></button>
 								@endif
+                                    </p>
 							@endisset
 						</td>
 						<td>
 							@isset($affliate)
 								@if($affliate->email_sent)
-									<p style="color: green">Yes</p>
+									<p style="color: green">Yes
+                                    <button type="button" class="btn btn-danger override-no" value="1"><i class="fas fa-times"></i></button>
 								@else
-									<p style="color: red">No</p>
+									<p style="color: red">No
+                                    <button type="button" class="btn btn-success override-yes" value="1"><i class="fas fa-check"></i></button>
 								@endif
+                                    </p>
 							@endisset
 						</td>
 					</tr>
