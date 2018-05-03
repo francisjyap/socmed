@@ -52,4 +52,9 @@ class Profile extends Model
     {
         return $this->hasMany(SocialMedia::class);
     }
+    
+    public function infaff()
+    {
+        return $this->hasMany(InfluencerAffliate::class);
+    }
 }
