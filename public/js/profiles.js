@@ -37,7 +37,6 @@ $(document).ready(function () {
         }, {
             field: 'is_influencer',
             title: 'Influencer',
-            searchable: false,
             cellStyle: function (value) {
                 if (value === 'Yes') {
                     return {
@@ -52,7 +51,6 @@ $(document).ready(function () {
         }, {
             field: 'is_affliate',
             title: 'Affliate',
-            searchable: false,
             cellStyle: function (value) {
                 if (value === 'Yes') {
                     return {
@@ -67,7 +65,7 @@ $(document).ready(function () {
         }, {
             field: 'emailed_influencer',
             title: 'Emailed Inf.',
-            searchable: false,
+            sortable: true,
             cellStyle: function (value) {
                 if (value === 'Yes') {
                     return {
@@ -82,7 +80,7 @@ $(document).ready(function () {
         }, {
             field: 'emailed_affliate',
             title: 'Emailed Aff.',
-            searchable: false,
+            sortable: true,
             cellStyle: function (value) {
                 if (value === 'Yes') {
                     return {
