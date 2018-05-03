@@ -27,9 +27,6 @@ $(document).ready(function () {
             title: 'Company Name',
             sortable: true
         }, {
-            field: 'phone_number',
-            title: 'Phone Number'
-        }, {
             field: 'country',
             title: 'Country',
             sortable: true
