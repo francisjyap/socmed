@@ -23,10 +23,11 @@ class CreateProfilesTable extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
-            $table->string('company_name')->nullable();
+            $table->string('company_name');
             $table->string('country_code')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('country')->nullable();
+            $table->string('payment_email')->nullable();
             $table->string('affliate_code')->nullable();
             $table->boolean('email_sent')->default(0);
             $table->boolean('is_affliate')->default(0);

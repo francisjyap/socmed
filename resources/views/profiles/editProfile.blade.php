@@ -24,8 +24,12 @@
 					@csrf
 					<input type="hidden" name="id" value="{{ $profile->id }}">
 					<div class="form-group">
-						<label>Name</label>
+						<label>Name <span style="color: red;">*</span></label>
 						<input type="text" name="name" class="form-control" autofocus="true" required="true" value="{{ $profile->name }}">
+					</div>
+                    <div class="form-group">
+						<label>Payment Email</label>
+						<input type="email" name="payment_email" placeholder="payment@example.com" class="form-control" value="{{ $profile->payment_email }}">
 					</div>
 					<div class="form-group">
 						<label>Company Name</label>

@@ -12,6 +12,7 @@
 		<h5>Company Name: {{ $profile->company_name }}</h5>
 		<h5>Phone Number: {{ $profile->phone_number ? $profile->phone_number : 'N/A' }}</h5>
 		<h5>Country: {{ $profile->country ? $profile->country : 'N/A' }}</h5>
+		<h5>Payment Email: {{ $profile->payment_email ? $profile->payment_email : 'N/A' }}</h5>
 
 		<div>
 			<button id="edit_affliate_code" class="btn btn-success" data-toggle="modal" data-target="#modal_edit_affliate_code" style="float: right;"

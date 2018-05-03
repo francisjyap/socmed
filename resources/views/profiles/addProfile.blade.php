@@ -23,12 +23,16 @@
 				<form id="form" method="POST" action="{{ route('storeProfile') }}">
 					@csrf
 					<div class="form-group">
-						<label>Name</label>
+						<label>Name <span style="color: red;">*</span></label>
 						<input type="text" name="name" placeholder="John Doe" class="form-control" autofocus="true" required="true">
 					</div>
 					<div class="form-group">
-						<label>Email</label>
+						<label>Email <span style="color: red;">*</span></label>
 						<input type="email" name="email" placeholder="john.doe@example.com" class="form-control" required="true">
+					</div>
+                    <div class="form-group">
+						<label>Payment Email</label>
+						<input type="email" name="payment_email" placeholder="payment@example.com" class="form-control">
 					</div>
 					<div class="form-group">
 						<label>Website URL</label>
