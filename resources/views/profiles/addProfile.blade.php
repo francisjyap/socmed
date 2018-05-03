@@ -12,14 +12,14 @@
 @section('content')
 
 <div class="row mar-bot-5">
-	<div class="col-md-8 offset-2">
+	<div class="col-md-10 offset-1">
 		
 		@include('layouts.errors')
 
     	<h3 style="margin-top: 5%; margin-bottom: 5%;">Add Profile</h3>
 		
 		<div class="row">
-			<div class="col-md-6 offset-3">
+			<div class="col-md-8 offset-2">
 				<form id="form" method="POST" action="{{ route('storeProfile') }}">
 					@csrf
 					<div class="form-group">
@@ -42,14 +42,14 @@
 						<label>Company Name</label>
 						<input type="text" name="company_name" placeholder="John Inc." class="form-control">
 					</div>
-					<div class="row form-group">
+                    <div class="row form-group">
 						<div class="col-md-3">
 							<label>Country</label>
-							<input type="tel" name="country_code" placeholder="1" class="form-control" minlength="1" maxlength="3">
+							<input type="tel" name="country_code" placeholder="1" class="form-control" minlength="1" maxlength="5">
 						</div>
 						<div class="col-md-9">
 							<label>Phone Number</label>
-							<input type="tel" name="phone_number" placeholder="808-555-1234" class="form-control" minlength="10" maxlength="12">
+							<input type="tel" name="phone_number" placeholder="808-555-1234" class="form-control" minlength="8" maxlength="12">
 						</div>
 					</div>
 					<div class="form-group">
@@ -58,7 +58,7 @@
 					</div>
 					<div class="clearfix">
 						<a href="{{ route("home") }}" class="btn btn-danger"><i class="fas fa-times"></i> Cancel</a>
-						<button type="submit" class="btn btn-success" style="float: right;"><i class="fas fa-check"></i> Submit</button>
+						<button type="submit" id="submit" class="btn btn-success" style="float: right;"><i class="fas fa-check"></i> Submit</button>
 					</div>
 				</form>
 			</div>

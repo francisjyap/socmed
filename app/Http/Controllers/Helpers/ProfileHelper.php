@@ -109,6 +109,22 @@ class ProfileHelper extends Controller
         }
 
         $cleaned_number = '';
+        
+        //For 8 Digit numbers
+        if(strlen($phone_number) == 8){
+            $cleaned_number = $cleaned_number.substr($phone_number, 0, 2).'-'.substr($phone_number, 3, 3).'-'.substr($phone_number, 6, 3);
+        } else if(strlen($phone_number) == 10){
+            $cleaned_number = $cleaned_number.$phone_number;
+        }
+        
+        //For 9 Digit numbers
+        if(strlen($phone_number) == 9){
+            $cleaned_number = $cleaned_number.substr($phone_number, 0, 3).'-'.substr($phone_number, 3, 3).'-'.substr($phone_number, 6, 3);
+        } else if(strlen($phone_number) == 11){
+            $cleaned_number = $cleaned_number.$phone_number;
+        }
+        
+        //For 10 Digit Numbers
         if(strlen($phone_number) == 10){
             $cleaned_number = $cleaned_number.substr($phone_number, 0, 3).'-'.substr($phone_number, 3, 3).'-'.substr($phone_number, 6, 4);
         } else if(strlen($phone_number) == 12){

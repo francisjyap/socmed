@@ -11,15 +11,15 @@
 
 @section('content')
 
-<div class="row">
-	<div class="col-md-8 offset-2">
+<div class="row mar-bot-5">
+	<div class="col-md-10 offset-1">
 
 		@include('layouts.errors')
 
     	<h3 style="margin-top: 5%; margin-bottom: 5%;">Edit Profile</h3>
 		
 		<div class="row">
-			<div class="col-md-6 offset-3">
+			<div class="col-md-8 offset-2">
 				<form id="form" method="POST" action="{{ route('updateProfile') }}">
 					@csrf
 					<input type="hidden" name="id" value="{{ $profile->id }}">
@@ -38,11 +38,11 @@
 					<div class="row form-group">
 						<div class="col-md-3">
 							<label>Country</label>
-							<input type="tel" name="country_code" placeholder="1" class="form-control" minlength="1" maxlength="3" value="{{ $profile->country_code }}">
+							<input type="tel" name="country_code" placeholder="1" class="form-control" minlength="1" maxlength="5" value="{{ $profile->country_code }}">
 						</div>
 						<div class="col-md-9">
 							<label>Phone Number</label>
-							<input type="tel" name="phone_number" placeholder="808-555-1234" class="form-control" minlength="10" maxlength="12" value="{{ $profile->phone_number }}">
+							<input type="tel" name="phone_number" placeholder="808-555-1234" class="form-control" minlength="8" maxlength="12" value="{{ $profile->phone_number }}">
 						</div>
 					</div>
 					<div class="form-group">
