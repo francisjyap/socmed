@@ -221,7 +221,6 @@
 			})
 			.then((willDelete) => {
 			  if (willDelete) {
-			  	$('#formSetMentionedProduct-id').val({{ $profile->id }});
 			  	$('#formSetMentionedProduct-bool').val(1);
 			  	$("#formSetMentionedProduct").submit();
 			  } else {
@@ -243,12 +242,55 @@
 			})
 			.then((willDelete) => {
 			  if (willDelete) {
-			  	$('#formSetMentionedProduct-id').val({{ $profile->id }});
 			  	$('#formSetMentionedProduct-bool').val(0);
 			  	$("#formSetMentionedProduct").submit();
 			  } else {
 				    swal({
 				    	title: "Mentioned Trackimo NOT changed",
+				    	icon: "error"
+				    });
+			  }
+			});
+		});
+        
+        $('.override-no').on('click', function() {
+			swal({
+			  title: "OVERRIDING EMAIL SENT STATUS?",
+			  text: "Setting Email Sent to 'NO'. Are you sure?",
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((willDelete) => {
+			  if (willDelete) {
+			  	$('#formOverrideEmailSent-bool').val(0);
+			  	$('#formOverrideEmailSent-class').val(this.value);
+			  	$("#formOverrideEmailSent").submit();
+			  } else {
+				    swal({
+				    	title: "Email Sent NOT changed",
+				    	icon: "error"
+				    });
+			  }
+			});
+		});
+        
+        $('.override-yes').on('click', function() {
+			swal({
+			  title: "OVERRIDING EMAIL SENT STATUS?",
+			  text: "Setting Email Sent to 'Yes'. Are you sure?",
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((willDelete) => {
+			  if (willDelete) {
+			  	$('#formOverrideEmailSent-bool').val(1);
+                $('#formOverrideEmailSent-class').val(this.value);
+			  	$("#formOverrideEmailSent").submit();
+			  } else {
+				    swal({
+				    	title: "Email Sent NOT changed",
 				    	icon: "error"
 				    });
 			  }

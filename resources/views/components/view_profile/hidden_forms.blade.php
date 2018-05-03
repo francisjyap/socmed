@@ -36,6 +36,13 @@
 
 <form id="formSetMentionedProduct" method="POST" action="{{ route('setMentionedProduct') }}" hidden="true">
 	@csrf
-	<input type="hidden" name="profile_id" id="formSetMentionedProduct-id" value="">
+	<input type="hidden" name="profile_id" id="formSetMentionedProduct-id" value="{{ $profile->id }}">
 	<input type="hidden" name="bool" id="formSetMentionedProduct-bool" value="">
+</form>
+
+<form id="formOverrideEmailSent" method="POST" action="{{ route('overrideEmailSent') }}" hidden="true">
+	@csrf
+	<input type="hidden" name="profile_id" id="formOverrideEmailSent-id" value="{{ $profile->id }}">
+	<input type="hidden" name="class" id="formOverrideEmailSent-class" value="">
+	<input type="hidden" name="bool" id="formOverrideEmailSent-bool" value="">
 </form>

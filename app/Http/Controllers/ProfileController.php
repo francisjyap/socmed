@@ -189,4 +189,30 @@ class ProfileController extends Controller
         
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
     }
+    
+    public function overrideEmailSent(Request $request)
+    {
+        $this->validate(request(), [
+            'profile_id' => 'required',
+        ]);
+        
+        $profile = Profile::find(request('profile_id'));
+        foreach($profile->infaff as $a){
+            if($a->class == request('class'))
+                $infaff = $a;
+        }
+        $infaff->email_sent = request('bool');
+        $bool = $infaff->save();
+        
+//        $bool = $infaff->update(['email_sent' => request('bool')]);
+        
+        if($bool){
+            $note = 'Email Sent Override, Class: '.request('class').', Set to: '.request('bool'); 
+            NoteController::createLogNote(request('profile_id'), $note);
+        }
+        
+        $banner = CommonHelper::createBanner($bool, 'Email Sent', 'Override');
+        
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
+    }
 }

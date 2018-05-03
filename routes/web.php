@@ -41,6 +41,7 @@ Route::post('/deleteProfile', 'ProfileController@delete')->name('deleteProfile')
 Route::post('/setEmailSent', 'ProfileController@setEmailSent')->name('setEmailSent');
 Route::post('/setMentionedProduct', 'ProfileController@setMentionedProduct')->name('setMentionedProduct');
 Route::post('/setAffliateCode', 'ProfileController@setAffliateCode')->name('setAffliateCode');
+Route::post('/overrideEmailSent', 'ProfileController@overrideEmailSent')->name('overrideEmailSent');
 
 
 //EmailController
