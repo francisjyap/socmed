@@ -42,7 +42,7 @@ Route::post('/setEmailSent', 'ProfileController@setEmailSent')->name('setEmailSe
 Route::post('/setMentionedProduct', 'ProfileController@setMentionedProduct')->name('setMentionedProduct');
 Route::post('/setAffliateCode', 'ProfileController@setAffliateCode')->name('setAffliateCode');
 Route::post('/overrideEmailSent', 'ProfileController@overrideEmailSent')->name('overrideEmailSent');
-
+Route::post('/setPaymentEmail', 'ProfileController@setPaymentEmail')->name('setPaymentEmail');
 
 //EmailController
 Route::get('/addEmail/{profile_id}', 'EmailController@create')->name('addEmail');
