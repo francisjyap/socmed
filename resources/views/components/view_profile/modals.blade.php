@@ -16,7 +16,7 @@
 
             <div class="form-group">
               <label>Affliate Code</label>
-              <input type="text" name="affliate_code" class="form-control" value="{{ $profile->affliate_code }}" required>
+              <input type="text" name="affliate_code" class="form-control" value="{{ $profile->affliate_code }}">
             </div>
             
         </div>
@@ -49,7 +49,7 @@
 
             <div class="form-group">
               <label>Payment Email</label>
-              <input type="text" name="payment_email" class="form-control" value="{{ $profile->payment_email }}" required>
+              <input type="email" name="payment_email" class="form-control" value="{{ $profile->payment_email }}">
             </div>
             
         </div>
