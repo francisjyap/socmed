@@ -73,9 +73,7 @@ class ProfileController extends Controller
         $this->validate(request(), [
             'name' => 'required|unique:profiles',
             'email' => 'required|email|unique:emails',
-            'country' => 'nullable|alpha',
-            'payment_email' => 'nullable|email'
-        ]);            
+        ]);
         
         $company_name = ProfileHelper::cleanCompanyName(request('company_name'), request('name'));
         $phone_number = ProfileHelper::cleanPhoneNumber(request('country_code'), request('phone_number'));
@@ -86,7 +84,6 @@ class ProfileController extends Controller
             'country_code' => $phone_number['country_code'],
             'phone_number' => $phone_number['phone_number'],
             'country' => request('country'),
-            'payment_email' => request('payment_email')
         ]);
         
         EmailController::staticStore($profile->id, request('email'));
@@ -102,8 +99,6 @@ class ProfileController extends Controller
     {
         $this->validate(request(), [
             'name' => 'required',
-            'country' => 'nullable|alpha',
-            'payment_email' => 'nullable|email'
         ]);
         
         $old = Profile::find(request('id'));
@@ -117,7 +112,6 @@ class ProfileController extends Controller
             'country_code' => $phone_number['country_code'],
             'phone_number' => $phone_number['phone_number'],
             'country' => request('country'),
-            'payment_email' => request('payment_email')
         ]);
         
         $new = Profile::find(request('id'));
@@ -204,14 +198,32 @@ class ProfileController extends Controller
         $infaff->email_sent = request('bool');
         $bool = $infaff->save();
         
-//        $bool = $infaff->update(['email_sent' => request('bool')]);
-        
         if($bool){
             $note = 'Email Sent Override, Class: '.request('class').', Set to: '.request('bool'); 
             NoteController::createLogNote(request('profile_id'), $note);
         }
         
         $banner = CommonHelper::createBanner($bool, 'Email Sent', 'Override');
+        
+        return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
+    }
+    
+    public function setPaymentEmail(Request $request)
+    {
+        $this->validate(request(), [
+            'profile_id' => 'required',
+        ]);
+        
+        $bool = Profile::find(request('profile_id'))->update([
+            'payment_email' => request('payment_email')
+        ]);
+        
+        if($bool){
+            $note = 'Payment Email set to: '.request('payment_email'); 
+            NoteController::createLogNote(request('profile_id'), $note);
+        }
+        
+        $banner = CommonHelper::createBanner($bool, 'Payment Email', 'Set');
         
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
     }

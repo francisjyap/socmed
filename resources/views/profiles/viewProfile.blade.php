@@ -36,7 +36,7 @@
 	</div>
 </div>
 
-@include('components.view_profile.modal_edit_affliate_code')
+@include('components.view_profile.modals')
 
 @include('components.view_profile.hidden_forms')
 
