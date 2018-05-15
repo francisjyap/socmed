@@ -73,7 +73,6 @@ class ProfileController extends Controller
         $this->validate(request(), [
             'name' => 'required|unique:profiles',
             'email' => 'required|email|unique:emails',
-            'country' => 'nullable|alpha',
         ]);
         
         $company_name = ProfileHelper::cleanCompanyName(request('company_name'), request('name'));
@@ -100,7 +99,6 @@ class ProfileController extends Controller
     {
         $this->validate(request(), [
             'name' => 'required',
-            'country' => 'nullable|alpha',
         ]);
         
         $old = Profile::find(request('id'));
