@@ -27,10 +27,6 @@
 						<label>Name <span style="color: red;">*</span></label>
 						<input type="text" name="name" class="form-control" autofocus="true" required="true" value="{{ $profile->name }}">
 					</div>
-                    <div class="form-group">
-						<label>Payment Email</label>
-						<input type="email" name="payment_email" placeholder="payment@example.com" class="form-control" value="{{ $profile->payment_email }}">
-					</div>
 					<div class="form-group">
 						<label>Company Name</label>
 						<input type="text" name="company_name" class="form-control" value="{{ $profile->company_name }}">

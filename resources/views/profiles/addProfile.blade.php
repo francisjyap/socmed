@@ -30,10 +30,6 @@
 						<label>Email <span style="color: red;">*</span></label>
 						<input type="email" name="email" placeholder="john.doe@example.com" class="form-control" required="true">
 					</div>
-                    <div class="form-group">
-						<label>Payment Email</label>
-						<input type="email" name="payment_email" placeholder="payment@example.com" class="form-control">
-					</div>
 					<div class="form-group">
 						<label>Website URL</label>
 						<input type="url" name="website" placeholder="http://www.example.com" class="form-control">

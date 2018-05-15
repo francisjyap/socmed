@@ -74,7 +74,6 @@ class ProfileController extends Controller
             'name' => 'required|unique:profiles',
             'email' => 'required|email|unique:emails',
             'country' => 'nullable|alpha',
-            'payment_email' => 'nullable|email'
         ]);
         
         $company_name = ProfileHelper::cleanCompanyName(request('company_name'), request('name'));
@@ -86,7 +85,6 @@ class ProfileController extends Controller
             'country_code' => $phone_number['country_code'],
             'phone_number' => $phone_number['phone_number'],
             'country' => request('country'),
-            'payment_email' => request('payment_email')
         ]);
         
         EmailController::staticStore($profile->id, request('email'));
@@ -103,7 +101,6 @@ class ProfileController extends Controller
         $this->validate(request(), [
             'name' => 'required',
             'country' => 'nullable|alpha',
-            'payment_email' => 'nullable|email'
         ]);
         
         $old = Profile::find(request('id'));
@@ -117,7 +114,6 @@ class ProfileController extends Controller
             'country_code' => $phone_number['country_code'],
             'phone_number' => $phone_number['phone_number'],
             'country' => request('country'),
-            'payment_email' => request('payment_email')
         ]);
         
         $new = Profile::find(request('id'));
