@@ -1,11 +1,4 @@
 <?php
-/*
-|   Authored/Written/Maintained by:
-|       Francis Alec J. Yap
-|       francisj.yap@gmail.com
-|       https://github.com/francisjyap/socmed
-|
-*/
 
 namespace App\Http\Controllers;
 
@@ -27,7 +20,7 @@ class LogController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public static function createLog($user_id, $profile_id, $class, $field_name, $field_data)
     {
         return Log::create([
@@ -42,9 +35,9 @@ class LogController extends Controller
     public function createHistory(Request $request)
     {
         $bool = Log::create(request(['user_id', 'profile_id', 'type', 'field_name', 'field_data', 'created_at']));
-        
+
         $banner = CommonHelper::createBanner($bool, 'History', 'create');
-        
+
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
     }
 
@@ -53,7 +46,7 @@ class LogController extends Controller
         $logs = Log::where('profile_id', $profile_id)->where('type', 0)->get();
 
         $logs = LogHelper::convertFieldDataToString($logs);
-        
+
         $logs = $logs->sortByDesc('created_at');
 
         return $logs;
@@ -64,12 +57,12 @@ class LogController extends Controller
         $logs = Log::where('profile_id', $profile_id)->where('type', 1)->get();
 
         $logs = LogHelper::convertFieldDataToString($logs);
-        
+
         $logs = $logs->sortByDesc('created_at');
 
         return $logs;
     }
-    
+
     public static function getHistory($profile_id, $type)
     {
         $logs = Log::where('profile_id', $profile_id)->where('type', $type)->get();

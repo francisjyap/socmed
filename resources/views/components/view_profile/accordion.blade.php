@@ -8,10 +8,10 @@
 
 <div id="accordion">
 
-	@include('components.view_profile.accordion_cards.email_list')
+    @include('components.view_profile.accordion_cards.email_list')
 
-	@include('components.view_profile.accordion_cards.website_list')
+    @include('components.view_profile.accordion_cards.website_list')
 
-	@include('components.view_profile.accordion_cards.social_media_list')
-	
+    @include('components.view_profile.accordion_cards.social_media_list')
+
 </div>

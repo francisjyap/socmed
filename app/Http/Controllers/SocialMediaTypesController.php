@@ -1,11 +1,4 @@
 <?php
-/*
-|   Authored/Written/Maintained by:
-|       Francis Alec J. Yap
-|       francisj.yap@gmail.com
-|       https://github.com/francisjyap/socmed
-|
-*/
 
 namespace App\Http\Controllers;
 
@@ -14,7 +7,7 @@ use Illuminate\Http\Request;
 
 class SocialMediaTypesController extends Controller
 {
-	/**
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -26,7 +19,7 @@ class SocialMediaTypesController extends Controller
 
     public static function getTypes()
     {
-    	return SocialMediaTypes::all();
+        return SocialMediaTypes::all();
     }
 
     public static function getString($id)

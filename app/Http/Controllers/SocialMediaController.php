@@ -1,11 +1,4 @@
 <?php
-/*
-|   Authored/Written/Maintained by:
-|       Francis Alec J. Yap
-|       francisj.yap@gmail.com
-|       https://github.com/francisjyap/socmed
-|
-*/
 
 namespace App\Http\Controllers;
 
@@ -31,7 +24,7 @@ class SocialMediaController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -144,12 +137,10 @@ class SocialMediaController extends Controller
 
         $new = SocialMedia::find($request->id);
 
-        //Log changes
         if($bool){
             SocialMediaHelper::updateLog($old, $new);
         }
 
-        //Create banner
         $banner = CommonHelper::createBanner($bool, 'Account', 'update');
 
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $new->profile_id])->with(['status' => $bool, 'banner' => $banner]);
@@ -172,7 +163,6 @@ class SocialMediaController extends Controller
             SocialMediaHelper::destroyLog($deleted_profile_id, $deleted);
         }
 
-        //Create banner
         $banner = CommonHelper::createBanner($bool, 'Account', 'delete');
 
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $socmed->profile_id])->with(['status' => $bool, 'banner' => $banner]);

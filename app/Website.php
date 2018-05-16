@@ -1,22 +1,13 @@
 <?php
-/*
-|   Authored/Written/Maintained by:
-|       Francis Alec J. Yap
-|       francisj.yap@gmail.com
-|       https://github.com/francisjyap/socmed
-|
-*/
 
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-// use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Website extends Model
 {
-    // use SoftDeletes;
-
     protected $table = 'websites';
+
     public $timestamps = true;
 
     /**

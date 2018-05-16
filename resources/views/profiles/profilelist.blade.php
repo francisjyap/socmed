@@ -13,7 +13,7 @@
 
 <div class="row mar-top-5 mar-bot-5">
     <div class="col-md-10 offset-1">
-        
+
         @include('layouts.banner')
 
         <div class="clearfix" style="margin-bottom: 5%;">
@@ -44,10 +44,10 @@
             </div>
 
         </div>
-		
-		<table id="table" data-unique-id="id"></table>
+
+        <table id="table" data-unique-id="id"></table>
     </div>
-	
+
 </div>
 
 <script type="text/javascript" src="js/profiles.js"></script>

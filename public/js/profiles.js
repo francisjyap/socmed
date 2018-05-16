@@ -1,23 +1,23 @@
 /*jslint browser: true*/
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
-/*global $, */
+/*global $, document, window*/
 
 /*Function Declarations*/
 
 function refreshTableWithSelectValues() {
     "use strict";
-	$('#table').bootstrapTable('refresh', {
-		silent: true,
-		url: 'profileSort/' + $('#selectType').val() + '/' + $('#selectInfAff').val()
-	});
+    $('#table').bootstrapTable('refresh', {
+        silent: true,
+        url: 'profileSort/' + $('#selectType').val() + '/' + $('#selectInfAff').val()
+    });
 }
 
 $(document).ready(function () {
     "use strict";
-	$('#table').bootstrapTable({
-		url: 'getProfiles',
-		uniqueId: 'id',
-		search: true,
+    $('#table').bootstrapTable({
+        url: 'getProfiles',
+        uniqueId: 'id',
+        search: true,
         columns: [{
             field: 'name',
             title: 'Name',
@@ -93,27 +93,27 @@ $(document).ready(function () {
                 }
             }
         }]
-	});
+    });
 });
 
 $('#table').on('click-row.bs.table', function (e, row) {
     "use strict";
-	window.location.href = "viewProfile/" + row.id;
+    window.location.href = "viewProfile/" + row.id;
 });
 
 $('#btnResetFilter').on('click', function () {
     "use strict";
-	$('#selectType').prop('selectedIndex', 0);
-	$('#selectInfAff').prop('selectedIndex', 0);
-	refreshTableWithSelectValues();
+    $('#selectType').prop('selectedIndex', 0);
+    $('#selectInfAff').prop('selectedIndex', 0);
+    refreshTableWithSelectValues();
 });
 
 $('#selectType').change(function () {
     "use strict";
-	refreshTableWithSelectValues();
+    refreshTableWithSelectValues();
 });
 
 $('#selectInfAff').change(function () {
     "use strict";
-	refreshTableWithSelectValues();
+    refreshTableWithSelectValues();
 });

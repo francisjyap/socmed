@@ -1,11 +1,4 @@
 <?php
-/*
-|   Authored/Written/Maintained by:
-|       Francis Alec J. Yap
-|       francisj.yap@gmail.com
-|       https://github.com/francisjyap/socmed
-|
-*/
 
 namespace App\Http\Controllers;
 
@@ -31,14 +24,23 @@ class ProfileController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
+    /**
+     * Returns the 'profile list' view.
+     * @author Francis Alec Yap
+     */
     public function index()
     {
         return view('profiles.profilelist')->with([
             'types' => SocialMediaTypesController::getTypes(),
         ]);
     }
-    
+
+    /**
+     * Returns the 'view profile' view of the given profile
+     * @author Francis Alec Yap
+     * @param integer $profile_id Profile ID to be viewed.
+     */
     public function viewProfile($profile_id)
     {
         $profile = ProfileHelper::cleanProfile(Profile::find($profile_id));
@@ -47,37 +49,55 @@ class ProfileController extends Controller
         $affliate = InfluencerAffliateController::getAffliateEntry($profile_id);
         $infHistory = LogController::getInfHistory($profile_id);
         $affHistory = LogController::getAffHistory($profile_id);
-        
+
         return view('profiles.viewProfile', compact([
-            'profile', 'types', 'influencer', 'affliate', 'infHistory', 'affHistory'    
+            'profile', 'types', 'influencer', 'affliate', 'infHistory', 'affHistory'
         ]));
     }
-    
+
+    /**
+     * Returns the 'create profile' view.
+     * @author Francis Alec Yap
+     */
     public function create()
     {
         return view('profiles.addProfile');
     }
-    
+
+    /**
+     * Returns the 'edit profile' view.
+     * @author Francis Alec Yap
+     * @param integer $id ID of Profile to be edited.
+     */
     public function edit($id)
     {
         return view('profiles.editProfile')->with(['profile' => Profile::find($id)]);
     }
-    
+
+    /**
+     * Returns an array of all Profiles.
+     * @author Francis Alec Yap
+     */
     public static function getProfiles()
     {
         return ProfileHelper::cleanProfiles(Profile::all());
     }
 
+    /**
+     * Creates and stores a new Profile entry.
+     * @author Francis Alec Yap
+     * @param Request $request
+     */
     protected function store(Request $request)
     {
         $this->validate(request(), [
             'name' => 'required|unique:profiles',
             'email' => 'required|email|unique:emails',
         ]);
-        
+
         $company_name = ProfileHelper::cleanCompanyName(request('company_name'), request('name'));
         $phone_number = ProfileHelper::cleanPhoneNumber(request('country_code'), request('phone_number'));
-        
+
         $profile = Profile::create([
             'name' => request('name'),
             'company_name' => $company_name,
@@ -85,13 +105,13 @@ class ProfileController extends Controller
             'phone_number' => $phone_number['phone_number'],
             'country' => request('country'),
         ]);
-        
+
         EmailController::staticStore($profile->id, request('email'));
         WebsiteController::staticStore($profile->id, request('website'));
         InfluencerAffliateController::createEntryforProfile($profile->id);
-        
+
         $banner = CommonHelper::createBanner($profile, 'Profile', 'create');
-        
+
         return redirect()->action('ProfileController@index')->with(['status' => $profile, 'banner' => $banner]);
     }
 
@@ -100,12 +120,12 @@ class ProfileController extends Controller
         $this->validate(request(), [
             'name' => 'required',
         ]);
-        
+
         $old = Profile::find(request('id'));
-        
+
         $company_name = ProfileHelper::cleanCompanyName(request('company_name'), request('name'));
         $phone_number = ProfileHelper::cleanPhoneNumber(request('country_code'), request('phone_number'));
-        
+
         $bool = Profile::find(request('id'))->update([
             'name' => request('name'),
             'company_name' => $company_name,
@@ -113,15 +133,15 @@ class ProfileController extends Controller
             'phone_number' => $phone_number['phone_number'],
             'country' => request('country'),
         ]);
-        
+
         $new = Profile::find(request('id'));
-        
+
         if($bool){
             ProfileHelper::profileUpdateLog(request('id'), $old, $new);
         }
-        
+
         $banner = CommonHelper::createBanner($bool, 'Profile', 'edit');
-        
+
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->id])->with(['status' => $bool, 'banner' => $banner]);
     }
 
@@ -130,9 +150,10 @@ class ProfileController extends Controller
         $profile = Profile::find(request('id'));
         $bool = $profile->delete();
         $banner = CommonHelper::createBanner($bool, 'Profile', 'delete');
-        
-        return redirect()->action('ProfileController@index')->with(['status' => $bool, 'banner' => $banner]);
 
+        /*TODO When deleting a profile, delete all related Emails, Logs, Notes, Social Media Accounts, and Websites.*/
+
+        return redirect()->action('ProfileController@index')->with(['status' => $bool, 'banner' => $banner]);
     }
 
     public static function setIsInfluencer($profile_id, $bool)
@@ -151,17 +172,17 @@ class ProfileController extends Controller
             'profile_id' => 'required',
             'bool' => 'required'
         ]);
-        
+
         $bool = Profile::find(request('profile_id'))->update([
             'mentioned_product' => request('bool')
         ]);
-        
+
         if($bool){
             ProfileHelper::profileSetMentionedProductLog(request('bool'), request('profile_id'));
         }
-        
+
         $banner = CommonHelper::createBanner($bool, 'Mentioned product', 'status change');
-        
+
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
     }
 
@@ -170,26 +191,26 @@ class ProfileController extends Controller
         $this->validate(request(), [
             'profile_id' => 'required',
         ]);
-        
+
         $profile = Profile::find(request('profile_id'));
         $profile->affliate_code = request('affliate_code');
         $bool = $profile->save();
-        
+
         if($bool){
             ProfileHelper::profileSetAffliateCodeLog(request('affliate_code'), request('profile_id'));
         }
-        
+
         $banner = CommonHelper::createBanner($bool, 'Affliate Code', 'set');
-        
+
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
     }
-    
+
     public function overrideEmailSent(Request $request)
     {
         $this->validate(request(), [
             'profile_id' => 'required',
         ]);
-        
+
         $profile = Profile::find(request('profile_id'));
         foreach($profile->infaff as $a){
             if($a->class == request('class'))
@@ -197,34 +218,34 @@ class ProfileController extends Controller
         }
         $infaff->email_sent = request('bool');
         $bool = $infaff->save();
-        
+
         if($bool){
-            $note = 'Email Sent Override, Class: '.request('class').', Set to: '.request('bool'); 
+            $note = 'Email Sent Override, Class: '.request('class').', Set to: '.request('bool');
             NoteController::createLogNote(request('profile_id'), $note);
         }
-        
+
         $banner = CommonHelper::createBanner($bool, 'Email Sent', 'Override');
-        
+
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
     }
-    
+
     public function setPaymentEmail(Request $request)
     {
         $this->validate(request(), [
             'profile_id' => 'required',
         ]);
-        
+
         $bool = Profile::find(request('profile_id'))->update([
             'payment_email' => request('payment_email')
         ]);
-        
+
         if($bool){
-            $note = 'Payment Email set to: '.request('payment_email'); 
+            $note = 'Payment Email set to: '.request('payment_email');
             NoteController::createLogNote(request('profile_id'), $note);
         }
-        
+
         $banner = CommonHelper::createBanner($bool, 'Payment Email', 'Set');
-        
+
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
     }
 }

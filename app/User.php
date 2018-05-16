@@ -1,24 +1,16 @@
 <?php
-/*
-|   Authored/Written/Maintained by:
-|       Francis Alec J. Yap
-|       francisj.yap@gmail.com
-|       https://github.com/francisjyap/socmed
-|
-*/
 
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
-// use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use Notifiable;
-//    use SoftDeletes;
+
     public $timestamps = true;
-    
+
     /**
      * The attributes that are mass assignable.
      *

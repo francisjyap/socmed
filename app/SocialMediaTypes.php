@@ -1,21 +1,11 @@
 <?php
-/*
-|   Authored/Written/Maintained by:
-|       Francis Alec J. Yap
-|       francisj.yap@gmail.com
-|       https://github.com/francisjyap/socmed
-|
-*/
 
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-// use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SocialMediaTypes extends Model
 {
-    // use SoftDeletes;
-
     protected $table = 'social_media_types';
     public $timestamps = true;
 

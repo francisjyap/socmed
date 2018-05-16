@@ -1,11 +1,4 @@
 <?php
-/*
-|   Authored/Written/Maintained by:
-|       Francis Alec J. Yap
-|       francisj.yap@gmail.com
-|       https://github.com/francisjyap/socmed
-|
-*/
 
 namespace App\Http\Controllers;
 
@@ -31,7 +24,7 @@ class InfluencerAffliateController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public static function createEntryforProfile($profile_id)
     {
         InfluencerAffliate::create([
@@ -48,7 +41,7 @@ class InfluencerAffliateController extends Controller
     /*******
     *   Changes the status of the given type(Status or Follow-up)
     *   and executes specific functions for each type.
-    *   
+    *
     *   $status_key:
     *       0 - N/A, 1 - Done, 2 - Declined, 3 - Interested, 4 - Emailed, 5 - Rejected
     *   $status_type:
@@ -57,9 +50,9 @@ class InfluencerAffliateController extends Controller
     *       0 - Influencer, 1 - Affliate
     *******/
     public function changeStatus(Request $request)
-    {        
+    {
         $previous = InfluencerAffliate::where('profile_id', $request->profile_id)->where('class', $request->class)->first();
-        
+
         if($request->status_type == 0){
             $type = "Status";
             $row = InfluencerAffliate::where('profile_id', $request->profile_id)->where('class', $request->class)->update([

@@ -1,11 +1,4 @@
 <?php
-/*
-|   Authored/Written/Maintained by:
-|       Francis Alec J. Yap
-|       francisj.yap@gmail.com
-|       https://github.com/francisjyap/socmed
-|
-*/
 
 namespace App;
 
@@ -22,7 +15,7 @@ class Note extends Model
      * @var array
      */
     protected $fillable = [
-        'profile_id', 'note', 'author_id', 'created_at', 
+        'profile_id', 'note', 'author_id', 'created_at',
     ];
 
     /**

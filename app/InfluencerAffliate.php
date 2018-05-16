@@ -1,18 +1,11 @@
 <?php
-/*
-|   Authored/Written/Maintained by:
-|       Francis Alec J. Yap
-|       francisj.yap@gmail.com
-|       https://github.com/francisjyap/socmed
-|
-*/
 
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
 class InfluencerAffliate extends Model
-{    
+{
     protected $table = 'influencer_affliates';
     public $timestamps = true;
 

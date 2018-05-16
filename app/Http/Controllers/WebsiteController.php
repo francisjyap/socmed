@@ -1,11 +1,4 @@
 <?php
-/*
-|   Authored/Written/Maintained by:
-|       Francis Alec J. Yap
-|       francisj.yap@gmail.com
-|       https://github.com/francisjyap/socmed
-|
-*/
 
 namespace App\Http\Controllers;
 
@@ -32,14 +25,14 @@ class WebsiteController extends Controller
     {
         return view('website.addWebsite')->with(['profile_id' => $profile_id]);
     }
-    
+
     public function store(Request $request)
     {
         $this->validate(request(), [
             'profile_id' => 'required',
             'website' => 'required|unique:websites',
         ]);
-        
+
         $bool = Website::create([
             'profile_id' => $request->profile_id,
             'website' => $request->website,
@@ -48,7 +41,7 @@ class WebsiteController extends Controller
         if($bool){
             WebsiteHelper::storeLog(request('profile_id'), request('website'));
         }
-        
+
         $banner = CommonHelper::createBanner($bool, 'Website', 'add');
 
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'banner' => $banner]);
@@ -75,15 +68,15 @@ class WebsiteController extends Controller
         $this->validate(request(), [
             'website' => 'required',
         ]);
-        
+
         $website = Website::find($request->id);
         $old = $website->website;
         $bool = $website->update(['website' => $request->website]);
-        
+
         if($bool){
             WebsiteHelper::updateLog($website->profile_id, $old, request('website'));
         }
-        
+
         $banner = CommonHelper::createBanner($bool, 'Website', 'update');
 
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $website->profile_id])->with(['status' => $bool, 'msg' => $msg, 'type' => $type]);
@@ -99,7 +92,7 @@ class WebsiteController extends Controller
         if($bool){
             WebsiteHelper::destroyLog($deleted_profile_id, $deleted);
         }
-        
+
         $banner = CommonHelper::createBanner($bool, 'Website', 'delete');
 
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $website->profile_id])->with(['status' => $bool, 'banner' => $banner]);

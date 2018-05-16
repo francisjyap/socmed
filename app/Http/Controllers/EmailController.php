@@ -1,11 +1,4 @@
 <?php
-/*
-|   Authored/Written/Maintained by:
-|       Francis Alec J. Yap
-|       francisj.yap@gmail.com
-|       https://github.com/francisjyap/socmed
-|
-*/
 
 namespace App\Http\Controllers;
 
@@ -16,7 +9,7 @@ use App\Http\Controllers\Helpers\CommonHelper;
 
 class EmailController extends Controller
 {
-    
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -34,22 +27,17 @@ class EmailController extends Controller
 
     public function store(Request $request)
     {
-        //Validate request
         $this->validate(request(), [
             'profile_id' => 'required',
             'email' => 'required|email|unique:emails'
         ]);
 
-        // Create Email entry
         $bool = Email::create(request(['profile_id', 'email']));
 
-        //Log change
         NoteController::createLogNote(request('profile_id'), 'Added email: '.request('email'));
 
-        //Create banner message
         $banner = CommonHelper::createBanner($bool, 'Email', 'create');
 
-        //Redirect
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => request('profile_id')])->with(['status' => $bool, 'banner' => $banner]);
     }
 
@@ -80,10 +68,8 @@ class EmailController extends Controller
         $old = $email->email;
         $bool = $email->update(['email' => request('email')]);
 
-        //Log change
         NoteController::createLogNote($email->profile_id, 'Edited email: '.$old.' to '.request('email'));
 
-        //Create banner message
         $banner = CommonHelper::createBanner($bool, 'Email', 'edit');
 
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $email->profile_id])->with(['status' => $bool, 'banner' => $banner]);
@@ -96,10 +82,8 @@ class EmailController extends Controller
         $deleted_profile_id = $email->profile_id;
         $bool = $email->delete();
 
-        //Log change
         NoteController::createLogNote($deleted_profile_id, 'Deleted email: '.$deleted);
 
-        //Create banner message
         $banner = CommonHelper::createBanner($bool, 'Email', 'delete');
 
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $deleted_profile_id])->with(['status' => $bool, 'banner' => $banner]);

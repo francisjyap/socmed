@@ -7,6 +7,6 @@
 */ --}}
 
 <div class="col-md-12" style="margin-top: 5%;">
-	<h5>History</h5>
-	<table id="tableNotes" data-pagination="true" data-page-size="5"></table>
+    <h5>History</h5>
+    <table id="tableNotes" data-pagination="true" data-page-size="5"></table>
 </div>

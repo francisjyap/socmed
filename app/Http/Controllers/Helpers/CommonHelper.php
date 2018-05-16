@@ -11,13 +11,13 @@ use App\Http\Controllers\SocialMediaController;
 
 class CommonHelper extends Controller
 {
-	/**
-	*	function convertBoolToString
-	*	@param Profile $profile
-	*/
+    /**
+    *	function convertBoolToString
+    *	@param Profile $profile
+    */
     public static function convertBoolToString($profiles)
     {
-    	foreach($profiles as $p){
+        foreach($profiles as $p){
             if($p->is_influencer == 0){
                 $p->is_influencer = "No";
             } else {
@@ -56,7 +56,7 @@ class CommonHelper extends Controller
             $acc_ids = SocialMediaController::getAccountsWithSocMedType($socmedtype_id);
             foreach($acc_ids as $a){
                 $accounts->push(Profile::find($a->profile_id));
-            } 
+            }
         } else {
             $accounts = Profile::all();
         }

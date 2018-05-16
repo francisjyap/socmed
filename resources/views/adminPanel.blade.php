@@ -20,10 +20,10 @@
         @endif
 
         <h3 style="float: left;">Admin Panel</h3>
-		
-		<table id="table" data-unique-id="id"></table>
+
+        <table id="table" data-unique-id="id"></table>
     </div>
-	
+
 </div>
 
 <script type="text/javascript">

@@ -7,9 +7,9 @@ use App\Http\Controllers\Controller;
 
 class LogHelper extends Controller
 {
-	public static function convertFieldDataToString($logs)
-	{
-	    foreach($logs as $log){
+    public static function convertFieldDataToString($logs)
+    {
+        foreach($logs as $log){
             switch($log->field_data){
                 case 0:
                     $log->field_data = "N/A";
@@ -31,7 +31,7 @@ class LogHelper extends Controller
                     break;
             }
         }
-        
+
         return $logs;
-	}
+    }
 }

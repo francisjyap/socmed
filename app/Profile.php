@@ -1,32 +1,25 @@
 <?php
-/*
-|   Authored/Written/Maintained by:
-|       Francis Alec J. Yap
-|       francisj.yap@gmail.com
-|       https://github.com/francisjyap/socmed
-|
-*/
 
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
-{    
+{
     /**
      * The table the Model is associated with.
      *
      * @var string
      */
-	protected $table = 'profiles';
+    protected $table = 'profiles';
 
-	/**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'company_name', 'country_code', 'phone_number', 'country', 'email_sent', 'is_affliate', 'is_influencer', 'mentioned_product', 'payment_email', 
+        'name', 'company_name', 'country_code', 'phone_number', 'country', 'email_sent', 'is_affliate', 'is_influencer', 'mentioned_product', 'payment_email',
     ];
 
     /**
@@ -35,7 +28,7 @@ class Profile extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
-    
+
     public $timestamps = true;
 
     public function emails()
@@ -52,7 +45,7 @@ class Profile extends Model
     {
         return $this->hasMany(SocialMedia::class);
     }
-    
+
     public function infaff()
     {
         return $this->hasMany(InfluencerAffliate::class);

@@ -18,7 +18,7 @@
               <label>Affliate Code</label>
               <input type="text" name="affliate_code" class="form-control" value="{{ $profile->affliate_code }}">
             </div>
-            
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -51,7 +51,7 @@
               <label>Payment Email</label>
               <input type="email" name="payment_email" class="form-control" value="{{ $profile->payment_email }}">
             </div>
-            
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

@@ -1,11 +1,4 @@
 <?php
-/*
-|   Authored/Written/Maintained by:
-|       Francis Alec J. Yap
-|       francisj.yap@gmail.com
-|       https://github.com/francisjyap/socmed
-|
-*/
 
 namespace App\Http\Controllers;
 
@@ -26,21 +19,21 @@ class NoteController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public function addNote(Request $request)
     {
         $date = $request->date_of_action;
-        
+
         if($request->btnToday)
             $date = now();
-        
+
         $bool = Note::create([
             'profile_id' => $request->profile_id,
             'author_id' => Auth::id(),
             'note' => $request->note,
             'created_at' => $date
         ]);
-        
+
         $banner = CommonHelper::createBanner($bool, 'Note', 'add');
 
         return redirect()->action('ProfileController@viewProfile', ['profile_id' => $request->profile_id])->with(['status' => $bool, 'banner' => $banner]);

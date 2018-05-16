@@ -7,42 +7,42 @@
 */ --}}
 
 <form id="formDelete" method="POST" action="{{ route('deleteProfile') }}" hidden="true">
-	@csrf
-	<input type="hidden" name="id" id="formDelete-id" value="{{ $profile->id }}">
+    @csrf
+    <input type="hidden" name="id" id="formDelete-id" value="{{ $profile->id }}">
 </form>
 
 <form id="formDeleteEmail" method="POST" action="{{ route('deleteEmail') }}" hidden="true">
-	@csrf
-	<input type="hidden" name="id" id="formDeleteEmail-id" value="">
+    @csrf
+    <input type="hidden" name="id" id="formDeleteEmail-id" value="">
 </form>
 
 <form id="formDeleteWebsite" method="POST" action="{{ route('deleteWebsite') }}" hidden="true">
-	@csrf
-	<input type="hidden" name="id" id="formDeleteWebsite-id" value="">
+    @csrf
+    <input type="hidden" name="id" id="formDeleteWebsite-id" value="">
 </form>
 
 <form id="formDeleteAccount" method="POST" action="{{ route('deleteAccount') }}" hidden="true">
-	@csrf
-	<input type="hidden" name="id" id="formDeleteAccount-id" value="">
+    @csrf
+    <input type="hidden" name="id" id="formDeleteAccount-id" value="">
 </form>
 
 <form id="formChangeStatus" method="POST" action="{{ route('changeStatus') }}" hidden="true">
-	@csrf
-	<input type="hidden" name="profile_id" value="{{ $profile->id }}">
-	<input type="hidden" name="class" id="formChangeStatus-class" value="">
-	<input type="hidden" name="status_key" id="formChangeStatus-statusKey" value="">
-	<input type="hidden" name="status_type" id="formChangeStatus-statusType" value="">
+    @csrf
+    <input type="hidden" name="profile_id" value="{{ $profile->id }}">
+    <input type="hidden" name="class" id="formChangeStatus-class" value="">
+    <input type="hidden" name="status_key" id="formChangeStatus-statusKey" value="">
+    <input type="hidden" name="status_type" id="formChangeStatus-statusType" value="">
 </form>
 
 <form id="formSetMentionedProduct" method="POST" action="{{ route('setMentionedProduct') }}" hidden="true">
-	@csrf
-	<input type="hidden" name="profile_id" id="formSetMentionedProduct-id" value="{{ $profile->id }}">
-	<input type="hidden" name="bool" id="formSetMentionedProduct-bool" value="">
+    @csrf
+    <input type="hidden" name="profile_id" id="formSetMentionedProduct-id" value="{{ $profile->id }}">
+    <input type="hidden" name="bool" id="formSetMentionedProduct-bool" value="">
 </form>
 
 <form id="formOverrideEmailSent" method="POST" action="{{ route('overrideEmailSent') }}" hidden="true">
-	@csrf
-	<input type="hidden" name="profile_id" id="formOverrideEmailSent-id" value="{{ $profile->id }}">
-	<input type="hidden" name="class" id="formOverrideEmailSent-class" value="">
-	<input type="hidden" name="bool" id="formOverrideEmailSent-bool" value="">
+    @csrf
+    <input type="hidden" name="profile_id" id="formOverrideEmailSent-id" value="{{ $profile->id }}">
+    <input type="hidden" name="class" id="formOverrideEmailSent-class" value="">
+    <input type="hidden" name="bool" id="formOverrideEmailSent-bool" value="">
 </form>

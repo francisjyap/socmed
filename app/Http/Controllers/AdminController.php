@@ -15,20 +15,20 @@ class AdminController extends Controller
 
     public function CheckAdmin()
     {
-    	if(Auth::user()->is_admin == 0){
-    		return false;
-    	} else {
-    		return true;
-    	}
+        if(Auth::user()->is_admin == 0){
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public function index()
     {
-    	if(AdminController::CheckAdmin()){
-	        return view('adminPanel');
-    	} else {
-    		return redirect('/');
-    	}
+        if(AdminController::CheckAdmin()){
+            return view('adminPanel');
+        } else {
+            return redirect('/');
+        }
     }
 
     public function getUsers()
